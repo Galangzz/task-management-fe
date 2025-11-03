@@ -4,12 +4,16 @@
     --background-color: #ecf4e8;
     --border-color: #171717;
     --background-header: #c6cbc3;
+    --button-color: #ff9f9f;
+    --button-color-hover: #da0037;
 }
 
 [data-theme='dark'] {
     --backgrond-color: #171717;
     --border-color: #ecf4e8;
     --background-header: #3c3939;
+    --button-color: #da0037;
+    --button-color-hover: #ff9f9f;
 
 }
 
@@ -17,11 +21,12 @@
     /* padding: 0;
     margin: 0; */
     color: var(--border-color);
+    font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
     transition: background 0.3s ease-in;
 }
 
-.App{
+.App {
     background-color: var(--backgrond-color);
 }
 
@@ -50,4 +55,21 @@
     transform: scale(1.05);
     position: relative;
     box-shadow: 0px 0px 12px 1px var(--border-color);
+}
+
+.formTitleList {
+    background-color: var(--background-header);
+}
+
+.formTitleList form button {
+    background-color: var(--button-color);
+    border: 1px solid var(--border-color);
+    padding: 2px;
+    border-radius: 10px 10px;
+    transition: all 0.3s ease;
+}
+
+.formTitleList form button:hover {
+    transform: scale(1.02);
+    background-color: var(--button-color-hover);
 }
