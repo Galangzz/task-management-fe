@@ -1,1 +1,53 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+:root {
+    --background-color: #ecf4e8;
+    --border-color: #171717;
+    --background-header: #c6cbc3;
+}
+
+[data-theme='dark'] {
+    --backgrond-color: #171717;
+    --border-color: #ecf4e8;
+    --background-header: #3c3939;
+
+}
+
+* {
+    /* padding: 0;
+    margin: 0; */
+    color: var(--border-color);
+    box-sizing: border-box;
+    transition: background 0.3s ease-in;
+}
+
+.App{
+    background-color: var(--backgrond-color);
+}
+
+.NavBar ul li {
+    display: flex;
+    height: 36px;
+    min-width: 36px;
+    /* background-color: red; */
+}
+
+.listTask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+    cursor: pointer;
+
+    border: 1px solid var(--border-color);
+
+    width: 100%;
+
+    transition: all 0.3s ease;
+}
+
+.listTask:hover {
+    transform: scale(1.05);
+    position: relative;
+    box-shadow: 0px 0px 12px 1px var(--border-color);
+}
