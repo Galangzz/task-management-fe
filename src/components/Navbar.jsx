@@ -27,14 +27,13 @@ function Navbar({ tabs, addList }) {
                     </Button>
                 </li>
                 {tabs.map((tab) => (
-                    <li>
+                    <li key={tab.id}>
                         <Button
-                            key={tab.id}
                             type={'button'}
                             className={'listTask'}
-                            onClick={() => navigate(`/${tab.id}`)}
+                            onClick={() => navigate(`/${tab.title}`)}
                         >
-                            {tab.id}
+                            {tab.title}
                         </Button>
                     </li>
                 ))}

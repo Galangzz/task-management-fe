@@ -18,8 +18,6 @@
 }
 
 * {
-    /* padding: 0;
-    margin: 0; */
     color: var(--border-color);
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
@@ -61,7 +59,7 @@
     background-color: var(--background-header);
 }
 
-.formTitleList form button {
+.formTitleList form > button {
     background-color: var(--button-color);
     border: 1px solid var(--border-color);
     padding: 2px;
@@ -69,7 +67,7 @@
     transition: all 0.3s ease;
 }
 
-.formTitleList form button:hover {
+.formTitleList form > button:hover {
     transform: scale(1.02);
     background-color: var(--button-color-hover);
 }
