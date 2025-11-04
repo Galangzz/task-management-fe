@@ -8,8 +8,8 @@ function Navbar({ tabs, addList }) {
     const navigate = useNavigate();
 
     return (
-        <div className="NavBar min-w-screen flex items-center px-10 py-2 bg-(--background-header)">
-            <ul className="flex gap-x-2 font-mono text-xl items-center  w-full h-full">
+        <div className="NavBar min-w-screen flex items-center px-10 py-2 bg-(--background-header) ">
+            <ul className="flex py-1 gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
                 <li className="">
                     <Button
                         type={'button'}

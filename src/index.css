@@ -14,7 +14,6 @@
     --background-header: #3c3939;
     --button-color: #da0037;
     --button-color-hover: #ff9f9f;
-
 }
 
 * {
@@ -31,7 +30,7 @@
 .NavBar ul li {
     display: flex;
     height: 36px;
-    min-width: 36px;
+    width: max-content;
     /* background-color: red; */
 }
 
@@ -44,7 +43,7 @@
 
     border: 1px solid var(--border-color);
 
-    width: 100%;
+    width: max-content;
 
     transition: all 0.3s ease;
 }
@@ -71,3 +70,12 @@
     transform: scale(1.02);
     background-color: var(--button-color-hover);
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
