@@ -14,6 +14,7 @@ function Navbar({ tabs, addList }) {
                     <Button
                         type={'button'}
                         className={'listTask flex'}
+                        onClick={() => navigate('/stared-task')}
                     >
                         <FaStar className="h-full w-full flex " />
                     </Button>
@@ -22,6 +23,7 @@ function Navbar({ tabs, addList }) {
                     <Button
                         type={'button'}
                         className={'listTask'}
+                        onClick={() => navigate('/')}
                     >
                         Tugas Saya
                     </Button>
@@ -31,7 +33,7 @@ function Navbar({ tabs, addList }) {
                         <Button
                             type={'button'}
                             className={'listTask'}
-                            onClick={() => navigate(`/${tab.title}`)}
+                            onClick={() => navigate(`/${tab.id}`)}
                         >
                             {tab.title}
                         </Button>

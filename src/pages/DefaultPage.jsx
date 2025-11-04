@@ -5,7 +5,7 @@ import useTheme from '../hooks/useTheme';
 import { ThemeProvider } from '../context/Theme';
 import FormTitleList from '../components/ModalTaskTitle';
 import { useNavigate } from 'react-router-dom';
-import { getAllTasks, getTaskListByTitle, postTask } from '../services/localService';
+import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
 import { nanoid } from 'nanoid';
 
 function DefaultPage() {
@@ -24,12 +24,25 @@ function DefaultPage() {
         }
     }, [isOpenModalTaskTitle]);
 
-    // const currentId = location.pathname.split('/tab/')[1];
+    useEffect(() => {
+        const currentTab = location.pathname.split('/')[1];
+        if (currentTab === '') {
+            navigate('/');
+        } else if (currentTab == 'stared-task') {
+            navigate(`/${currentTab}`);
+        } else {
+            const activeTask = getTaskListById(currentTab);
+            if (!activeTask) {
+                navigate('/');
+            } else {
+                navigate(`/${currentTab}`);
+            }
+        }
+        console.log(currentTab);
+    }, [navigate]);
 
     const addTab = () => {
         setIsOpenModalTaskTitle(() => true);
-        // const newId = tabs.length ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
-        // setTabs([...tabs, { id: newId }]);
     };
 
     const handleSubmitTitleList = () => {
@@ -48,7 +61,7 @@ function DefaultPage() {
 
         setErrTL('');
         setIsOpenModalTaskTitle(false);
-        navigate(`/${titleList}`);
+        navigate(`/${id}`);
         setTitleList('');
         console.log(tabs);
     };

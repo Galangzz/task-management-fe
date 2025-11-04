@@ -1,4 +1,9 @@
-const task = [];
+const task = [
+    {
+        id: 123,
+        title: 'ABcD',
+    },
+];
 
 function postTask({ id, title }) {
     if (id == null) {
@@ -26,8 +31,18 @@ function getTaskListByTitle(title) {
     return found || null;
 }
 
+function getTaskListById(id) {
+    if (!id) {
+        return null;
+    }
+
+    const found = task.find((t) => t.id == id);
+
+    return found || null;
+}
+
 function getAllTasks() {
     return task;
 }
 
-export { postTask, getTaskListByTitle, getAllTasks };
+export { postTask, getTaskListByTitle, getAllTasks, getTaskListById };
