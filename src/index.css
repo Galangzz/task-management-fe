@@ -55,11 +55,11 @@
     box-shadow: 0px 0px 12px 1px var(--border-color);
 }
 
-.formTitleList {
+.ModalTaskTitle {
     background-color: var(--background-header);
 }
 
-.formTitleList form > button {
+.ModalTaskTitle form > button {
     background-color: var(--button-color);
     border: 1px solid var(--border-color);
     padding: 2px;
@@ -67,7 +67,7 @@
     transition: all 0.3s ease;
 }
 
-.formTitleList form > button:hover {
+.ModalTaskTitle form > button:hover {
     transform: scale(1.02);
     background-color: var(--button-color-hover);
 }
