@@ -1,7 +1,31 @@
 const task = [
     {
+        id: 'main-task',
+        title: 'Tugas Saya',
+        task: [
+            {
+                name: 'Matematika',
+                dateDeadline: '2025-11-05T05:13:45.673Z',
+            },
+            {
+                name: 'Bahasa Indonesia',
+                dateDeadline: '2025-11-05T05:13:45.673Z',
+            },
+            {
+                name: 'Bahasa Jawa',
+                dateDeadline: '2025-11-07T05:13:45.673Z',
+            },
+        ],
+    },
+    {
         id: 123,
         title: 'ABcD',
+        task: [
+            {
+                name: 'Matematika',
+                dateDeadline: '2025-11-05T05:13:45.673Z',
+            },
+        ],
     },
 ];
 
@@ -33,7 +57,7 @@ function getTaskListByTitle(title) {
 
 function getTaskListById(id) {
     if (!id) {
-        return null;
+        return task.find((t) => t.id == 'main-task');
     }
 
     const found = task.find((t) => t.id == id);

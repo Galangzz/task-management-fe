@@ -7,9 +7,12 @@ import FormTitleList from '../components/ModalTaskTitle';
 import { useNavigate } from 'react-router-dom';
 import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
 import { nanoid } from 'nanoid';
+import Field from '../components/Field';
+import TaskContent from '../components/TaskContent';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState([]);
+    const [task, setTask] = useState([]);
     const [theme, toggleTheme] = useTheme();
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
@@ -23,6 +26,10 @@ function DefaultPage() {
             setTitleList('');
         }
     }, [isOpenModalTaskTitle]);
+
+    // useEffect(()=> {
+
+    // },[])
 
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1];
@@ -38,8 +45,10 @@ function DefaultPage() {
                 navigate(`/${currentTab}`);
             }
         }
+        setTask(() => getTaskListById(currentTab));
+        console.log(task);
         console.log(currentTab);
-    }, [navigate]);
+    }, [navigate, task]);
 
     const addTab = () => {
         setIsOpenModalTaskTitle(() => true);
@@ -85,6 +94,8 @@ function DefaultPage() {
                         setErr={setErrTL}
                     />
                 )}
+
+                <TaskContent title={task.title} task={task.task}/>
             </div>
         </ThemeProvider>
     );
