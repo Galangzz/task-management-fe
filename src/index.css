@@ -6,6 +6,7 @@
     --background-header: #c6cbc3;
     --button-color: #ff9f9f;
     --button-color-hover: #da0037;
+    --add-button: #91ADC8;
 }
 
 [data-theme='dark'] {
@@ -14,6 +15,7 @@
     --background-header: #3c3939;
     --button-color: #da0037;
     --button-color-hover: #ff9f9f;
+    --add-button: #647FBC;
 }
 
 * {
@@ -51,7 +53,7 @@
 .listTask:hover {
     transform: scale(1.05);
     position: relative;
-    box-shadow: 0px 0px 12px 1px var(--border-color);
+    box-shadow: 0px 0px 4px 1px var(--border-color);
 }
 
 .ModalTaskTitle {

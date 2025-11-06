@@ -1,19 +1,21 @@
 import React from 'react';
 import Field from './Field';
+import ListTask from './ListTask';
+import StarCheck from './StarCheck';
 
-function TaskContent({ title, task = [] }) {
-    const groupedData = task.reduce((acc, item) => {
+function TaskContent({ task = {} }) {
+    const groupedData = (task.tasks || []).reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
 
         if (!acc[dateKey]) acc[dateKey] = [];
-        acc[dateKey].push(item.name);
+        acc[dateKey].push(item);
         return acc;
     }, {});
 
     const sortedDates = Object.keys(groupedData).sort((a, b) => {
-        if (a === 'Tanpa tanggal') return 1; 
+        if (a === 'Tanpa tanggal') return 1;
         if (b === 'Tanpa tanggal') return -1;
-        return a.localeCompare(b); 
+        return a.localeCompare(b);
     });
 
     const formatCustomDate = (dateString) => {
@@ -24,10 +26,10 @@ function TaskContent({ title, task = [] }) {
         const targetYear = dateObj.getFullYear();
 
         const dateOptions = {
-            weekday: 'short', 
-            day: 'numeric', 
-            month: 'short', 
-            timeZone: 'Asia/Jakarta', 
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            timeZone: 'Asia/Jakarta',
         };
 
         if (targetYear !== currentYear) {
@@ -36,18 +38,13 @@ function TaskContent({ title, task = [] }) {
 
         let formattedDate = dateObj.toLocaleDateString('id-ID', dateOptions);
 
-        formattedDate = formattedDate
-            .replace(/\./g, '') 
-            .replace(/,\s+/g, ' ') 
-            .replace(/,\s*$/g, '') 
-            .trim();
+        formattedDate = formattedDate.replace(/\./g, '').replace(/,\s+/g, ' ').replace(/,\s*$/g, '').trim();
 
         const parts = formattedDate.split(/\s+/).filter((p) => p.length > 0);
         if (parts.length >= 3) {
             let result = `${parts[0]}, ${parts[1]} ${parts[2]}`;
             if (parts.length === 4) {
-                // Jika tahun disertakan (tahun berbeda)
-                result += ` ${parts[3]}`; // 'Jum, 7 Nov 2026'
+                result += ` ${parts[3]}`;
             }
             formattedDate = result;
         }
@@ -57,20 +54,30 @@ function TaskContent({ title, task = [] }) {
     return (
         <Field>
             <div className="flex">
-                <h1 className="font-bold text-xl tracking-wide">{title}</h1>
+                <h1 className="font-bold text-xl tracking-wide mb-6">{task.title ?? 'Stared Task'}</h1>
             </div>
-            <div className="flex flex-col">
-                {sortedDates.map((date) => (
-                    <div key={date}>
-                        <h2 className="font-bold text-lg mb-1">📅 {formatCustomDate(date)}</h2>
-                        <ul className="ml-4 list-disc">
-                            {groupedData[date].map((nama, idx) => (
-                                <li key={idx}>{nama}</li>
+            {task.tasks && (
+                <div className="flex flex-col gap-4">
+                    {sortedDates.map((date) => (
+                        <div
+                            key={date}
+                            className="flex flex-col gap-4"
+                        >
+                            <h2 className="font-bold text-lg">{formatCustomDate(date)}</h2>
+                            {groupedData[date].map((task, idx) => (
+                                <ListTask
+                                    key={idx}
+                                    checked={task.status}
+                                    stared={task.stared}
+                                    id={task.id}
+                                >
+                                    {task.name}
+                                </ListTask>
                             ))}
-                        </ul>
-                    </div>
-                ))}
-            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </Field>
     );
 }

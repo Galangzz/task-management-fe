@@ -4,20 +4,21 @@ import Navbar from '../components/Navbar';
 import useTheme from '../hooks/useTheme';
 import { ThemeProvider } from '../context/Theme';
 import FormTitleList from '../components/ModalTaskTitle';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
 import { nanoid } from 'nanoid';
-import Field from '../components/Field';
 import TaskContent from '../components/TaskContent';
+import AddButton from '../components/AddButton';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState([]);
-    const [task, setTask] = useState([]);
+    const [task, setTask] = useState({});
     const [theme, toggleTheme] = useTheme();
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [errTL, setErrTL] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         setTabs(() => getAllTasks());
@@ -27,28 +28,18 @@ function DefaultPage() {
         }
     }, [isOpenModalTaskTitle]);
 
-    // useEffect(()=> {
-
-    // },[])
-
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1];
         if (currentTab === '') {
             navigate('/');
-        } else if (currentTab == 'stared-task') {
-            navigate(`/${currentTab}`);
         } else {
-            const activeTask = getTaskListById(currentTab);
-            if (!activeTask) {
-                navigate('/');
-            } else {
-                navigate(`/${currentTab}`);
-            }
+            navigate(`/${currentTab}`);
         }
+
         setTask(() => getTaskListById(currentTab));
-        console.log(task);
+        console.log(getTaskListById(currentTab));
         console.log(currentTab);
-    }, [navigate, task]);
+    }, [navigate, location.pathname]);
 
     const addTab = () => {
         setIsOpenModalTaskTitle(() => true);
@@ -95,7 +86,9 @@ function DefaultPage() {
                     />
                 )}
 
-                <TaskContent title={task.title} task={task.task}/>
+                <TaskContent task={task ?? {}} />
+
+                <AddButton />
             </div>
         </ThemeProvider>
     );
