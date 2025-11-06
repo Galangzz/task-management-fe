@@ -6,16 +6,16 @@
     --background-header: #c6cbc3;
     --button-color: #ff9f9f;
     --button-color-hover: #da0037;
-    --add-button: #91ADC8;
+    --add-button: #91adc8;
 }
 
 [data-theme='dark'] {
-    --backgrond-color: #171717;
+    --background-color: #171717;
     --border-color: #ecf4e8;
     --background-header: #3c3939;
     --button-color: #da0037;
     --button-color-hover: #ff9f9f;
-    --add-button: #647FBC;
+    --add-button: #647fbc;
 }
 
 * {
@@ -25,9 +25,11 @@
     transition: background 0.3s ease-in;
 }
 
-.App {
-    background-color: var(--backgrond-color);
+body {
+    background-color: var(--background-color);
 }
+
+
 
 .NavBar ul li {
     display: flex;
@@ -80,4 +82,3 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-

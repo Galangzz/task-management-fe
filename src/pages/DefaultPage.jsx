@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
-import useTheme from '../hooks/useTheme';
-import { ThemeProvider } from '../context/Theme';
 import FormTitleList from '../components/ModalTaskTitle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
@@ -13,7 +11,6 @@ import AddButton from '../components/AddButton';
 function DefaultPage() {
     const [tabs, setTabs] = useState([]);
     const [task, setTask] = useState({});
-    const [theme, toggleTheme] = useTheme();
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [errTL, setErrTL] = useState('');
@@ -67,30 +64,28 @@ function DefaultPage() {
     };
 
     return (
-        <ThemeProvider value={{ theme, toggleTheme }}>
-            <div className="relative w-screen h-screen flex flex-col">
-                <Header />
-                <Navbar
-                    tabs={tabs}
-                    addList={addTab}
+        <div className="relative w-screen h-screen flex flex-col">
+            <Header />
+            <Navbar
+                tabs={tabs}
+                addList={addTab}
+            />
+
+            {isOpenModalTaskTitle && (
+                <FormTitleList
+                    titleList={titleList}
+                    setTitleList={setTitleList}
+                    setToggleTitle={setIsOpenModalTaskTitle}
+                    handleSubmitTitleList={handleSubmitTitleList}
+                    err={errTL}
+                    setErr={setErrTL}
                 />
+            )}
 
-                {isOpenModalTaskTitle && (
-                    <FormTitleList
-                        titleList={titleList}
-                        setTitleList={setTitleList}
-                        setToggleTitle={setIsOpenModalTaskTitle}
-                        handleSubmitTitleList={handleSubmitTitleList}
-                        err={errTL}
-                        setErr={setErrTL}
-                    />
-                )}
+            <TaskContent task={task ?? {}} />
 
-                <TaskContent task={task ?? {}} />
-
-                <AddButton />
-            </div>
-        </ThemeProvider>
+            <AddButton />
+        </div>
     );
 }
 

@@ -4,6 +4,7 @@ import ListTask from './ListTask';
 import StarCheck from './StarCheck';
 
 function TaskContent({ task = {} }) {
+    const taskId = task.id;
     const groupedData = (task.tasks || []).reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
 
@@ -70,6 +71,7 @@ function TaskContent({ task = {} }) {
                                     checked={task.status}
                                     stared={task.stared}
                                     id={task.id}
+                                    taskId={taskId}
                                 >
                                     {task.name}
                                 </ListTask>

@@ -2,8 +2,10 @@ import React from 'react';
 import Checkbox from './Checkboxes';
 import StarCheck from './StarCheck';
 import { getAllTasks, toggleStaredTask, toggleStatusTask } from '../services/localService';
+import { useNavigate } from 'react-router-dom';
 
-function ListTask({ children, checked, stared, id }) {
+function ListTask({ children, checked, stared, id, taskId }) {
+    const navigate = useNavigate();
     const handleChecked = (id) => {
         toggleStatusTask(id);
     };
@@ -15,9 +17,9 @@ function ListTask({ children, checked, stared, id }) {
 
     return (
         <div
-            className="flex items-center gap-4 p-2 hover:bg-red-700 cursor-pointer"
+            className="flex items-center gap-4 p-2 hover:bg-(--background-color)/40 cursor-pointer rounded-xl"
             onClick={() => {
-                alert('Clicked');
+                navigate(`/details/${taskId}/${id}`);
             }}
         >
             <Checkbox
