@@ -4,7 +4,10 @@ import styled from 'styled-components';
 const Checkbox = ({ id = 'dummyChecked', checked, onChange }) => {
     return (
         <StyledWrapper>
-            <div className="checkbox-wrapper-12">
+            <div
+                className="checkbox-wrapper-12"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="cbx">
                     <input
                         onChange={onChange}
@@ -127,6 +130,10 @@ const StyledWrapper = styled.div`
         stroke-dashoffset: 19;
         transition: stroke-dashoffset 0.3s ease;
         transition-delay: 0.2s;
+    }
+
+    .checkbox-wrapper-12 .cbx input:checked {
+        border: none;
     }
 
     .checkbox-wrapper-12 .cbx input:checked + label {

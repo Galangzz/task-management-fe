@@ -14,7 +14,12 @@ function ListTask({ children, checked, stared, id }) {
     };
 
     return (
-        <div className="flex items-center gap-4 p-2">
+        <div
+            className="flex items-center gap-4 p-2 hover:bg-red-700 cursor-pointer"
+            onClick={() => {
+                alert('Clicked');
+            }}
+        >
             <Checkbox
                 id={id}
                 checked={checked}
