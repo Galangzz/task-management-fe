@@ -13,14 +13,22 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                 setErr('');
             }
         } else {
-            setErr(''); 
+            setErr('');
         }
     };
 
     return (
-        <Modal setToggle={setToggleTitle}>
+        <Modal setToggle={() => setToggleTitle(false)}>
             <div
-                className="ModalTaskTitle flex flex-col w-98 h-auto gap-6 p-4 justify-center items-center rounded-3xl border  "
+                className="ModalTaskTitle flex flex-col 
+                w-98 h-auto 
+                gap-6 p-4 
+                justify-center items-center 
+                rounded-3xl 
+                border 
+                bg-(--background-header) 
+
+                "
                 onClick={(e) => e.stopPropagation()}
             >
                 <h3>Masukan Nama Daftar Baru</h3>
@@ -43,7 +51,18 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                     {err && <p className="text-red-500! text-sm italic mt-1">{err}</p>}
                     <button
                         type="submit"
-                        className="disabled:opacity-50 hover:disabled:transform-none! hover:disabled:bg-(--button-color)!"
+                        className="
+                        bg-(--button-color)
+                        border
+                        border-(--border-color)
+                        p-0.5
+                        rounded-xl
+                        transition-all!
+                        duration-300
+                        ease-in-out
+                        hover:scale-102
+                        hover:bg-(--button-color-hover)
+                        disabled:opacity-50 hover:disabled:transform-none! hover:disabled:bg-(--button-color)!"
                         disabled={titleList === '' || err !== ''}
                     >
                         Submit

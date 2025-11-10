@@ -7,7 +7,7 @@
     --button-color: #ff9f9f;
     --button-color-hover: #da0037;
     --add-button: #91adc8;
-    --star-fill: #3282B8;
+    --star-fill: #3282b8;
     --stroke-check: #fff;
 }
 
@@ -18,9 +18,8 @@
     --button-color: #da0037;
     --button-color-hover: #ff9f9f;
     --add-button: #647fbc;
-    --star-fill: #BBE1FA;
+    --star-fill: #bbe1fa;
     --stroke-check: #4a4a4a;
-
 }
 
 * {
@@ -34,13 +33,10 @@ body {
     background-color: var(--background-color);
 }
 
-
-
 .NavBar ul li {
     display: flex;
     height: 36px;
     width: max-content;
-    /* background-color: red; */
 }
 
 .listTask {
@@ -63,27 +59,25 @@ body {
     box-shadow: 0px 0px 4px 1px var(--border-color);
 }
 
-.ModalTaskTitle {
-    background-color: var(--background-header);
-}
-
-.ModalTaskTitle form > button {
-    background-color: var(--button-color);
-    border: 1px solid var(--border-color);
-    padding: 2px;
-    border-radius: 10px 10px;
-    transition: all 0.3s ease;
-}
-
-.ModalTaskTitle form > button:hover {
-    transform: scale(1.02);
-    background-color: var(--button-color-hover);
-}
-
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+.scrollbar-custom-textarea {
+    scrollbar-width: 10em;
+    /* -ms-overflow-style: none; */
+}
+
+.scrollbar-custom-textarea::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #aaaaaa;
+}
+
+.scrollbar-custom-textarea::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
 }

@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
-import FormTitleList from '../components/ModalTaskTitle';
+import ModalTaskTitle from '../components/ModalTaskTitle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
 import { nanoid } from 'nanoid';
 import TaskContent from '../components/TaskContent';
 import AddButton from '../components/AddButton';
+import ModalNewTask from '../components/ModalNewTask';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState([]);
     const [task, setTask] = useState({});
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
+    const [isOpenModalTask, setIsOpenModalTask] = useState(false);
     const [errTL, setErrTL] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,19 +29,30 @@ function DefaultPage() {
 
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1];
-        if (currentTab === '') {
-            navigate('/');
-        } else {
-            navigate(`/${currentTab}`);
+        const newTaskList = getTaskListById(currentTab);
+        setTask(newTaskList);
+        console.log('New Task List: ', newTaskList);
+        if (!newTaskList && currentTab) {
+            setTask(getTaskListById(''));
+
+            navigate('/', { replace: true });
+
+            return;
         }
 
-        setTask(() => getTaskListById(currentTab));
-        console.log(getTaskListById(currentTab));
-        console.log(currentTab);
+        if (newTaskList && newTaskList.id === 'main-task' && currentTab !== 'main-task') {
+            navigate('/');
+        } else if (currentTab && currentTab !== newTaskList.id) {
+            navigate(`/${currentTab}`);
+        }
     }, [navigate, location.pathname]);
 
     const addTab = () => {
         setIsOpenModalTaskTitle(() => true);
+    };
+
+    const addTask = () => {
+        setIsOpenModalTask(() => true);
     };
 
     const handleSubmitTitleList = () => {
@@ -72,7 +85,7 @@ function DefaultPage() {
             />
 
             {isOpenModalTaskTitle && (
-                <FormTitleList
+                <ModalTaskTitle
                     titleList={titleList}
                     setTitleList={setTitleList}
                     setToggleTitle={setIsOpenModalTaskTitle}
@@ -82,9 +95,13 @@ function DefaultPage() {
                 />
             )}
 
+            {isOpenModalTask && 
+                <ModalNewTask/>
+            }
+
             <TaskContent task={task ?? {}} />
 
-            <AddButton />
+            <AddButton onClick={addTask} />
         </div>
     );
 }
