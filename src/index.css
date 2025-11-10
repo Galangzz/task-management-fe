@@ -7,6 +7,8 @@
     --button-color: #ff9f9f;
     --button-color-hover: #da0037;
     --add-button: #91adc8;
+    --star-fill: #3282B8;
+    --stroke-check: #fff;
 }
 
 [data-theme='dark'] {
@@ -16,6 +18,9 @@
     --button-color: #da0037;
     --button-color-hover: #ff9f9f;
     --add-button: #647fbc;
+    --star-fill: #BBE1FA;
+    --stroke-check: #4a4a4a;
+
 }
 
 * {

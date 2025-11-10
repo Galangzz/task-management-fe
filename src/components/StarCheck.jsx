@@ -38,7 +38,7 @@ const StyledWrapper = styled.div`
 
     input[type='checkbox']:checked + label svg {
         stroke: none;
-        fill: #ffc107;
+        fill: var(--star-fill);
         animation: pop_42 0.5s ease-out;
     }
 

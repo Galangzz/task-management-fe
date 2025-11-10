@@ -122,7 +122,7 @@ const StyledWrapper = styled.div`
     }
 
     .checkbox-wrapper-12 .cbx svg path {
-        stroke: #fff;
+        stroke: var(--stroke-check);
         stroke-width: 3;
         stroke-linecap: round;
         stroke-linejoin: round;
@@ -146,13 +146,13 @@ const StyledWrapper = styled.div`
 
     @-moz-keyframes splash-12 {
         40% {
-            background: #866efb;
-            box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb,
-                -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
+            background: var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
+                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
-            background: #866efb;
+            background: var(--star-fill);
             box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent,
                 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
         }
@@ -160,13 +160,13 @@ const StyledWrapper = styled.div`
 
     @-webkit-keyframes splash-12 {
         40% {
-            background: #866efb;
-            box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb,
-                -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
+            background: var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
+                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
-            background: #866efb;
+            background: var(--star-fill);
             box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent,
                 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
         }
@@ -174,13 +174,13 @@ const StyledWrapper = styled.div`
 
     @-o-keyframes splash-12 {
         40% {
-            background: #866efb;
-            box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb,
-                -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
+            background: var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
+                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
-            background: #866efb;
+            background: var(--star-fill);
             box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent,
                 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
         }
@@ -188,13 +188,13 @@ const StyledWrapper = styled.div`
 
     @keyframes splash-12 {
         40% {
-            background: #866efb;
-            box-shadow: 0 -18px 0 -8px #866efb, 16px -8px 0 -8px #866efb, 16px 8px 0 -8px #866efb, 0 18px 0 -8px #866efb,
-                -16px 8px 0 -8px #866efb, -16px -8px 0 -8px #866efb;
+            background: var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
+                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
-            background: #866efb;
+            background: var(--star-fill);
             box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent, 32px 16px 0 -10px transparent,
                 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
         }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Checkbox from './Checkboxes';
 import StarCheck from './StarCheck';
-import { getAllTasks, toggleStaredTask, toggleStatusTask } from '../services/localService';
+import { toggleStaredTask, toggleStatusTask } from '../services/localService';
 import { useNavigate } from 'react-router-dom';
 
 function ListTask({ children, checked, stared, id, taskId }) {
@@ -12,7 +12,7 @@ function ListTask({ children, checked, stared, id, taskId }) {
 
     const handleStared = (id) => {
         toggleStaredTask(id);
-        console.log(getAllTasks());
+        // console.log(getAllTasks());
     };
 
     return (
