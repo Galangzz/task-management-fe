@@ -1,15 +1,14 @@
 import React, { useRef, useState } from 'react';
-import Modal from './Modal';
+import Modal from '../ui/Modal';
 import { CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
-import StarCheck from './StarCheck';
+import StarCheck from '../ui/StarCheck';
 
 function ModalNewTask() {
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
     const [isOpenDetail, setIsOpenDetail] = useState(false);
     const textRef = useRef(null);
-    const inputRef = useRef(null);
 
     const handleInputDetail = (e) => {
         const el = textRef.current;
@@ -111,15 +110,7 @@ function ModalNewTask() {
                                 p-2
                                 "
                             >
-                                <input
-                                    ref={inputRef}
-                                    type="datetime-local"
-                                    id="newTaskDateTime"
-                                    className="absolute left-0 top-10 opacity-0 pointer-events-none
-                                     bg-gray-800 text-white"
-                                    
-                                />
-                                <IoMdTime onClick={() => inputRef.current.showPicker?.()} />
+                                <IoMdTime />
                             </div>
                             <div
                                 className="

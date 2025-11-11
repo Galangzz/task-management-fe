@@ -1,7 +1,7 @@
 import React from 'react';
 import Checkbox from './Checkboxes';
-import StarCheck from './StarCheck';
-import { toggleStaredTask, toggleStatusTask } from '../services/localService';
+import StarCheck from '../ui/StarCheck';
+import { toggleStaredTask, toggleStatusTask } from '../../services/localService';
 import { useNavigate } from 'react-router-dom';
 
 function ListTask({ children, checked, stared, id, taskId }) {

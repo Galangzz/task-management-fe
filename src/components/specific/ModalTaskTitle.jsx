@@ -1,4 +1,4 @@
-import { getTaskListByTitle } from '../services/localService';
+import { getTaskListByTitle } from '../../services/localService';
 import Modal from './Modal';
 
 function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitTitleList, err, setErr }) {

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import Switch from './Switch';
-import { ThemeContext } from '../context/Theme';
+import Switch from '../ui/Switch';
+import { ThemeContext } from '../../context/Theme';
 
 function Header() {
     const { theme, toggleTheme } = useContext(ThemeContext);

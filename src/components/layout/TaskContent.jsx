@@ -1,7 +1,7 @@
 import React from 'react';
 import Field from './Field';
-import ListTask from './ListTask';
-import StarCheck from './StarCheck';
+import ListTask from '../specific/ListTask';
+import StarCheck from '../ui/StarCheck';
 
 function TaskContent({ task = {} }) {
     const taskId = task.id;
