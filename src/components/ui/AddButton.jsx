@@ -6,7 +6,7 @@ function AddButton({ onClick }) {
         <button
             type="button"
             className="bg-(--add-button) 
-            w-fit p-4 rounded-2xl text-2xl absolute bottom-14 right-14 max-sm:bottom-7 max-sm:right-7 z-50 
+            w-fit p-4 rounded-2xl text-2xl absolute bottom-14 right-14 max-sm:bottom-7 max-sm:right-7 z-2 
             transition! duration-300 ease-in-out 
             transform 
             hover:scale-110 

@@ -9,6 +9,7 @@
     --add-button: #91adc8;
     --star-fill: #3282b8;
     --stroke-check: #fff;
+    --button-text: oklch(37.9% 0.146 265.522);
 }
 
 [data-theme='dark'] {
@@ -20,6 +21,8 @@
     --add-button: #647fbc;
     --star-fill: #bbe1fa;
     --stroke-check: #4a4a4a;
+    --button-text: oklch(70.7% 0.165 254.624);
+
 }
 
 * {

@@ -1,13 +1,20 @@
 import React, { useRef, useState } from 'react';
 import Modal from '../ui/Modal';
-import { CgDetailsMore } from 'react-icons/cg';
+import { CgCross, CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
 import StarCheck from '../ui/StarCheck';
+import ModalDayPicker from './ModalDayPicker';
+import { formatCustomDate } from '../../utils';
+import { RxCross2 } from 'react-icons/rx';
 
 function ModalNewTask() {
     const [title, setTitle] = useState('');
     const [detail, setDetail] = useState('');
     const [isOpenDetail, setIsOpenDetail] = useState(false);
+    const [isOpenCalendar, setIsOpenCalendar] = useState(false);
+    const [selected, setSelected] = useState(new Date());
+    const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
+
     const textRef = useRef(null);
 
     const handleInputDetail = (e) => {
@@ -19,6 +26,16 @@ function ModalNewTask() {
 
     const handleAddDetail = () => {
         setIsOpenDetail(true);
+    };
+
+    const handleOpenCalendar = () => {
+        setIsOpenCalendar(true);
+    };
+
+    const handleSubmitDateTime = () => {
+        setIsOpenCalendar(false);
+
+        setIsSubmitDateTime(true);
     };
 
     return (
@@ -83,6 +100,34 @@ function ModalNewTask() {
                             rows={1}
                         />
                     )}
+                    {isSubmitDateTime && (
+                        <div
+                            className="
+                            flex 
+                            gap-2 
+                            items-center
+                            text-[14px]
+                            font-bold
+                            border-2
+                            w-fit
+                            p-2
+                            mt-2   
+                        "
+                        >
+                            <p>{formatCustomDate(selected)}</p>
+                            <p>Time</p>
+                            <div className="flex justify-center items-center 
+                            transition!
+                            duration-300
+                            ease-in-out
+                            hover:scale-125 
+                            cursor-pointer"
+                            onClick={() => setIsSubmitDateTime(false)}
+                            >
+                                <RxCross2 size={18} />
+                            </div>
+                        </div>
+                    )}
                     <div
                         className="
                         flex justify-between items-center text-center
@@ -110,7 +155,7 @@ function ModalNewTask() {
                                 p-2
                                 "
                             >
-                                <IoMdTime />
+                                <IoMdTime onClick={handleOpenCalendar} />
                             </div>
                             <div
                                 className="
@@ -141,6 +186,17 @@ function ModalNewTask() {
                     </div>
                 </form>
             </div>
+            {isOpenCalendar && (
+                <ModalDayPicker
+                    toggleCalendar={(e) => {
+                        e.stopPropagation();
+                        setIsOpenCalendar(false);
+                    }}
+                    selected={selected}
+                    setSelected={setSelected}
+                    onHandleSubmit={handleSubmitDateTime}
+                />
+            )}
         </Modal>
     );
 }

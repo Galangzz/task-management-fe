@@ -1,5 +1,5 @@
 import React from 'react';
-import Checkbox from './Checkboxes';
+import Checkbox from '../ui/Checkboxes';
 import StarCheck from '../ui/StarCheck';
 import { toggleStaredTask, toggleStatusTask } from '../../services/localService';
 import { useNavigate } from 'react-router-dom';

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 
-function Calendar() {
-    const [selected, setSelected] = useState(new Date);
+function Calendar({selected, setSelected}) {
 
     return (
         <DayPicker

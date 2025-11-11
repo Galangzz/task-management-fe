@@ -1,5 +1,5 @@
 import { getTaskListByTitle } from '../../services/localService';
-import Modal from './Modal';
+import Modal from '../ui/Modal';
 
 function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitTitleList, err, setErr }) {
     const handleOnChange = (e) => {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import ModalTaskTitle from '../components/ModalTaskTitle';
+import Header from '../components/layout/Header';
+import Navbar from '../components/layout/Navbar';
+import ModalTaskTitle from '../components/specific/ModalTaskTitle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
 import { nanoid } from 'nanoid';
-import TaskContent from '../components/TaskContent';
-import AddButton from '../components/AddButton';
-import ModalNewTask from '../components/ModalNewTask';
+import TaskContent from '../components/layout/TaskContent';
+import AddButton from '../components/ui/AddButton';
+import ModalNewTask from '../components/specific/ModalNewTask';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState([]);

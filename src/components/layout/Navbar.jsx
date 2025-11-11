@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaPlus, FaStar } from 'react-icons/fa';
 import { GoPlus } from 'react-icons/go';
-import Button from './Button';
+import Button from '../ui/Button';
 import { useNavigate } from 'react-router-dom';
 
 function Navbar({ tabs, addList }) {
