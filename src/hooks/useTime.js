@@ -8,6 +8,7 @@ function useTime() {
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
     const [isOpenTime, setIsOpenTime] = useState(false);
     const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
+    const [isSubmitTime, setIsSubmitTime] = useState(false);
     const [selected, setSelected] = useState(new Date());
     // const [time, setTime] = useState(new Date());
     // console.log('Time: ',selected)
@@ -49,11 +50,13 @@ function useTime() {
         isOpenCalendar,
         isOpenTime,
         isSubmitDateTime,
+        isSubmitTime,
         selected,
         // time,
         textRef,
         setTitle,
         setIsSubmitDateTime,
+        setIsSubmitTime,
         handleInputDetail,
         handleAddDetail,
         handleOpenCalendar,

@@ -19,6 +19,7 @@ function ModalDayPicker({ toggleCalendar, onHandleSubmit, selected, setSelected,
             h-auto
             rounded-2xl
             py-4
+            m-2
             "
                     onClick={(e) => e.stopPropagation()}
                 >

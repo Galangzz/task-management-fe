@@ -16,11 +16,13 @@ function ModalNewTask() {
         isOpenCalendar,
         isOpenTime,
         isSubmitDateTime,
+        isSubmitTime, 
         selected,
         // time,
         textRef,
         setTitle,
         setIsSubmitDateTime,
+        setIsSubmitTime,
         handleInputDetail,
         handleAddDetail,
         handleOpenCalendar,
@@ -42,7 +44,7 @@ function ModalNewTask() {
                 rounded-3xl 
                 border 
                 bg-(--background-header) 
-
+                m-2
                 "
                     onClick={(e) => e.stopPropagation()}
                 >
