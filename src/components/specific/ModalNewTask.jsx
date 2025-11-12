@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React from 'react';
 import Modal from '../ui/Modal';
 import { CgCross, CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
@@ -6,46 +6,31 @@ import StarCheck from '../ui/StarCheck';
 import ModalDayPicker from './ModalDayPicker';
 import { formatCustomDate } from '../../utils';
 import { RxCross2 } from 'react-icons/rx';
+import useTime from '../../hooks/useTime';
 
 function ModalNewTask() {
-    const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState('');
-    const [isOpenDetail, setIsOpenDetail] = useState(false);
-    const [isOpenCalendar, setIsOpenCalendar] = useState(false);
-    const [selected, setSelected] = useState(new Date());
-    const [time, setTime] = useState(new Date());
-    const [isOpenTime, setIsOpenTime] = useState(false);
-    console.log(isOpenTime)
-    const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
+    const [
+        title,
+        detail,
+        isOpenDetail,
+        isOpenCalendar,
+        isOpenTime,
+        isSubmitDateTime,
+        selected,
+        // time,
+        textRef,
+        setTitle,
+        setIsSubmitDateTime,
+        handleInputDetail,
+        handleAddDetail,
+        handleOpenCalendar,
+        setIsOpenCalendar,
+        setIsOpenTime,
+        handleSubmitDateTime,
+        setSelected,
+        // handleTimeChange,
+    ] = useTime();
 
-    const textRef = useRef(null);
-
-    const handleInputDetail = (e) => {
-        const el = textRef.current;
-        el.style.height = 'auto';
-        el.style.height = `${el.scrollHeight}px`;
-        setDetail(e.target.value);
-    };
-
-    const handleAddDetail = () => {
-        setIsOpenDetail(true);
-    };
-
-    const handleOpenCalendar = () => {
-        setIsOpenCalendar(true);
-    };
-
-    const handleSubmitDateTime = () => {
-        setIsOpenCalendar(false);
-
-        setIsSubmitDateTime(true);
-    };
-
-    const handleTimeChange = useCallback((newTime) => {
-        setTime(newTime);
-    }, []);
-
-  
     return (
         <>
             <Modal setToggle={() => alert('aaaa')}>
@@ -85,10 +70,7 @@ function ModalNewTask() {
                             focus:border
                         "
                             maxLength={30}
-                            onChange={(e) => {
-                                setTitle(e.target.value);
-                                console.log(title);
-                            }}
+                            onChange={setTitle}
                         />
                         {isOpenDetail && (
                             <textarea
@@ -205,8 +187,8 @@ function ModalNewTask() {
                     }}
                     selected={selected}
                     setSelected={setSelected}
-                    selectedTime={time}
-                    setSelectedTime={handleTimeChange}
+                    selectedTime={selected}
+                    setSelectedTime={(newTime) => setSelected(newTime) }
                     isOpenTime={isOpenTime}
                     setIsOpenTime={setIsOpenTime}
                     onHandleSubmit={handleSubmitDateTime}
