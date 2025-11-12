@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Modal from '../ui/Modal';
 import { CgCross, CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
@@ -13,6 +13,9 @@ function ModalNewTask() {
     const [isOpenDetail, setIsOpenDetail] = useState(false);
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
     const [selected, setSelected] = useState(new Date());
+    const [time, setTime] = useState(new Date());
+    const [isOpenTime, setIsOpenTime] = useState(false);
+    console.log(isOpenTime)
     const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
 
     const textRef = useRef(null);
@@ -38,10 +41,16 @@ function ModalNewTask() {
         setIsSubmitDateTime(true);
     };
 
+    const handleTimeChange = useCallback((newTime) => {
+        setTime(newTime);
+    }, []);
+
+  
     return (
-        <Modal setToggle={() => alert('aaaa')}>
-            <div
-                className="ModalTaskTitle flex flex-col 
+        <>
+            <Modal setToggle={() => alert('aaaa')}>
+                <div
+                    className="ModalTaskTitle flex flex-col 
                 w-98 h-auto 
                 gap-6 p-4 
                 justify-center items-center 
@@ -50,24 +59,24 @@ function ModalNewTask() {
                 bg-(--background-header) 
 
                 "
-                onClick={(e) => e.stopPropagation()}
-            >
-                <form
-                    id="newTaskForm"
-                    action="submit"
-                    className="
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <form
+                        id="newTaskForm"
+                        action="submit"
+                        className="
                     flex flex-col
                     gap-2
                     w-full
                     
                 "
-                >
-                    <input
-                        value={title}
-                        id="newTaskTitle"
-                        type="text"
-                        placeholder="Tugas Baru"
-                        className="
+                    >
+                        <input
+                            value={title}
+                            id="newTaskTitle"
+                            type="text"
+                            placeholder="Tugas Baru"
+                            className="
                             text-xl
                             border-b-2
                             p-2
@@ -75,20 +84,20 @@ function ModalNewTask() {
                             focus:outline-none
                             focus:border
                         "
-                        maxLength={30}
-                        onChange={(e) => {
-                            setTitle(e.target.value);
-                            console.log(title);
-                        }}
-                    />
-                    {isOpenDetail && (
-                        <textarea
-                            ref={textRef}
-                            value={detail}
-                            onInput={handleInputDetail}
-                            id="newTaskDetail"
-                            placeholder="Tambahkan detail"
-                            className="
+                            maxLength={30}
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                                console.log(title);
+                            }}
+                        />
+                        {isOpenDetail && (
+                            <textarea
+                                ref={textRef}
+                                value={detail}
+                                onInput={handleInputDetail}
+                                id="newTaskDetail"
+                                placeholder="Tambahkan detail"
+                                className="
                     scrollbar-custom-textarea
                     w-full
                     h-auto
@@ -97,12 +106,12 @@ function ModalNewTask() {
                     focus:outline-none
                     resize-none
                     "
-                            rows={1}
-                        />
-                    )}
-                    {isSubmitDateTime && (
-                        <div
-                            className="
+                                rows={1}
+                            />
+                        )}
+                        {isSubmitDateTime && (
+                            <div
+                                className="
                             flex 
                             gap-2 
                             items-center
@@ -113,66 +122,67 @@ function ModalNewTask() {
                             p-2
                             mt-2   
                         "
-                        >
-                            <p>{formatCustomDate(selected)}</p>
-                            <p>Time</p>
-                            <div className="flex justify-center items-center 
+                            >
+                                <p>{formatCustomDate(selected)}</p>
+                                <p>Time</p>
+                                <div
+                                    className="flex justify-center items-center 
                             transition!
                             duration-300
                             ease-in-out
                             hover:scale-125 
                             cursor-pointer"
-                            onClick={() => setIsSubmitDateTime(false)}
-                            >
-                                <RxCross2 size={18} />
+                                    onClick={() => setIsSubmitDateTime(false)}
+                                >
+                                    <RxCross2 size={18} />
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    <div
-                        className="
+                        )}
+                        <div
+                            className="
                         flex justify-between items-center text-center
                         "
-                    >
-                        <div className="flex flex-1 gap-2 items-center text-2xl mt-2">
-                            <div
-                                className="
+                        >
+                            <div className="flex flex-1 gap-2 items-center text-2xl mt-2">
+                                <div
+                                    className="
                                 rounded-4xl
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
                                 p-2
                                 "
-                                onClick={handleAddDetail}
-                            >
-                                <CgDetailsMore />
-                            </div>
-                            <div
-                                className="
+                                    onClick={handleAddDetail}
+                                >
+                                    <CgDetailsMore />
+                                </div>
+                                <div
+                                    className="
                                 rounded-4xl
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
                                 p-2
                                 "
-                            >
-                                <IoMdTime onClick={handleOpenCalendar} />
-                            </div>
-                            <div
-                                className="
+                                >
+                                    <IoMdTime onClick={handleOpenCalendar} />
+                                </div>
+                                <div
+                                    className="
                                 rounded-4xl
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
                                 p-2
                                 "
-                            >
-                                <StarCheck />
+                                >
+                                    <StarCheck />
+                                </div>
                             </div>
-                        </div>
-                        <button
-                            // disabled
-                            type="submit"
-                            className="
+                            <button
+                                // disabled
+                                type="submit"
+                                className="
                             text-center
                             rounded-2xl
                             p-2
@@ -180,12 +190,13 @@ function ModalNewTask() {
                             disabled:text-gray-400!
                             hover:backdrop-brightness-110
                             "
-                        >
-                            Simpan
-                        </button>
-                    </div>
-                </form>
-            </div>
+                            >
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </Modal>
             {isOpenCalendar && (
                 <ModalDayPicker
                     toggleCalendar={(e) => {
@@ -194,10 +205,14 @@ function ModalNewTask() {
                     }}
                     selected={selected}
                     setSelected={setSelected}
+                    selectedTime={time}
+                    setSelectedTime={handleTimeChange}
+                    isOpenTime={isOpenTime}
+                    setIsOpenTime={setIsOpenTime}
                     onHandleSubmit={handleSubmitDateTime}
                 />
             )}
-        </Modal>
+        </>
     );
 }
 
