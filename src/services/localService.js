@@ -113,19 +113,30 @@ function getTaskListByTitle(title) {
     if (!title) {
         return null;
     }
+    const taskStorage = localStorage.getItem('task');
 
-    const found = task.find((t) => t.title == title);
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
+    let found;
+    try {
+        found = tasks.find((t) => t.title == title);
+    } catch {
+        found = tasks.find((t) => t.title == title);
+    }
 
     return found || null;
 }
 
 function getTaskListById(id) {
+    const taskStorage = localStorage.getItem('task');
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
     if (!id) {
-        return task.find((t) => t.id == 'main-task');
+        return tasks.find((t) => t.id == 'main-task');
     }
 
     if (id == 'stared-task') {
-        const staredTasks = task.flatMap((list) => list.tasks.filter((t) => t.stared === true) || []);
+        const staredTasks = tasks.flatMap((list) => list.tasks.filter((t) => t.stared === true) || []);
         return {
             id: 'stared-task',
             title: 'Stared Task',
@@ -139,25 +150,36 @@ function getTaskListById(id) {
 }
 
 function getAllTasks() {
+    const taskStorage = localStorage.getItem('task');
+    if (taskStorage) {
+        return JSON.parse(taskStorage);
+    }
     return task;
 }
 
 function toggleStatusTask(id) {
-    task = task.map((taskDoc) => ({
+    const taskStorage = localStorage.getItem('task');
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+    tasks = tasks.map((taskDoc) => ({
         ...taskDoc,
         tasks: taskDoc.tasks.map((taskItem) =>
             taskItem.id === id ? { ...taskItem, status: !taskItem.status } : taskItem
         ),
     }));
+
+    localStorage.setItem('task', JSON.stringify(tasks));
 }
 
 function toggleStaredTask(id) {
-    task = task.map((taskDoc) => ({
+    const taskStorage = localStorage.getItem('task');
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+    tasks = tasks.map((taskDoc) => ({
         ...taskDoc,
         tasks: taskDoc.tasks.map((taskItem) =>
             taskItem.id === id ? { ...taskItem, stared: !taskItem.stared } : taskItem
         ),
     }));
+    localStorage.setItem('task', JSON.stringify(tasks));
 }
 
 export { postTask, getTaskListByTitle, getAllTasks, getTaskListById, toggleStatusTask, toggleStaredTask, addNewTask };
