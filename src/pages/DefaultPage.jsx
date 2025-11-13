@@ -1,33 +1,108 @@
-import React, { useState } from 'react';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import { Navigate } from 'react-router-dom';
-import useTheme from '../hooks/useTheme';
-import { ThemeProvider } from '../context/Theme';
+import React, { useEffect, useState } from 'react';
+import Header from '../components/layout/Header';
+import Navbar from '../components/layout/Navbar';
+import ModalTaskTitle from '../components/specific/ModalTaskTitle';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getAllTasks, getTaskListById, getTaskListByTitle, postTask } from '../services/localService';
+import { nanoid } from 'nanoid';
+import TaskContent from '../components/layout/TaskContent';
+import AddButton from '../components/ui/AddButton';
+import ModalNewTask from '../components/specific/ModalNewTask';
 
 function DefaultPage() {
-    const [tabs, setTabs] = useState([{ id: 1 }]);
-    const [theme, toggleTheme] = useTheme();
+    const [tabs, setTabs] = useState([]);
+    const [task, setTask] = useState({});
+    const [titleList, setTitleList] = useState('');
+    const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
+    const [isOpenModalTask, setIsOpenModalTask] = useState(false);
+    const [errTL, setErrTL] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    // const currentId = location.pathname.split('/tab/')[1];
+    useEffect(() => {
+        setTabs(() => getAllTasks());
+        if (!isOpenModalTaskTitle) {
+            setErrTL('');
+            setTitleList('');
+        }
+    }, [isOpenModalTaskTitle]);
+
+    useEffect(() => {
+        const currentTab = location.pathname.split('/')[1];
+        const newTaskList = getTaskListById(currentTab);
+        setTask(newTaskList);
+        console.log('New Task List: ', newTaskList);
+        if (!newTaskList && currentTab) {
+            setTask(getTaskListById(''));
+
+            navigate('/', { replace: true });
+
+            return;
+        }
+
+        if (newTaskList && newTaskList.id === 'main-task' && currentTab !== 'main-task') {
+            navigate('/');
+        } else if (currentTab && currentTab !== newTaskList.id) {
+            navigate(`/${currentTab}`);
+        }
+    }, [navigate, location.pathname]);
 
     const addTab = () => {
-        const newId = tabs.length ? Math.max(...tabs.map((t) => t.id)) + 1 : 1;
-        setTabs([...tabs, { id: newId }]);
-        Navigate(`/tab/${newId}`);
+        setIsOpenModalTaskTitle(() => true);
+    };
+
+    const addTask = () => {
+        setIsOpenModalTask(() => true);
+    };
+
+    const handleSubmitTitleList = () => {
+        const checkTitle = getTaskListByTitle(titleList);
+
+        if (checkTitle) {
+            setErrTL('Judul Task List tidak boleh duplikat');
+            return;
+        }
+        const id = nanoid(16);
+        const post = postTask({ id: id, title: titleList });
+        if (!post) {
+            setErrTL('Gagal Menambahkan Task List');
+            return;
+        }
+
+        setErrTL('');
+        setIsOpenModalTaskTitle(false);
+        navigate(`/${id}`);
+        setTitleList('');
+        console.log(tabs);
     };
 
     return (
-        <ThemeProvider value={{ theme, toggleTheme }}>
-            <div >
-                <Header />
-                <Navbar
-                    tabs={tabs}
-                    addList={addTab}
+        <div className="relative w-screen h-screen flex flex-col">
+            <Header />
+            <Navbar
+                tabs={tabs}
+                addList={addTab}
+            />
+
+            {isOpenModalTaskTitle && (
+                <ModalTaskTitle
+                    titleList={titleList}
+                    setTitleList={setTitleList}
+                    setToggleTitle={setIsOpenModalTaskTitle}
+                    handleSubmitTitleList={handleSubmitTitleList}
+                    err={errTL}
+                    setErr={setErrTL}
                 />
-                <button type="button">aaa</button>
-            </div>
-        </ThemeProvider>
+            )}
+
+            {isOpenModalTask && 
+                <ModalNewTask setIsOpenModalTask={setIsOpenModalTask}/>
+            }
+
+            <TaskContent task={task ?? {}} />
+
+            <AddButton onClick={addTask} />
+        </div>
     );
 }
 

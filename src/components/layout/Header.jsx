@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import Switch from './Switch';
-import { ThemeContext } from '../context/Theme';
+import Switch from '../ui/Switch';
+import { ThemeContext } from '../../context/Theme';
 
 function Header() {
     const { theme, toggleTheme } = useContext(ThemeContext);
@@ -10,7 +10,7 @@ function Header() {
             <h1>Task</h1>
             <Switch
                 className={'absolute right-0'}
-                checked={theme == 'dark' ? true : false}
+                checked={theme === 'dark'}
                 onChange={toggleTheme}
             />
         </div>

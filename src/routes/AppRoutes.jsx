@@ -3,17 +3,20 @@ import { Route } from 'react-router-dom';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import DefaultPage from '../pages/DefaultPage';
+import DetailTask from '../pages/DetailTask';
 
 function AppRoutes() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route
-                    path="/*"
-                    element={<DefaultPage />}
-                />
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+            <Route
+                path="/*"
+                element={<DefaultPage />}
+            />
+            <Route
+                path="/details/:id/:taskId"
+                element={<DetailTask />}
+            />
+        </Routes>
     );
 }
 
