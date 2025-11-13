@@ -8,21 +8,25 @@ import { formatCustomDate } from '../../utils';
 import { RxCross2 } from 'react-icons/rx';
 import useTime from '../../hooks/useTime';
 
-function ModalNewTask() {
-    const [
+function ModalNewTask({setIsOpenModalTask}) {
+    const {
         title,
         detail,
         isOpenDetail,
         isOpenCalendar,
         isOpenTime,
         isSubmitDateTime,
-        isSubmitTime, 
+        isSubmitTime,
         selected,
         // time,
         textRef,
+        stared,
+        error,
+        setStared,
         setTitle,
         setIsSubmitDateTime,
         setIsSubmitTime,
+        handleSubmitTime,
         handleInputDetail,
         handleAddDetail,
         handleOpenCalendar,
@@ -30,9 +34,12 @@ function ModalNewTask() {
         setIsOpenTime,
         handleSubmitDateTime,
         setSelected,
+        handleSubmitNewTask,
         // handleTimeChange,
-    ] = useTime();
-
+    } = useTime();
+    // console.log('ModalNewTask: ', { isOpenTime });
+    const hours = selected.getHours();
+    const minutes = selected.getMinutes();
     return (
         <>
             <Modal setToggle={() => alert('aaaa')}>
@@ -56,10 +63,14 @@ function ModalNewTask() {
                     gap-2
                     w-full
                     
-                "
+                    "
+                        onSubmit={(e) => {
+                            handleSubmitNewTask(e, setIsOpenModalTask);
+                        }}
                     >
                         <input
                             value={title}
+                            onChange={setTitle}
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
@@ -72,8 +83,9 @@ function ModalNewTask() {
                             focus:border
                         "
                             maxLength={30}
-                            onChange={setTitle}
+                            required
                         />
+                        {error !== '' && <p>{error}</p>}
                         {isOpenDetail && (
                             <textarea
                                 ref={textRef}
@@ -108,7 +120,12 @@ function ModalNewTask() {
                         "
                             >
                                 <p>{formatCustomDate(selected)}</p>
-                                <p>Time</p>
+                                {isSubmitTime && (
+                                    <p className="m-0">{`${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+                                        2,
+                                        '0'
+                                    )}`}</p>
+                                )}
                                 <div
                                     className="flex justify-center items-center 
                             transition!
@@ -160,7 +177,11 @@ function ModalNewTask() {
                                 p-2
                                 "
                                 >
-                                    <StarCheck />
+                                    <StarCheck
+                                        id="newTask"
+                                        checked={stared}
+                                        onChange={() => setStared(!stared)}
+                                    />
                                 </div>
                             </div>
                             <button
@@ -190,10 +211,13 @@ function ModalNewTask() {
                     selected={selected}
                     setSelected={setSelected}
                     selectedTime={selected}
-                    setSelectedTime={(newTime) => setSelected(newTime) }
+                    setSelectedTime={(newTime) => setSelected(newTime)}
                     isOpenTime={isOpenTime}
+                    isSubmitTime={isSubmitTime}
                     setIsOpenTime={setIsOpenTime}
                     onHandleSubmit={handleSubmitDateTime}
+                    onHandleSubmitTime={handleSubmitTime}
+                    setIsSubmitTime={setIsSubmitTime}
                 />
             )}
         </>

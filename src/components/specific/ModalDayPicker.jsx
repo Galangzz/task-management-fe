@@ -3,9 +3,24 @@ import Calendar from './Calendar';
 import Modal from '../ui/Modal';
 import { IoMdTime } from 'react-icons/io';
 import ModalTimePicker from './ModalTimePicker';
+import { RxCross2 } from 'react-icons/rx';
 
-function ModalDayPicker({ toggleCalendar, onHandleSubmit, selected, setSelected, selectedTime, setSelectedTime, isOpenTime, setIsOpenTime }) {
-
+function ModalDayPicker({
+    toggleCalendar,
+    onHandleSubmit,
+    selected,
+    setSelected,
+    selectedTime,
+    setSelectedTime,
+    isOpenTime,
+    setIsOpenTime,
+    isSubmitTime,
+    setIsSubmitTime,
+    onHandleSubmitTime,
+}) {
+    // console.log('ModalDayPicker: ', { isOpenTime });
+    const hours = selected.getHours();
+    const minutes = selected.getMinutes();
     return (
         <>
             <Modal setToggle={toggleCalendar}>
@@ -44,7 +59,42 @@ function ModalDayPicker({ toggleCalendar, onHandleSubmit, selected, setSelected,
                         onClick={() => setIsOpenTime(true)}
                     >
                         <IoMdTime className="text-2xl" />
-                        {isOpenTime ? '' : <p className="text-xl">Setel waktu</p>}
+                        {isSubmitTime ? (
+                            <div
+                                className="
+                            flex items-center 
+                            w-fit
+                            border
+                            p-2
+                            gap-2 
+                            text-xl
+                            leading-none"
+                                // onClick={(e) => e.stopPropagation()}
+                            >
+                                <p className="m-0 translate-y-0.5">{`${String(hours).padStart(2, '0')}:${String(
+                                    minutes
+                                ).padStart(2, '0')}`}</p>
+                                <div
+                                    className="
+                                    flex justify-center items-center 
+                                    h-full
+                                    transition!
+                                    duration-300
+                                    ease-in-out
+                                    hover:scale-125 
+                                    cursor-pointer
+                                    text-[22px]"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsSubmitTime(false);
+                                    }}
+                                >
+                                    <RxCross2 />
+                                </div>
+                            </div>
+                        ) : (
+                            <p className="text-xl">Setel waktu</p>
+                        )}
                     </div>
                     <div
                         className="
@@ -95,6 +145,7 @@ function ModalDayPicker({ toggleCalendar, onHandleSubmit, selected, setSelected,
                     }}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
+                    onSubmitTime={onHandleSubmitTime}
                 />
             )}
         </>

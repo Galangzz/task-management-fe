@@ -8,9 +8,11 @@ function Calendar({selected, setSelected}) {
         <DayPicker
             animate
             mode="single"
+            navLayout="around"
             selected={selected}
             onSelect={setSelected}
-            footer={selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'}
+            required
+            // footer={selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'}
         />
     );
 }

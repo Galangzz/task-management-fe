@@ -5,7 +5,7 @@ import CustomClockField from '../ui/CustomClockField';
 import { IoMdTime } from 'react-icons/io';
 import { FaKeyboard } from 'react-icons/fa';
 
-function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime }) {
+function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTime }) {
     const [inputTimeField, setInputTimeField] = useState(false);
     const [viewClock, setViewClock] = useState('hours');
     const [clickCount, setClickCount] = useState(0);
@@ -143,7 +143,7 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime }) {
                             rounded-2xl
                             cursor-pointer
                         "
-                        onClick={toggleTime}
+                            onClick={toggleTime}
                         >
                             Batal
                         </button>
@@ -156,6 +156,7 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime }) {
                             rounded-2xl
                             cursor-pointer
                         "
+                            onClick={onSubmitTime}
                         >
                             Selesai
                         </button>
