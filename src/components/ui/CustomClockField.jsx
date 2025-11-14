@@ -20,7 +20,6 @@ function CustomClockField({ time, onChange, view, setView }) {
                         backdropFilter: 'brightness(80%)',
                     },
                 }}
-                
                 onChange={onChange}
                 view={view}
                 onViewChange={(newView) => setView(newView)}

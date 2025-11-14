@@ -27,6 +27,8 @@ function DefaultPage() {
         }
     }, [isOpenModalTaskTitle]);
 
+   
+
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1];
         const newTaskList = getTaskListById(currentTab);
@@ -45,7 +47,7 @@ function DefaultPage() {
         } else if (currentTab && currentTab !== newTaskList.id) {
             navigate(`/${currentTab}`);
         }
-    }, [navigate, location.pathname]);
+    }, [navigate, location.pathname, isOpenModalTask]);
 
     const addTab = () => {
         setIsOpenModalTaskTitle(() => true);
@@ -95,9 +97,7 @@ function DefaultPage() {
                 />
             )}
 
-            {isOpenModalTask && 
-                <ModalNewTask setIsOpenModalTask={setIsOpenModalTask}/>
-            }
+            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />}
 
             <TaskContent task={task ?? {}} />
 

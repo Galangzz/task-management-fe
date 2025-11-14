@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addNewTask, getTaskListById } from '../services/localService';
@@ -17,11 +17,21 @@ function useTime() {
     const [error, setError] = useState('');
     const [selected, setSelected] = useState(new Date());
     // const [time, setTime] = useState(new Date());
-    // console.log('Time: ',selected)
+    console.log('Time: ', selected);
     // console.log({ isSubmitTime });
 
     const textRef = useRef(null);
-    
+
+    useEffect(() => {
+        let date = new Date();
+        const isValid = selected instanceof Date && !isNaN(selected.getTime());
+
+        if (!isValid) {
+            setSelected(date);
+        } else {
+            date = selected
+        }
+    }, [selected]);
 
     const handleInputDetail = useCallback(
         (e) => {
@@ -96,7 +106,7 @@ function useTime() {
                 }
                 navigate(`/${currentTab}`);
             }
-            setIsOpenModaltask(false)
+            setIsOpenModaltask(false);
         },
         [isSubmitDateTime, title, isSubmitTime, selected, stared, location.pathname, navigate, detail]
     );
