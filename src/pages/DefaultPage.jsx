@@ -32,6 +32,7 @@ function DefaultPage() {
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1];
         const newTaskList = getTaskListById(currentTab);
+        console.log({newTaskList, currentTab})
         setTask(newTaskList);
         console.log('New Task List: ', newTaskList);
         if (!newTaskList && currentTab) {

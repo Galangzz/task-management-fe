@@ -55,11 +55,17 @@ function postTask({ id, title }) {
         return false;
     }
 
-    task.push({
+    const taskStorage = localStorage.getItem('task');
+
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
+    tasks.push({
         id: id,
         title: title,
         tasks: [],
     });
+    console.log({ tasks });
+    localStorage.setItem('task', JSON.stringify(tasks));
 
     return true;
 }
@@ -71,8 +77,12 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
     //     return {err: ''};
     // }
 
+    const taskStorage = localStorage.getItem('task');
+
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
     // cari list berdasarkan idList
-    const listIndex = task.findIndex((list) => list.id === idList);
+    const listIndex = tasks.findIndex((list) => list.id === idList);
     if (listIndex === -1) {
         console.error(`List dengan id ${idList} tidak ditemukan.`);
         return { err: 'Gagal Menambahkan catatan' };
@@ -98,13 +108,13 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
     };
 
     // tambahkan ke list yang sesuai
-    task[listIndex].tasks.push(newTask);
+    tasks[listIndex].tasks.push(newTask);
 
     // simpan ke localStorage (opsional)
-    localStorage.setItem('task', JSON.stringify(task));
+    localStorage.setItem('task', JSON.stringify(tasks));
 
     console.log('✅ Task baru ditambahkan:', newTask);
-    console.log('📦 Semua data:', task);
+    console.log('📦 Semua data:', tasks);
 
     return { err: '' };
 }
@@ -130,6 +140,7 @@ function getTaskListByTitle(title) {
 function getTaskListById(id) {
     const taskStorage = localStorage.getItem('task');
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+    console.log({tasks})
 
     if (!id) {
         return tasks.find((t) => t.id == 'main-task');
@@ -144,7 +155,7 @@ function getTaskListById(id) {
         };
     }
 
-    const found = task.find((t) => t.id == id);
+    const found = tasks.find((t) => t.id == id);
 
     return found || null;
 }
