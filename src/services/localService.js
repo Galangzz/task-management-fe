@@ -7,7 +7,7 @@ let task = [
         title: 'Tugas Saya',
         tasks: [
             {
-                id: 1,
+                id: '1',
                 name: 'Matematika',
                 dateDeadline: '2025-11-05T05:13:45.673Z',
                 created: '2025-11-05T05:13:45.673Z',
@@ -15,7 +15,7 @@ let task = [
                 status: true,
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Bahasa Indonesia',
                 dateDeadline: '2025-11-05T05:13:45.673Z',
                 created: '2025-11-05T05:13:45.673Z',
@@ -23,7 +23,7 @@ let task = [
                 status: false,
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Bahasa Jawa',
                 dateDeadline: '2025-11-07T05:13:45.673Z',
                 created: '2025-11-07T05:13:45.673Z',
@@ -38,7 +38,7 @@ let task = [
         title: 'ABcD',
         tasks: [
             {
-                id: 4,
+                id: '4',
                 name: 'Matematika',
                 dateDeadline: '2025-11-21T05:13:45.673Z',
                 created: '2025-11-21T05:13:45.673Z',
@@ -92,10 +92,8 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
 
     const newId = `task-${nanoid(16)}`;
 
-    // waktu pembuatan (jika tidak dikirim dari luar)
     const created = new Date().toISOString();
 
-    // task baru
     const newTask = {
         id: newId,
         name,
@@ -106,14 +104,12 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
         status,
     };
 
-    // tambahkan ke list yang sesuai
     tasks[listIndex].tasks.push(newTask);
 
-    // simpan ke localStorage (opsional)
     localStorage.setItem('task', JSON.stringify(tasks));
 
-    console.log('✅ Task baru ditambahkan:', newTask);
-    console.log('📦 Semua data:', tasks);
+    console.log('Task baru ditambahkan:', newTask);
+    console.log('Semua data:', tasks);
 
     return { err: '' };
 }
@@ -204,4 +200,25 @@ export {
 
 addTaskTitle.propTypes = {
     title: PropTypes.string.isRequired,
+};
+
+addNewTask.propTypes = {
+    idList: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    dateDeadline: PropTypes.string,
+    detail: PropTypes.string,
+    stared: PropTypes.bool.isRequired,
+    status: PropTypes.bool.isRequired,
+};
+
+getTaskListByTitle.propTypes = {
+    title: PropTypes.string.isRequired,
+};
+
+getTaskListById.propTypes = {
+    id: PropTypes.string.isRequired,
+};
+
+toggleStatusTask.propTypes = {
+    id: PropTypes.string.isRequired,
 };
