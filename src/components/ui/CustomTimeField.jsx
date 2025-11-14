@@ -4,7 +4,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 
-function CustomTimeField({ id, view, format, time, readOnly, onChange, onClick }) {
+function CustomTimeField({ id, view, format, time, readOnly, onChange, onClick, onError }) {
+    const handlePrevent = (e) => {
+        e.preventDefault();
+    };
+
+    const handleKeyDown = (e) => {
+        if ((e.ctrlKey || e.metaKey) && ['c', 'v', 'x'].includes(e.key.toLowerCase())) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <TimeField
@@ -49,9 +59,25 @@ function CustomTimeField({ id, view, format, time, readOnly, onChange, onClick }
                         borderRadius: 2,
                     },
                 }}
+                slotProps={{
+                    textField: {
+                        inputProps: {
+                            onCopy: handlePrevent,
+                            onPaste: handlePrevent,
+                            onCut: handlePrevent,
+                            onKeyDown: handleKeyDown, // tangkap keyboard shortcut
+                            style: { userSelect: 'none' },
+                        },
+                    },
+                }}
+                onError={onError}
                 focused={id === view}
                 onClick={onClick}
                 readOnly={readOnly}
+                required
+                onCut={(e) => e.preventDefault()}
+                // onCopy={(e) => e.preventDefault()}
+                // onPaste={(e) => e.preventDefault()}
             />
         </LocalizationProvider>
     );

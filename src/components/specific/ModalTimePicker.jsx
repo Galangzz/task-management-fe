@@ -9,6 +9,9 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
     const [inputTimeField, setInputTimeField] = useState(false);
     const [viewClock, setViewClock] = useState('hours');
     const [clickCount, setClickCount] = useState(0);
+    const [errTimeField, setErrTimeField] = useState(null);
+    // const [date, setDate] = useState(new Date());
+    // console.log({date})
 
     useEffect(() => {
         if (clickCount === 3) {
@@ -22,16 +25,11 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
         return () => clearTimeout(timer);
     }, [clickCount]);
 
-    // const handleChange = useCallback(
-    //     (newValue, selectionState) => {
-    //         // onChange(newValue);
-    //         // Jika user sedang memilih menit, ubah view kembali ke jam
-    //         if (selectionState === 'finish' && viewClock === 'minutes') {
-    //             setTimeout(() => setViewClock('hours'), 500); // delay biar smooth
-    //         }
-    //     },
-    //     [viewClock]
-    // );
+    // useEffect(() => {
+    //     if (selectedTime && selectedTime.getTime() !== date.getTime()) {
+    //         setDate(selectedTime);
+    //     }
+    // }, [selectedTime, date]);
 
     return (
         <Modal setToggle={toggleTime}>
@@ -73,6 +71,11 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                         }}
                         onChange={setSelectedTime}
                         readOnly={!inputTimeField}
+                        onError={(error) => {
+                            setErrTimeField(error);
+
+                            // setSelectedTime(date);
+                        }}
                     />
                     :
                     <CustomTimeField
@@ -86,6 +89,14 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                         }}
                         onChange={setSelectedTime}
                         readOnly={!inputTimeField}
+                        onError={(error) => {
+                            setErrTimeField(error);
+
+                            // if (!error) {
+                            //     setSelectedTime(date);
+                            // }
+                            // console.log({ date });
+                        }}
                     />
                 </div>
                 {!inputTimeField && (
@@ -155,8 +166,11 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                             p-2
                             rounded-2xl
                             cursor-pointer
+                            disabled:text-gray-600!
+                            disabled:cursor-not-allowed
                         "
                             onClick={onSubmitTime}
+                            disabled={errTimeField}
                         >
                             Selesai
                         </button>

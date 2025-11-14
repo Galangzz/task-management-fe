@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from './Calendar';
 import Modal from '../ui/Modal';
 import { IoMdTime } from 'react-icons/io';
@@ -18,9 +18,15 @@ function ModalDayPicker({
     setIsSubmitTime,
     onHandleSubmitTime,
 }) {
-    // console.log('ModalDayPicker: ', { isOpenTime });
-    const hours = selected.getHours();
-    const minutes = selected.getMinutes();
+    const [hours, setHours] = useState(null);
+    const [minutes, setMinutes] = useState(null);
+
+    useEffect(() => {
+        if (!isSubmitTime) return;
+        setHours(selected.getHours());
+        setMinutes(selected.getMinutes());
+    }, [isSubmitTime, selected]);
+
     return (
         <>
             <Modal setToggle={toggleCalendar}>

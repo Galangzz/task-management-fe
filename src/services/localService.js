@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 
 let task = [
     {
@@ -6,7 +7,7 @@ let task = [
         title: 'Tugas Saya',
         tasks: [
             {
-                id: 1,
+                id: '1',
                 name: 'Matematika',
                 dateDeadline: '2025-11-05T05:13:45.673Z',
                 created: '2025-11-05T05:13:45.673Z',
@@ -14,7 +15,7 @@ let task = [
                 status: true,
             },
             {
-                id: 2,
+                id: '2',
                 name: 'Bahasa Indonesia',
                 dateDeadline: '2025-11-05T05:13:45.673Z',
                 created: '2025-11-05T05:13:45.673Z',
@@ -22,7 +23,7 @@ let task = [
                 status: false,
             },
             {
-                id: 3,
+                id: '3',
                 name: 'Bahasa Jawa',
                 dateDeadline: '2025-11-07T05:13:45.673Z',
                 created: '2025-11-07T05:13:45.673Z',
@@ -30,13 +31,14 @@ let task = [
                 status: false,
             },
         ],
+        deletePermission: false,
     },
     {
         id: 123,
         title: 'ABcD',
         tasks: [
             {
-                id: 4,
+                id: '4',
                 name: 'Matematika',
                 dateDeadline: '2025-11-21T05:13:45.673Z',
                 created: '2025-11-21T05:13:45.673Z',
@@ -44,49 +46,54 @@ let task = [
                 status: false,
             },
         ],
+        deletePermission: true,
     },
 ];
 
-function postTask({ id, title }) {
-    if (id == null) {
-        return false;
-    }
-    if (title == null) {
-        return false;
-    }
+async function addTaskTitle({ title }) {
+    try {
+        if (!title || title.trim() === '') {
+            return { id: null, err: 'Judul tidak boleh kosong' };
+        }
+        const checkDuplicate = getTaskListByTitle(title);
+        if (checkDuplicate) return { id: null, err: 'Judul task list tidak boleh duplikat' };
 
-    task.push({
-        id: id,
-        title: title,
-        tasks: [],
-    });
+        const id = nanoid(16);
 
-    return true;
+        const taskStorage = localStorage.getItem('task');
+        let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
+        tasks.push({
+            id: id,
+            title: title.trim(),
+            tasks: [],
+            deletePermission: true,
+        });
+        console.log({ tasks });
+        localStorage.setItem('task', JSON.stringify(tasks));
+
+        return { id: id, err: null };
+    } catch (error) {
+        console.error(error);
+        return { id: null, err: error };
+    }
 }
 
 async function addNewTask(idList, { name, dateDeadline, detail, stared, status }) {
-    // validasi input
-    // if (!name || !idList) {
-    //     console.error('idList dan name wajib diisi');
-    //     return {err: ''};
-    // }
+    const taskStorage = localStorage.getItem('task');
 
-    // cari list berdasarkan idList
-    const listIndex = task.findIndex((list) => list.id === idList);
+    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
+    const listIndex = tasks.findIndex((list) => list.id === idList);
     if (listIndex === -1) {
         console.error(`List dengan id ${idList} tidak ditemukan.`);
         return { err: 'Gagal Menambahkan catatan' };
     }
 
-    // buat id unik baru (auto increment berdasarkan semua task)
-    // const allTasks = task.flatMap((list) => list.tasks);
-    // const newId = allTasks.length ? Math.max(...allTasks.map((t) => t.id)) + 1 : 1;
     const newId = `task-${nanoid(16)}`;
 
-    // waktu pembuatan (jika tidak dikirim dari luar)
     const created = new Date().toISOString();
 
-    // task baru
     const newTask = {
         id: newId,
         name,
@@ -97,14 +104,12 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
         status,
     };
 
-    // tambahkan ke list yang sesuai
-    task[listIndex].tasks.push(newTask);
+    tasks[listIndex].tasks.push(newTask);
 
-    // simpan ke localStorage (opsional)
-    localStorage.setItem('task', JSON.stringify(task));
+    localStorage.setItem('task', JSON.stringify(tasks));
 
-    console.log('✅ Task baru ditambahkan:', newTask);
-    console.log('📦 Semua data:', task);
+    console.log('Task baru ditambahkan:', newTask);
+    console.log('Semua data:', tasks);
 
     return { err: '' };
 }
@@ -130,6 +135,7 @@ function getTaskListByTitle(title) {
 function getTaskListById(id) {
     const taskStorage = localStorage.getItem('task');
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+    console.log({ tasks });
 
     if (!id) {
         return tasks.find((t) => t.id == 'main-task');
@@ -144,7 +150,7 @@ function getTaskListById(id) {
         };
     }
 
-    const found = task.find((t) => t.id == id);
+    const found = tasks.find((t) => t.id == id);
 
     return found || null;
 }
@@ -182,19 +188,37 @@ function toggleStaredTask(id) {
     localStorage.setItem('task', JSON.stringify(tasks));
 }
 
-export { postTask, getTaskListByTitle, getAllTasks, getTaskListById, toggleStatusTask, toggleStaredTask, addNewTask };
-// {
-//     const updateTaskArr = taskDoc.tasks.map((taskItem) => {
-//         if (taskItem.id === id) {
-//             return {
-//                 ...taskItem,
-//                 status: !taskItem.status,
-//             };
-//         }
-//         return taskItem;
-//     });
-//     return {
-//         ...taskDoc,
-//         tasks: updateTaskArr,
-//     };
-// }
+export {
+    addTaskTitle,
+    getTaskListByTitle,
+    getAllTasks,
+    getTaskListById,
+    toggleStatusTask,
+    toggleStaredTask,
+    addNewTask,
+};
+
+addTaskTitle.propTypes = {
+    title: PropTypes.string.isRequired,
+};
+
+addNewTask.propTypes = {
+    idList: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    dateDeadline: PropTypes.string,
+    detail: PropTypes.string,
+    stared: PropTypes.bool.isRequired,
+    status: PropTypes.bool.isRequired,
+};
+
+getTaskListByTitle.propTypes = {
+    title: PropTypes.string.isRequired,
+};
+
+getTaskListById.propTypes = {
+    id: PropTypes.string.isRequired,
+};
+
+toggleStatusTask.propTypes = {
+    id: PropTypes.string.isRequired,
+};
