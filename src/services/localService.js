@@ -1,4 +1,5 @@
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 
 let task = [
     {
@@ -30,6 +31,7 @@ let task = [
                 status: false,
             },
         ],
+        deletePermission: false,
     },
     {
         id: 123,
@@ -44,53 +46,50 @@ let task = [
                 status: false,
             },
         ],
+        deletePermission: true,
     },
 ];
 
-function postTask({ id, title }) {
-    if (id == null) {
-        return false;
+async function addTaskTitle({ title }) {
+    try {
+        if (!title || title.trim() === '') {
+            return { id: null, err: 'Judul tidak boleh kosong' };
+        }
+        const checkDuplicate = getTaskListByTitle(title);
+        if (checkDuplicate) return { id: null, err: 'Judul task list tidak boleh duplikat' };
+
+        const id = nanoid(16);
+
+        const taskStorage = localStorage.getItem('task');
+        let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
+
+        tasks.push({
+            id: id,
+            title: title.trim(),
+            tasks: [],
+            deletePermission: true,
+        });
+        console.log({ tasks });
+        localStorage.setItem('task', JSON.stringify(tasks));
+
+        return { id: id, err: null };
+    } catch (error) {
+        console.error(error);
+        return { id: null, err: error };
     }
-    if (title == null) {
-        return false;
-    }
-
-    const taskStorage = localStorage.getItem('task');
-
-    let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
-
-    tasks.push({
-        id: id,
-        title: title,
-        tasks: [],
-    });
-    console.log({ tasks });
-    localStorage.setItem('task', JSON.stringify(tasks));
-
-    return true;
 }
 
 async function addNewTask(idList, { name, dateDeadline, detail, stared, status }) {
-    // validasi input
-    // if (!name || !idList) {
-    //     console.error('idList dan name wajib diisi');
-    //     return {err: ''};
-    // }
-
     const taskStorage = localStorage.getItem('task');
 
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
 
-    // cari list berdasarkan idList
     const listIndex = tasks.findIndex((list) => list.id === idList);
     if (listIndex === -1) {
         console.error(`List dengan id ${idList} tidak ditemukan.`);
         return { err: 'Gagal Menambahkan catatan' };
     }
 
-    // buat id unik baru (auto increment berdasarkan semua task)
-    // const allTasks = task.flatMap((list) => list.tasks);
-    // const newId = allTasks.length ? Math.max(...allTasks.map((t) => t.id)) + 1 : 1;
     const newId = `task-${nanoid(16)}`;
 
     // waktu pembuatan (jika tidak dikirim dari luar)
@@ -140,7 +139,7 @@ function getTaskListByTitle(title) {
 function getTaskListById(id) {
     const taskStorage = localStorage.getItem('task');
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
-    console.log({tasks})
+    console.log({ tasks });
 
     if (!id) {
         return tasks.find((t) => t.id == 'main-task');
@@ -193,19 +192,16 @@ function toggleStaredTask(id) {
     localStorage.setItem('task', JSON.stringify(tasks));
 }
 
-export { postTask, getTaskListByTitle, getAllTasks, getTaskListById, toggleStatusTask, toggleStaredTask, addNewTask };
-// {
-//     const updateTaskArr = taskDoc.tasks.map((taskItem) => {
-//         if (taskItem.id === id) {
-//             return {
-//                 ...taskItem,
-//                 status: !taskItem.status,
-//             };
-//         }
-//         return taskItem;
-//     });
-//     return {
-//         ...taskDoc,
-//         tasks: updateTaskArr,
-//     };
-// }
+export {
+    addTaskTitle,
+    getTaskListByTitle,
+    getAllTasks,
+    getTaskListById,
+    toggleStatusTask,
+    toggleStaredTask,
+    addNewTask,
+};
+
+addTaskTitle.propTypes = {
+    title: PropTypes.string.isRequired,
+};

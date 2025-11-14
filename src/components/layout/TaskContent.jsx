@@ -2,9 +2,12 @@ import React from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
+import { CgSpinner } from 'react-icons/cg';
+import emptyNote from '../../assets/empty-note.svg';
 
-function TaskContent({ task = {} }) {
-    const taskId = task.id;
+function TaskContent({ task = {}, isLoading = false }) {
+    console.log(task.tasks);
+    const taskId = task.id || '';
     const groupedData = (task.tasks || []).reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
 
@@ -13,51 +16,21 @@ function TaskContent({ task = {} }) {
         return acc;
     }, {});
 
-    const sortedDates = Object.keys(groupedData).sort((a, b) => {
-        if (a === 'Tanpa tanggal') return 1;
-        if (b === 'Tanpa tanggal') return -1;
-        return a.localeCompare(b);
-    });
-
-    // const formatCustomDate = (dateString) => {
-    //     if (dateString == 'Tanpa tanggal') return;
-    //     const dateObj = new Date(dateString);
-
-    //     const currentYear = new Date().getFullYear();
-    //     const targetYear = dateObj.getFullYear();
-
-    //     const dateOptions = {
-    //         weekday: 'short',
-    //         day: 'numeric',
-    //         month: 'short',
-    //         timeZone: 'Asia/Jakarta',
-    //     };
-
-    //     if (targetYear !== currentYear) {
-    //         dateOptions.year = 'numeric';
-    //     }
-
-    //     let formattedDate = dateObj.toLocaleDateString('id-ID', dateOptions);
-
-    //     formattedDate = formattedDate.replace(/\./g, '').replace(/,\s+/g, ' ').replace(/,\s*$/g, '').trim();
-
-    //     const parts = formattedDate.split(/\s+/).filter((p) => p.length > 0);
-    //     if (parts.length >= 3) {
-    //         let result = `${parts[0]}, ${parts[1]} ${parts[2]}`;
-    //         if (parts.length === 4) {
-    //             result += ` ${parts[3]}`;
-    //         }
-    //         formattedDate = result;
-    //     }
-    //     return formattedDate;
-    // };
+    const sortedDates =
+        Object.keys(groupedData).sort((a, b) => {
+            if (a === 'Tanpa tanggal') return 1;
+            if (b === 'Tanpa tanggal') return -1;
+            return a.localeCompare(b);
+        }) || '';
 
     return (
         <Field>
             <div className="flex">
                 <h1 className="font-bold text-xl tracking-wide mb-6">{task.title ?? 'Stared Task'}</h1>
             </div>
-            {task.tasks && (
+            {isLoading ? (
+                <CgSpinner />
+            ) : task.tasks && task.tasks.length > 0 ? (
                 <div className="flex flex-col gap-4">
                     {sortedDates.map((date) => (
                         <div
@@ -65,19 +38,28 @@ function TaskContent({ task = {} }) {
                             className="flex flex-col gap-4"
                         >
                             <h2 className="font-bold text-lg">{formatCustomDate(date)}</h2>
-                            {groupedData[date].map((task, idx) => (
+                            {groupedData[date].map((t, idx) => (
                                 <ListTask
                                     key={idx}
-                                    checked={task.status}
-                                    stared={task.stared}
-                                    id={task.id}
+                                    checked={t.status}
+                                    stared={t.stared}
+                                    id={t.id}
                                     taskId={taskId}
                                 >
-                                    {task.name}
+                                    {t.name}
                                 </ListTask>
                             ))}
                         </div>
                     ))}
+                </div>
+            ) : (
+                <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
+                    <img
+                        src={emptyNote}
+                        alt="aa"
+                        className='h-auto w-60 object-contain'
+                    />
+                    <p className='w-full font-semibold tracking-widest  text-center text-3xl'>Task Kosong</p>
                 </div>
             )}
         </Field>
