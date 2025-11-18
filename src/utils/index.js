@@ -1,6 +1,19 @@
 const formatCustomDate = (dateString) => {
-    if (dateString == 'Tanpa tanggal') return;
+    if (dateString == 'Tanpa tanggal') return dateString;
     const dateObj = new Date(dateString);
+    dateObj.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // console.log({ today });
+    // console.log({ dateObj });
+
+    if (tomorrow.toDateString() === dateObj.toDateString()) return 'Besok';
+    if (today.toDateString() === dateObj.toDateString()) return 'Hari ini';
 
     const currentYear = new Date().getFullYear();
     const targetYear = dateObj.getFullYear();

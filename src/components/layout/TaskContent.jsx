@@ -4,6 +4,7 @@ import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
 import { CgSpinner } from 'react-icons/cg';
 import emptyNote from '../../assets/empty-note.svg';
+import Dropdown from '../ui/Dropdown';
 
 function TaskContent({ task = {}, isLoading = false }) {
     console.log(task.tasks);
@@ -24,45 +25,58 @@ function TaskContent({ task = {}, isLoading = false }) {
         }) || '';
 
     return (
-        <Field>
-            <div className="flex">
-                <h1 className="font-bold text-xl tracking-wide mb-6">{task.title ?? 'Stared Task'}</h1>
-            </div>
-            {isLoading ? (
-                <CgSpinner />
-            ) : task.tasks && task.tasks.length > 0 ? (
-                <div className="flex flex-col gap-4">
-                    {sortedDates.map((date) => (
-                        <div
-                            key={date}
-                            className="flex flex-col gap-4"
-                        >
-                            <h2 className="font-bold text-lg">{formatCustomDate(date)}</h2>
-                            {groupedData[date].map((t, idx) => (
-                                <ListTask
-                                    key={idx}
-                                    checked={t.status}
-                                    stared={t.stared}
-                                    id={t.id}
-                                    taskId={taskId}
+        <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8">
+            <div className="flex items-center justify-center w-full h-auto">
+                <Field>
+                    <div className="flex">
+                        <h1 className="font-bold text-xl tracking-wide mb-6">{task.title ?? 'Stared Task'}</h1>
+                    </div>
+                    {isLoading ? (
+                        <CgSpinner />
+                    ) : task.tasks && task.tasks.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                            {sortedDates.map((date) => (
+                                <div
+                                    key={date}
+                                    className="flex flex-col gap-4"
                                 >
-                                    {t.name}
-                                </ListTask>
+                                    {formatCustomDate(date) === 'Hari ini' ? (
+                                        <h2 className="font-bold text-lg text-red-400!">{formatCustomDate(date)}</h2>
+                                    ) : formatCustomDate(date) === 'Besok' ? (
+                                        <h2 className="font-bold text-lg text-blue-400!">{formatCustomDate(date)}</h2>
+                                    ) : (
+                                        <h2 className="font-bold text-lg">{formatCustomDate(date)}</h2>
+                                    )}
+                                    {groupedData[date].map((t, idx) => (
+                                        <ListTask
+                                            key={idx}
+                                            checked={t.status}
+                                            stared={t.stared}
+                                            id={t.id}
+                                            taskId={taskId}
+                                        >
+                                            {t.name}
+                                        </ListTask>
+                                    ))}
+                                </div>
                             ))}
                         </div>
-                    ))}
-                </div>
-            ) : (
-                <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
-                    <img
-                        src={emptyNote}
-                        alt="aa"
-                        className='h-auto w-60 object-contain'
-                    />
-                    <p className='w-full font-semibold tracking-widest  text-center text-3xl'>Task Kosong</p>
-                </div>
-            )}
-        </Field>
+                    ) : (
+                        <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
+                            <img
+                                src={emptyNote}
+                                alt="aa"
+                                className="h-auto w-60 object-contain"
+                            />
+                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">Task Kosong</p>
+                        </div>
+                    )}
+                </Field>
+            </div>
+            <div className="flex items-center justify-center w-full h-auto">
+                <Dropdown />
+            </div>
+        </div>
     );
 }
 

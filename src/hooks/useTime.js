@@ -17,7 +17,6 @@ function useTime() {
     const [error, setError] = useState('');
     const [selected, setSelected] = useState(new Date());
     // const [time, setTime] = useState(new Date());
-    console.log('Time: ', selected);
     // console.log({ isSubmitTime });
 
     const textRef = useRef(null);

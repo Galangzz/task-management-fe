@@ -124,3 +124,8 @@ body {
         opacity: 0;
     }
 }
+
+html, body {
+      overflow-x: hidden;
+    overflow-y: visible;
+}

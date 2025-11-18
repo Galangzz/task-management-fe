@@ -7,6 +7,7 @@ import { addTaskTitle, getAllTasks, getTaskListById } from '../services/localSer
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
 import ModalNewTask from '../components/specific/ModalNewTask';
+import Dropdown from '../components/ui/Dropdown';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState(() => getAllTasks() || []);
@@ -68,7 +69,7 @@ function DefaultPage() {
     }, [navigate, titleList]);
 
     return (
-        <div className="relative w-screen h-screen flex flex-col">
+        <div className="relative w-screen min-h-screen flex flex-col">
             <Header />
             <Navbar
                 tabs={tabs}
@@ -100,6 +101,7 @@ function DefaultPage() {
             <AddButton onClick={() => setIsOpenModalTask(true)} />
 
             {isLoadingTitle && <p>aaaaa</p>}
+            
         </div>
     );
 }
