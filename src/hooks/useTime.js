@@ -6,19 +6,17 @@ import { addNewTask, getTaskListById } from '../services/localService';
 function useTime() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [title, setTitle] = useInput('');
-    const [detail, setDetail] = useInput('');
+    const [title, setTitle, onResetTitle] = useInput('');
+    const [detail, setDetail, onResetDetail] = useInput('');
     const [isOpenDetail, setIsOpenDetail] = useState(false);
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
     const [isOpenTime, setIsOpenTime] = useState(false);
     const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
     const [isSubmitTime, setIsSubmitTime] = useState(false);
     const [stared, setStared] = useState(false);
+    const [isOpenConfirmationToClose, setIsOpenConfirmationToClose] = useState(false);
     const [error, setError] = useState('');
     const [selected, setSelected] = useState(new Date());
-    // const [time, setTime] = useState(new Date());
-    // console.log({ isSubmitTime });
-
     const textRef = useRef(null);
 
     useEffect(() => {
@@ -28,7 +26,7 @@ function useTime() {
         if (!isValid) {
             setSelected(date);
         } else {
-            date = selected
+            date = selected;
         }
     }, [selected]);
 
@@ -61,6 +59,25 @@ function useTime() {
 
         setIsSubmitTime(true);
     }, []);
+
+    const handleCloseModalNewTask = useCallback(
+        (setIsOpenModaltask) => {
+            if (title !== '' || isSubmitDateTime) {
+                // @ TODO
+                console.log('handleCloseModalNewTask Called');
+                setIsOpenConfirmationToClose(true);
+                return;
+            }
+            setIsOpenModaltask(false);
+        },
+        [title, isSubmitDateTime]
+    );
+
+    const handleConfirmationToClose = useCallback(() => {
+        onResetTitle();
+        setIsSubmitDateTime(false);
+        setIsOpenConfirmationToClose(false);
+    }, [onResetTitle]);
 
     const handleSubmitNewTask = useCallback(
         async (e, setIsOpenModaltask) => {
@@ -105,9 +122,22 @@ function useTime() {
                 }
                 navigate(`/${currentTab}`);
             }
+            onResetTitle();
+            onResetDetail();
             setIsOpenModaltask(false);
         },
-        [isSubmitDateTime, title, isSubmitTime, selected, stared, location.pathname, navigate, detail]
+        [
+            isSubmitDateTime,
+            title,
+            isSubmitTime,
+            selected,
+            stared,
+            location.pathname,
+            navigate,
+            detail,
+            onResetDetail,
+            onResetTitle,
+        ]
     );
 
     return {
@@ -118,6 +148,7 @@ function useTime() {
         isOpenTime,
         isSubmitDateTime,
         isSubmitTime,
+        isOpenConfirmationToClose,
         selected,
         // time,
         textRef,
@@ -136,6 +167,9 @@ function useTime() {
         handleSubmitDateTime,
         setSelected,
         handleSubmitNewTask,
+        handleCloseModalNewTask,
+        setIsOpenConfirmationToClose,
+        handleConfirmationToClose,
         // handleTimeChange,
     };
 }

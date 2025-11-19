@@ -91,7 +91,7 @@ function DefaultPage() {
                 />
             )}
 
-            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />}
+            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask}  />}
 
             <TaskContent
                 task={task ?? {}}

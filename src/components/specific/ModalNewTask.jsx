@@ -7,8 +7,9 @@ import ModalDayPicker from './ModalDayPicker';
 import { formatCustomDate } from '../../utils';
 import { RxCross2 } from 'react-icons/rx';
 import useTime from '../../hooks/useTime';
+import ModalConfirmationToClose from './ModalConfirmationToClose';
 
-function ModalNewTask({setIsOpenModalTask}) {
+function ModalNewTask({ setIsOpenModalTask }) {
     const {
         title,
         detail,
@@ -18,9 +19,9 @@ function ModalNewTask({setIsOpenModalTask}) {
         isSubmitDateTime,
         isSubmitTime,
         selected,
-        // time,
         textRef,
         stared,
+        isOpenConfirmationToClose,
         error,
         setStared,
         setTitle,
@@ -35,14 +36,16 @@ function ModalNewTask({setIsOpenModalTask}) {
         handleSubmitDateTime,
         setSelected,
         handleSubmitNewTask,
-        // handleTimeChange,
+        handleCloseModalNewTask,
+        setIsOpenConfirmationToClose,
+        handleConfirmationToClose,
     } = useTime();
-    // console.log('ModalNewTask: ', { isOpenTime });
+
     const hours = selected.getHours();
     const minutes = selected.getMinutes();
     return (
         <>
-            <Modal setToggle={() => alert('aaaa')}>
+            <Modal setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}>
                 <div
                     className="ModalTaskTitle flex flex-col 
                 w-98 h-auto 
@@ -218,6 +221,15 @@ function ModalNewTask({setIsOpenModalTask}) {
                     onHandleSubmit={handleSubmitDateTime}
                     onHandleSubmitTime={handleSubmitTime}
                     setIsSubmitTime={setIsSubmitTime}
+                />
+            )}
+            {isOpenConfirmationToClose && (
+                <ModalConfirmationToClose
+                    setToggle={() => setIsOpenConfirmationToClose(false)}
+                    onHandlerClose={() => {
+                        handleConfirmationToClose();
+                        setIsOpenModalTask(false)
+                    }}
                 />
             )}
         </>
