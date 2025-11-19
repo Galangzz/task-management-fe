@@ -61,7 +61,6 @@
     color: var(--border-color);
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
-    transition: background 0.3s ease-in;
 }
 
 body {
@@ -125,7 +124,10 @@ body {
     }
 }
 
-html, body {
-      overflow-x: hidden;
+html,
+body {
+    overflow-x: hidden;
     overflow-y: visible;
 }
+
+
