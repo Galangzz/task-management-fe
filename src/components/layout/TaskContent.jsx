@@ -73,9 +73,11 @@ function TaskContent({ task = {}, isLoading = false }) {
                     )}
                 </Field>
             </div>
-            <div className="flex items-center justify-center w-full h-auto">
-                <Dropdown />
-            </div>
+            {task.tasks && (
+                <div className="flex items-center justify-center w-full h-auto">
+                    <Dropdown />
+                </div>
+            )}
         </div>
     );
 }

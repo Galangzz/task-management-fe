@@ -7,7 +7,7 @@ import { addTaskTitle, getAllTasks, getTaskListById } from '../services/localSer
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
 import ModalNewTask from '../components/specific/ModalNewTask';
-import Dropdown from '../components/ui/Dropdown';
+import LoadingPage from '../components/ui/LoadingPage';
 
 function DefaultPage() {
     const [tabs, setTabs] = useState(() => getAllTasks() || []);
@@ -68,6 +68,11 @@ function DefaultPage() {
         navigate(`/${id}`);
     }, [navigate, titleList]);
 
+    if (isLoadedTaskList){
+        return(
+            <LoadingPage/>
+        )
+    }
     return (
         <div className="relative w-screen min-h-screen flex flex-col">
             <Header />
