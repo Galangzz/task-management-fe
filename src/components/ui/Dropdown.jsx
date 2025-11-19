@@ -129,7 +129,7 @@ const StyledWrapper = styled.div`
         padding-line: 1rem;
         height: max-content;
         position: relative;
-        z-index: 99;
+        z-index: 40;
         border-radius: inherit;
     }
 
