@@ -7,7 +7,9 @@ function useInput(defaultValue = '') {
         setValue(event.target.value);
     };
 
-    return [value, onValueChangeHandler];
+    const onResetTitle = () => setValue('')
+
+    return [value, onValueChangeHandler, onResetTitle];
 }
 
 export default useInput;
