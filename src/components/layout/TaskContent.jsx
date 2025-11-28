@@ -6,8 +6,9 @@ import { CgSpinner } from 'react-icons/cg';
 import emptyNote from '../../assets/empty-note.svg';
 import Dropdown from '../ui/Dropdown';
 
-function TaskContent({ task = {}, isLoading = false, activeTask, completeTask }) {
-    console.log(task.tasks);
+function TaskContent({ task = {}, isLoading = false, activeTask, completeTask, handleChecked }) {
+    console.log({activeTask: activeTask})
+    console.log({completeTask: completeTask})
     const taskId = task.id || '';
     const groupedData = activeTask?.reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
@@ -54,7 +55,10 @@ function TaskContent({ task = {}, isLoading = false, activeTask, completeTask })
                                             stared={t.stared}
                                             id={t.id}
                                             taskId={taskId}
+                                            handleChecked={handleChecked}
                                         >
+                                    {console.log({ TaskActive: t.name, status: t.status })}
+
                                             {t.name}
                                         </ListTask>
                                     ))}
@@ -75,7 +79,7 @@ function TaskContent({ task = {}, isLoading = false, activeTask, completeTask })
             </div>
             {completeTask.length > 0 && (
                 <div className="flex items-center justify-center w-full h-auto">
-                    <Dropdown tasks={completeTask} taskId={taskId}/>
+                    <Dropdown tasks={completeTask} taskId={taskId} handleChecked={handleChecked}/>
                 </div>
             )}
         </div>

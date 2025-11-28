@@ -6,7 +6,12 @@ const Checkbox = ({ id = 'dummyChecked', checked, onChange }) => {
         <StyledWrapper>
             <div
                 className="checkbox-wrapper-12"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {e.stopPropagation()
+
+                    console.log({ Checkbox: id})
+                }
+                    
+                }
             >
                 <div className="cbx">
                     <input
@@ -128,7 +133,7 @@ const StyledWrapper = styled.div`
         stroke-linejoin: round;
         stroke-dasharray: 19;
         stroke-dashoffset: 19;
-        transition: stroke-dashoffset 0.3s ease;
+        transition: stroke-dashoffset 0.1s ease;
         transition-delay: 0.2s;
     }
 

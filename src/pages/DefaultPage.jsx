@@ -27,6 +27,7 @@ function DefaultPage() {
         handleSubmitTitleList,
         taskActive,
         taskComplete,
+        handleChecked,
     } = useDefaultPage();
 
     if (isLoadedTaskList) {
@@ -63,6 +64,7 @@ function DefaultPage() {
                 isLoading={isLoadedTaskList}
                 activeTask={taskActive}
                 completeTask={taskComplete}
+                handleChecked={handleChecked}
             />
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />

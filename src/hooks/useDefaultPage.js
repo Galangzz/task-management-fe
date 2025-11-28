@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addTaskTitle, getAllTasks, getTaskListById } from '../services/localService';
+import { addTaskTitle, getAllTasks, getTaskListById, toggleStatusTask } from '../services/localService';
 
 export function useDefaultPage() {
     const [tabs, setTabs] = useState([]);
     const [task, setTask] = useState({});
     const [taskActive, setTaskActive] = useState([]);
     const [taskComplete, setTaskComplete] = useState([]);
-
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
@@ -17,12 +16,16 @@ export function useDefaultPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const [tempTask, setTempTask] = useState({});
+    const [pathId, setPathId] = useState('')
+
     useEffect(() => {
         setTabs(() => getAllTasks());
     }, []);
 
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1] || 'main-task';
+        setPathId(currentTab)
 
         const newTaskList = getTaskListById(currentTab);
 
@@ -85,6 +88,39 @@ export function useDefaultPage() {
         }, 1000);
     }, [navigate, titleList]);
 
+    const handleChecked = useCallback(
+        (id) => {
+            console.log({handleCheckId: id})
+            const temp = task?.tasks?.find((t) => t?.id === id);
+            const newStatus = !temp.status
+            setTempTask(temp);
+            setTimeout(() => {
+
+                if (newStatus) {
+                    setTaskActive(prev => prev.filter(t => t.id !== id));
+                    setTaskComplete(prev => [...prev, { ...temp, status: true }]);
+                } else {
+                    setTaskComplete(prev => prev.filter(t => t.id !== id));
+                    setTaskActive(prev => [...prev, { ...temp, status: false }]);
+                }
+                
+                toggleStatusTask(id);
+                setTask(() => getTaskListById(pathId))
+                console.log({task})
+            }, 1000);
+        },
+        [task, pathId]
+    );
+
+    // useEffect(() => {
+    //     const getTask  = setTimeout(() => {
+    //             setTask(() =>  getTaskListById(task?.id))
+    //             console.log()
+    //         }, 2000);
+
+    //         return () => clearInterval(getTask)
+    // }, [task]);
+
     return {
         tabs,
         task,
@@ -103,5 +139,6 @@ export function useDefaultPage() {
         handleSubmitTitleList,
         taskActive,
         taskComplete,
+        handleChecked,
     };
 }
