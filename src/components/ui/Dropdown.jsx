@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Field from './Field';
+import ListTask from '../specific/ListTask';
 
-const Dropdown = () => {
+const Dropdown = ({ tasks, taskId }) => {
     return (
-        <StyledWrapper>
-            <Field>
+        <Field>
+            <StyledWrapper>
                 <div className="dropdown">
                     <input
                         type="checkbox"
@@ -27,59 +28,22 @@ const Dropdown = () => {
                             className="listitem"
                             role="listitem"
                         >
-                            <article className="article">Hover to view scrollbar.</article>
-                        </li>
-
-                        <li
-                            className="listitem"
-                            role="listitem"
-                        >
-                            <article className="article">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, sunt tempora
-                                recusandae dolorum.
-                            </article>
-                        </li>
-
-                        <li
-                            className="listitem"
-                            role="listitem"
-                        >
-                            <article className="article">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, sunt tempora
-                                recusandae dolorum.
-                            </article>
-                        </li>
-                        <li
-                            className="listitem"
-                            role="listitem"
-                        >
-                            <article className="article">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, sunt tempora
-                                recusandae dolorum.
-                            </article>
-                        </li>
-                        <li
-                            className="listitem"
-                            role="listitem"
-                        >
-                            <article className="article">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, sunt tempora
-                                recusandae dolorum.
-                            </article>
-                        </li>
-                        <li
-                            className="listitem"
-                            role="listitem"
-                        >
-                            <article className="article">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Praesentium, sunt tempora
-                                recusandae dolorum.
-                            </article>
+                            {tasks.map((t, idx) => (
+                                <ListTask
+                                    key={idx}
+                                    checked={t.status}
+                                    stared={t.stared}
+                                    id={t.id}
+                                    taskId={taskId}
+                                >
+                                    {t.name}
+                                </ListTask>
+                            ))}
                         </li>
                     </ul>
                 </div>
-            </Field>
-        </StyledWrapper>
+            </StyledWrapper>
+        </Field>
     );
 };
 
@@ -89,7 +53,7 @@ const StyledWrapper = styled.div`
         overflow: hidden;
         position: relative;
         min-height: 28px;
-        width: auto;
+        width: full;
         inset-inline: auto;
     }
 
@@ -190,16 +154,16 @@ const StyledWrapper = styled.div`
         height: var(--w-scrollbar);
         border-radius: 9999px;
     }
-        
+
     .webkit-scrollbar::-webkit-scrollbar-track {
         background: #0000;
     }
-        
+
     .webkit-scrollbar::-webkit-scrollbar-thumb {
         background: #0000;
         border-radius: 9999px;
     }
-    
+
     .webkit-scrollbar:hover::-webkit-scrollbar-thumb {
         background: #c1c2c5;
     }

@@ -5,6 +5,9 @@ import { addTaskTitle, getAllTasks, getTaskListById } from '../services/localSer
 export function useDefaultPage() {
     const [tabs, setTabs] = useState([]);
     const [task, setTask] = useState({});
+    const [taskActive, setTaskActive] = useState([]);
+    const [taskComplete, setTaskComplete] = useState([]);
+
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
@@ -26,6 +29,7 @@ export function useDefaultPage() {
         console.log({ newTaskList, currentTab });
 
         setTask(newTaskList);
+
         setIsLoadedTaskList(false);
 
         console.log('New Task List: ', newTaskList);
@@ -45,6 +49,22 @@ export function useDefaultPage() {
         return;
     }, [navigate, location.pathname, isOpenModalTask]);
 
+    useEffect(() => {
+        const filterActiveTask = () => {
+            const tasks = task.tasks;
+            const activeTask = tasks?.filter((t) => t.status == false) ?? [];
+            return activeTask;
+        };
+
+        const filterCompleteTask = () => {
+            const tasks = task.tasks;
+            const completeTask = tasks?.filter((t) => t.status == true) ?? [];
+            return completeTask;
+        };
+        setTaskActive(() => filterActiveTask());
+        setTaskComplete(() => filterCompleteTask());
+    }, [task]);
+
     const handleSubmitTitleList = useCallback(async () => {
         setIsLoadingTitle(true);
         const { id, err } = await addTaskTitle({ title: titleList });
@@ -53,17 +73,16 @@ export function useDefaultPage() {
             return;
         }
 
-        
         setTimeout(() => {
             setTabs(getAllTasks());
 
             setErrTitle('');
             setIsOpenModalTaskTitle(false);
             setTitleList('');
-            
+
             setIsLoadingTitle(false);
             navigate(`/${id}`);
-        }, 1000)
+        }, 1000);
     }, [navigate, titleList]);
 
     return {
@@ -81,6 +100,8 @@ export function useDefaultPage() {
         setIsLoadedTaskList,
         errTitle,
         setErrTitle,
-        handleSubmitTitleList
+        handleSubmitTitleList,
+        taskActive,
+        taskComplete,
     };
 }

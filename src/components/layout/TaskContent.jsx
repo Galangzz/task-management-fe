@@ -6,10 +6,10 @@ import { CgSpinner } from 'react-icons/cg';
 import emptyNote from '../../assets/empty-note.svg';
 import Dropdown from '../ui/Dropdown';
 
-function TaskContent({ task = {}, isLoading = false }) {
+function TaskContent({ task = {}, isLoading = false, activeTask, completeTask }) {
     console.log(task.tasks);
     const taskId = task.id || '';
-    const groupedData = (task.tasks || []).reduce((acc, item) => {
+    const groupedData = activeTask?.reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
 
         if (!acc[dateKey]) acc[dateKey] = [];
@@ -33,7 +33,7 @@ function TaskContent({ task = {}, isLoading = false }) {
                     </div>
                     {isLoading ? (
                         <CgSpinner />
-                    ) : task.tasks && task.tasks.length > 0 ? (
+                    ) : activeTask.length > 0 ? (
                         <div className="flex flex-col gap-4">
                             {sortedDates.map((date) => (
                                 <div
@@ -73,9 +73,9 @@ function TaskContent({ task = {}, isLoading = false }) {
                     )}
                 </Field>
             </div>
-            {task.tasks && (
+            {completeTask.length > 0 && (
                 <div className="flex items-center justify-center w-full h-auto">
-                    <Dropdown />
+                    <Dropdown tasks={completeTask} taskId={taskId}/>
                 </div>
             )}
         </div>

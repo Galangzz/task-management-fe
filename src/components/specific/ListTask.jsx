@@ -27,12 +27,14 @@ function ListTask({ children, checked, stared, id, taskId }) {
                 checked={checked}
                 onChange={() => handleChecked(id)}
             />
-            <h3 className="flex-1">{children}</h3>
-            <StarCheck
-                id={id}
-                checked={stared}
-                onChange={() => handleStared(id)}
-            />
+            <h3 className={`flex-1 ${checked ? 'line-through decoration-2' : ''}`}>{children}</h3>
+            {!checked && (
+                <StarCheck
+                    id={id}
+                    checked={stared}
+                    onChange={() => handleStared(id)}
+                />
+            )}
         </div>
     );
 }

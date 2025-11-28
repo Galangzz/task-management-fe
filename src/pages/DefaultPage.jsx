@@ -9,7 +9,7 @@ import LoadingPage from '../components/ui/LoadingPage';
 import { useDefaultPage } from '../hooks/useDefaultPage';
 
 function DefaultPage() {
-   const {
+    const {
         tabs,
         task,
         titleList,
@@ -24,13 +24,13 @@ function DefaultPage() {
         // setIsLoadedTaskList,
         errTitle,
         setErrTitle,
-        handleSubmitTitleList
-    } = useDefaultPage()
+        handleSubmitTitleList,
+        taskActive,
+        taskComplete,
+    } = useDefaultPage();
 
-    if (isLoadedTaskList){
-        return(
-            <LoadingPage/>
-        )
+    if (isLoadedTaskList) {
+        return <LoadingPage />;
     }
     return (
         <div className="relative w-screen min-h-screen flex flex-col">
@@ -56,17 +56,16 @@ function DefaultPage() {
                 />
             )}
 
-            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask}  />}
+            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />}
 
             <TaskContent
                 task={task ?? {}}
                 isLoading={isLoadedTaskList}
+                activeTask={taskActive}
+                completeTask={taskComplete}
             />
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />
-
-            
-            
         </div>
     );
 }
