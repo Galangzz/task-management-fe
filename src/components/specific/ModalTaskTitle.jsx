@@ -1,7 +1,8 @@
+import { CgSpinnerTwo } from 'react-icons/cg';
 import { getTaskListByTitle } from '../../services/localService';
 import Modal from '../ui/Modal';
 
-function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitTitleList, err, setErr }) {
+function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitTitleList, err, setErr, isLoading }) {
     const handleOnChange = (e) => {
         const value = e.target.value;
         setTitleList(value);
@@ -52,6 +53,8 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                     <button
                         type="submit"
                         className="
+                        flex
+                        justify-center
                         bg-(--button-color)
                         border
                         border-(--border-color)
@@ -65,7 +68,11 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                         disabled:opacity-50 hover:disabled:transform-none! hover:disabled:bg-(--button-color)!"
                         disabled={titleList === '' || err !== ''}
                     >
-                        Submit
+                        {isLoading ? (
+                                <CgSpinnerTwo className="flex animate-spin "/>
+                        ) : (
+                            'Submit'
+                        )}
                     </button>
                 </form>
             </div>
