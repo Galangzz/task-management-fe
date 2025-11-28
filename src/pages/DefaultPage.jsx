@@ -1,72 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import Header from '../components/layout/Header';
 import Navbar from '../components/layout/Navbar';
 import ModalTaskTitle from '../components/specific/ModalTaskTitle';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { addTaskTitle, getAllTasks, getTaskListById } from '../services/localService';
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
 import ModalNewTask from '../components/specific/ModalNewTask';
 import LoadingPage from '../components/ui/LoadingPage';
+import { useDefaultPage } from '../hooks/useDefaultPage';
 
 function DefaultPage() {
-    const [tabs, setTabs] = useState(() => getAllTasks() || []);
-    const [task, setTask] = useState({});
-    const [titleList, setTitleList] = useState('');
-    const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
-    const [isOpenModalTask, setIsOpenModalTask] = useState(false);
-    const [isLoadingTitle, setIsLoadingTitle] = useState(false);
-    const [isLoadedTaskList, setIsLoadedTaskList] = useState(false);
-    const [errTL, setErrTL] = useState('');
-    const navigate = useNavigate();
-    const location = useLocation();
-
-    useEffect(() => {
-        setIsLoadedTaskList(true);
-        const currentTab = location.pathname.split('/')[1] || 'main-task';
-
-        const newTaskList = getTaskListById(currentTab);
-
-        console.log({ newTaskList, currentTab });
-
-        setTask(newTaskList);
-        setIsLoadedTaskList(false);
-
-        console.log('New Task List: ', newTaskList);
-        if (!newTaskList) {
-            navigate('/', { replace: true });
-            setTask(getTaskListById('main-task'));
-            setIsLoadedTaskList(false);
-
-            return;
-        }
-
-        if (newTaskList.id === 'main-task' && currentTab !== 'main-task') {
-            navigate('/');
-        } else {
-            navigate(`/${currentTab}`);
-        }
-        return;
-    }, [navigate, location.pathname, isOpenModalTask]);
-
-    const handleSubmitTitleList = useCallback(async () => {
-        console.log('aaaaaaaaaaaaaaa');
-        setIsLoadingTitle(true);
-        const { id, err } = await addTaskTitle({ title: titleList });
-        if (err) {
-            setErrTL(err);
-            return;
-        }
-
-        setTabs(getAllTasks());
-
-        setErrTL('');
-        setIsOpenModalTaskTitle(false);
-        setTitleList('');
-
-        setIsLoadingTitle(false);
-        navigate(`/${id}`);
-    }, [navigate, titleList]);
+   const {
+        tabs,
+        task,
+        titleList,
+        setTitleList,
+        isOpenModalTaskTitle,
+        setIsOpenModalTaskTitle,
+        isOpenModalTask,
+        setIsOpenModalTask,
+        isLoadingTitle,
+        // setIsLoadingTitle,
+        isLoadedTaskList,
+        // setIsLoadedTaskList,
+        errTitle,
+        setErrTitle,
+        handleSubmitTitleList
+    } = useDefaultPage()
 
     if (isLoadedTaskList){
         return(
@@ -87,12 +46,13 @@ function DefaultPage() {
                     setTitleList={setTitleList}
                     setToggleTitle={() => {
                         setIsOpenModalTaskTitle(false);
-                        setErrTL('');
+                        setErrTitle('');
                         setTitleList('');
                     }}
                     handleSubmitTitleList={handleSubmitTitleList}
-                    err={errTL}
-                    setErr={setErrTL}
+                    err={errTitle}
+                    setErr={setErrTitle}
+                    isLoading={isLoadingTitle}
                 />
             )}
 
@@ -105,7 +65,7 @@ function DefaultPage() {
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />
 
-            {isLoadingTitle && <p>aaaaa</p>}
+            
             
         </div>
     );
