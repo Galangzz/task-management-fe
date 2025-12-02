@@ -10,6 +10,7 @@
     --star-fill: #3282b8;
     --stroke-check: #fff;
     --button-text: oklch(37.9% 0.146 265.522);
+    --toast-bg: #53e8ff;
 }
 
 [data-theme='dark'] {
@@ -22,6 +23,7 @@
     --star-fill: #bbe1fa;
     --stroke-check: #4a4a4a;
     --button-text: oklch(70.7% 0.165 254.624);
+    --toast-bg: #2438bd;
 }
 
 [active='true'] {
@@ -129,5 +131,3 @@ body {
     overflow-x: hidden;
     overflow-y: visible;
 }
-
-

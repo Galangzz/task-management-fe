@@ -163,10 +163,10 @@ function getAllTasks() {
     return task;
 }
 
-function toggleStatusTask(id) {
+async function toggleStatusTask(id) {
     const taskStorage = localStorage.getItem('task');
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
-    tasks = tasks.map((taskDoc) => ({
+    tasks = await tasks.map((taskDoc) => ({
         ...taskDoc,
         tasks: taskDoc.tasks.map((taskItem) =>
             taskItem.id === id ? { ...taskItem, status: !taskItem.status } : taskItem

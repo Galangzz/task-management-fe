@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addTaskTitle, getAllTasks, getTaskListById, toggleStatusTask } from '../services/localService';
+import { ToastContext } from '../context/Toast';
 
 export function useDefaultPage() {
     const [tabs, setTabs] = useState([]);
     const [task, setTask] = useState({});
-    const [taskActive, setTaskActive] = useState([]);
-    const [taskComplete, setTaskComplete] = useState([]);
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
@@ -16,8 +15,11 @@ export function useDefaultPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [tempTask, setTempTask] = useState({});
-    const [pathId, setPathId] = useState('')
+    const { toast } = useContext(ToastContext);
+    const [stackedToast, setStackedToast] = useState(0);
+    const stackedRef = useRef(0);
+    console.log({ stackedToast });
+    const [pathId, setPathId] = useState('');
 
     useEffect(() => {
         setTabs(() => getAllTasks());
@@ -25,7 +27,7 @@ export function useDefaultPage() {
 
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1] || 'main-task';
-        setPathId(currentTab)
+        setPathId(currentTab);
 
         const newTaskList = getTaskListById(currentTab);
 
@@ -52,22 +54,6 @@ export function useDefaultPage() {
         return;
     }, [navigate, location.pathname, isOpenModalTask]);
 
-    useEffect(() => {
-        const filterActiveTask = () => {
-            const tasks = task.tasks;
-            const activeTask = tasks?.filter((t) => t.status == false) ?? [];
-            return activeTask;
-        };
-
-        const filterCompleteTask = () => {
-            const tasks = task.tasks;
-            const completeTask = tasks?.filter((t) => t.status == true) ?? [];
-            return completeTask;
-        };
-        setTaskActive(() => filterActiveTask());
-        setTaskComplete(() => filterCompleteTask());
-    }, [task]);
-
     const handleSubmitTitleList = useCallback(async () => {
         setIsLoadingTitle(true);
         const { id, err } = await addTaskTitle({ title: titleList });
@@ -88,38 +74,55 @@ export function useDefaultPage() {
         }, 1000);
     }, [navigate, titleList]);
 
-    const handleChecked = useCallback(
-        (id) => {
-            console.log({handleCheckId: id})
-            const temp = task?.tasks?.find((t) => t?.id === id);
-            const newStatus = !temp.status
-            setTempTask(temp);
-            setTimeout(() => {
+    useEffect(() => {
+        stackedRef.current = stackedToast;
+    }, [stackedToast]);
 
-                if (newStatus) {
-                    setTaskActive(prev => prev.filter(t => t.id !== id));
-                    setTaskComplete(prev => [...prev, { ...temp, status: true }]);
-                } else {
-                    setTaskComplete(prev => prev.filter(t => t.id !== id));
-                    setTaskActive(prev => [...prev, { ...temp, status: false }]);
-                }
-                
-                toggleStatusTask(id);
-                setTask(() => getTaskListById(pathId))
-                console.log({task})
-            }, 1000);
+    const fixChecked = useCallback(
+        async (id) => {
+            await toggleStatusTask(id);
+            console.log({ FixCheckedStacked: stackedRef.current });
+            if (stackedRef.current === 0) {
+                setTask(getTaskListById(pathId));
+                console.log('FIX-CHECKED TRIGER');
+            }
         },
-        [task, pathId]
+        [pathId]
     );
 
-    // useEffect(() => {
-    //     const getTask  = setTimeout(() => {
-    //             setTask(() =>  getTaskListById(task?.id))
-    //             console.log()
-    //         }, 2000);
+    const undoChecked = useCallback((id) => {
+        setTask((prev) => ({
+            ...prev,
+            tasks: prev.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
+        }));
+    }, []);
 
-    //         return () => clearInterval(getTask)
-    // }, [task]);
+    const handleChecked = useCallback(
+        async (id) => {
+            console.log({ handleCheckId: id });
+            setStackedToast((prev) => prev + 1);
+            setTimeout(async () => {
+                const updated = {
+                    ...task,
+                    tasks: task.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
+                };
+                const target = task.tasks.find((t) => t.id === id);
+
+                const message = target?.status === false ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
+                setTask(updated);
+                
+                toast.undo(
+                    message,
+                    () => undoChecked(id),
+                    () => fixChecked(id),
+                    () => setStackedToast((prev) => Math.max(prev - 1, 0))
+                );
+
+                console.log({ task });
+            }, 500);
+        },
+        [task, toast, fixChecked, undoChecked]
+    );
 
     return {
         tabs,
@@ -137,8 +140,6 @@ export function useDefaultPage() {
         errTitle,
         setErrTitle,
         handleSubmitTitleList,
-        taskActive,
-        taskComplete,
         handleChecked,
     };
 }

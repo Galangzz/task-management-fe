@@ -25,8 +25,6 @@ function DefaultPage() {
         errTitle,
         setErrTitle,
         handleSubmitTitleList,
-        taskActive,
-        taskComplete,
         handleChecked,
     } = useDefaultPage();
 
@@ -62,12 +60,11 @@ function DefaultPage() {
             <TaskContent
                 task={task ?? {}}
                 isLoading={isLoadedTaskList}
-                activeTask={taskActive}
-                completeTask={taskComplete}
                 handleChecked={handleChecked}
             />
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />
+                
         </div>
     );
 }

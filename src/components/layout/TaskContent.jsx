@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
@@ -6,10 +6,12 @@ import { CgSpinner } from 'react-icons/cg';
 import emptyNote from '../../assets/empty-note.svg';
 import Dropdown from '../ui/Dropdown';
 
-function TaskContent({ task = {}, isLoading = false, activeTask, completeTask, handleChecked }) {
-    console.log({activeTask: activeTask})
-    console.log({completeTask: completeTask})
-    const taskId = task.id || '';
+function TaskContent({ task = {}, isLoading = true, handleChecked }) {
+    const activeTask = useMemo(() => task?.tasks?.filter((t) => t.status === false) || [], [task]);
+
+    const completeTask = useMemo(() => task?.tasks?.filter((t) => t.status === true) || [], [task]);
+
+    const taskId = task?.id || '';
     const groupedData = activeTask?.reduce((acc, item) => {
         const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
 
@@ -23,7 +25,7 @@ function TaskContent({ task = {}, isLoading = false, activeTask, completeTask, h
             if (a === 'Tanpa tanggal') return 1;
             if (b === 'Tanpa tanggal') return -1;
             return a.localeCompare(b);
-        }) || '';
+        }) || [];
 
     return (
         <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8">
@@ -51,13 +53,13 @@ function TaskContent({ task = {}, isLoading = false, activeTask, completeTask, h
                                     {groupedData[date].map((t, idx) => (
                                         <ListTask
                                             key={idx}
-                                            checked={t.status}
-                                            stared={t.stared}
-                                            id={t.id}
+                                            checked={t?.status}
+                                            stared={t?.stared}
+                                            id={t?.id}
                                             taskId={taskId}
                                             handleChecked={handleChecked}
                                         >
-                                    {console.log({ TaskActive: t.name, status: t.status })}
+                                            {console.log({ TaskActive: t.name, status: t.status })}
 
                                             {t.name}
                                         </ListTask>
@@ -79,7 +81,11 @@ function TaskContent({ task = {}, isLoading = false, activeTask, completeTask, h
             </div>
             {completeTask.length > 0 && (
                 <div className="flex items-center justify-center w-full h-auto">
-                    <Dropdown tasks={completeTask} taskId={taskId} handleChecked={handleChecked}/>
+                    <Dropdown
+                        tasks={completeTask}
+                        taskId={taskId}
+                        handleChecked={handleChecked}
+                    />
                 </div>
             )}
         </div>

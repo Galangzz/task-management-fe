@@ -1,21 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Checkbox = ({ id = 'dummyChecked', checked, onChange }) => {
+const Checkbox = ({ id = 'dummyChecked', checked = false, onChange }) => {
     return (
         <StyledWrapper>
             <div
                 className="checkbox-wrapper-12"
-                onClick={(e) => {e.stopPropagation()
-
-                    console.log({ Checkbox: id})
-                }
-                    
-                }
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onChange()
+                    console.log({ Checkbox: id, Checked: checked });
+                }}
             >
                 <div className="cbx">
                     <input
-                        onChange={onChange}
                         defaultChecked={checked}
                         type="checkbox"
                         id={`checked-${id}`}
@@ -152,8 +150,9 @@ const StyledWrapper = styled.div`
     @-moz-keyframes splash-12 {
         40% {
             background: var(--star-fill);
-            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
-                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill),
+                16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill), -16px 8px 0 -8px var(--star-fill),
+                -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
@@ -166,8 +165,9 @@ const StyledWrapper = styled.div`
     @-webkit-keyframes splash-12 {
         40% {
             background: var(--star-fill);
-            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
-                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill),
+                16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill), -16px 8px 0 -8px var(--star-fill),
+                -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
@@ -180,8 +180,9 @@ const StyledWrapper = styled.div`
     @-o-keyframes splash-12 {
         40% {
             background: var(--star-fill);
-            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
-                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill),
+                16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill), -16px 8px 0 -8px var(--star-fill),
+                -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
@@ -194,8 +195,9 @@ const StyledWrapper = styled.div`
     @keyframes splash-12 {
         40% {
             background: var(--star-fill);
-            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill), 16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill),
-                -16px 8px 0 -8px var(--star-fill), -16px -8px 0 -8px var(--star-fill);
+            box-shadow: 0 -18px 0 -8px var(--star-fill), 16px -8px 0 -8px var(--star-fill),
+                16px 8px 0 -8px var(--star-fill), 0 18px 0 -8px var(--star-fill), -16px 8px 0 -8px var(--star-fill),
+                -16px -8px 0 -8px var(--star-fill);
         }
 
         100% {
