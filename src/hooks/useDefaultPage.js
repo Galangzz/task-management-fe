@@ -17,9 +17,10 @@ export function useDefaultPage() {
 
     const { toast } = useContext(ToastContext);
     const [stackedToast, setStackedToast] = useState(0);
+    const [pathId, setPathId] = useState('');
+    const pendingTasksRef = useRef(new Map());
     const stackedRef = useRef(0);
     console.log({ stackedToast });
-    const [pathId, setPathId] = useState('');
 
     useEffect(() => {
         setTabs(() => getAllTasks());
@@ -76,19 +77,43 @@ export function useDefaultPage() {
 
     useEffect(() => {
         stackedRef.current = stackedToast;
-    }, [stackedToast]);
+    }, [stackedToast, pathId]);
 
-    const fixChecked = useCallback(
-        async (id) => {
-            await toggleStatusTask(id);
-            console.log({ FixCheckedStacked: stackedRef.current });
-            if (stackedRef.current === 0) {
-                setTask(getTaskListById(pathId));
-                console.log('FIX-CHECKED TRIGER');
-            }
-        },
-        [pathId]
-    );
+    // Effect untuk cleanup saat berpindah tab
+    useEffect(() => {
+        // Reset stacked toast saat pindah tab jika ada toast aktif
+        if (stackedToast > 0) {
+            console.log('Tab changed with active toasts, resetting...');
+            setStackedToast(0);
+            pendingTasksRef.current.clear();
+        }
+    }, [pathId, stackedToast]);
+
+    // Effect untuk trigger refresh task ketika stackedToast menjadi 0
+    useEffect(() => {
+        if (stackedToast === 0 && pathId && pendingTasksRef.current.size > 0) {
+            console.log('REFRESH TASK - stackedToast === 0');
+            // Refresh semua tab yang memiliki pending tasks
+            pendingTasksRef.current.forEach((_, tabId) => {
+                if (tabId === pathId) {
+                    setTask(getTaskListById(pathId));
+                }
+            });
+            pendingTasksRef.current.clear();
+        }
+    }, [stackedToast, pathId]);
+
+    const fixChecked = useCallback(async (id, taskPathId) => {
+        await toggleStatusTask(id);
+        console.log({ FixCheckedStacked: stackedRef.current, taskPathId });
+
+        // Tandai bahwa tab ini memiliki pending update
+        if (!pendingTasksRef.current.has(taskPathId)) {
+            pendingTasksRef.current.set(taskPathId, 1);
+        } else {
+            pendingTasksRef.current.set(taskPathId, pendingTasksRef.current.get(taskPathId) + 1);
+        }
+    }, []);
 
     const undoChecked = useCallback((id) => {
         setTask((prev) => ({
@@ -100,6 +125,7 @@ export function useDefaultPage() {
     const handleChecked = useCallback(
         async (id) => {
             console.log({ handleCheckId: id });
+            const currentPathId = pathId;
             setStackedToast((prev) => prev + 1);
             setTimeout(async () => {
                 const updated = {
@@ -110,18 +136,18 @@ export function useDefaultPage() {
 
                 const message = target?.status === false ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
                 setTask(updated);
-                
+
                 toast.undo(
                     message,
                     () => undoChecked(id),
-                    () => fixChecked(id),
+                    () => fixChecked(id, currentPathId),
                     () => setStackedToast((prev) => Math.max(prev - 1, 0))
                 );
 
                 console.log({ task });
             }, 500);
         },
-        [task, toast, fixChecked, undoChecked]
+        [task, toast, fixChecked, undoChecked, pathId]
     );
 
     return {
