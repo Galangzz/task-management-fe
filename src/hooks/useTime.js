@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addNewTask, getTaskListById } from '../services/localService';
+import { useTaskStore } from './useTaskStore';
 
 function useTime() {
     const location = useLocation();
@@ -122,6 +123,7 @@ function useTime() {
                 }
                 navigate(`/${currentTab}`);
             }
+            useTaskStore.getState().refreshCurrentTask();
             onResetTitle();
             onResetDetail();
             setIsOpenModaltask(false);
