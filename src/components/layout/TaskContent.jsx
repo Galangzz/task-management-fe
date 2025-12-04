@@ -1,12 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
 import { CgSpinner } from 'react-icons/cg';
-import emptyNote from '../../assets/empty-note.svg';
+import emptyNoteLight from '../../assets/empty-note-light.svg';
+import emptyNoteDark from '../../assets/empty-note-dark.svg';
+import completedTaskDark from '../../assets/completed-task-dark.svg';
+import completedTaskLight from '../../assets/completed-task-light.svg';
 import Dropdown from '../ui/Dropdown';
+import { ThemeContext } from '../../context/Theme';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
+    const { theme } = useContext(ThemeContext);
+
     const activeTask = useMemo(() => task?.tasks?.filter((t) => t.status === false) || [], [task]);
 
     const completeTask = useMemo(() => task?.tasks?.filter((t) => t.status === true) || [], [task]);
@@ -67,10 +73,20 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                 </div>
                             ))}
                         </div>
+                    ) : completeTask.length > 0 ? (
+                        <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
+                            <img
+                                src={theme === 'dark' ? completedTaskDark : completedTaskLight}
+                                alt="aa"
+                                className="h-auto w-60 object-contain"
+                            />
+                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">Task Telah Selesai<br/>Kerja Bagus</p>
+                            
+                        </div>
                     ) : (
                         <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
                             <img
-                                src={emptyNote}
+                                src={theme === 'dark' ? emptyNoteDark : emptyNoteLight}
                                 alt="aa"
                                 className="h-auto w-60 object-contain"
                             />
