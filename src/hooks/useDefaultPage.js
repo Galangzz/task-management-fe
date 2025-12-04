@@ -1,11 +1,10 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addTaskTitle, getAllTasks, getTaskListById, toggleStatusTask } from '../services/localService';
+import { addTaskTitle, getTaskListById } from '../services/localService';
 import { ToastContext } from '../context/Toast';
+import { useTaskStore } from './useTaskStore';
 
 export function useDefaultPage() {
-    const [tabs, setTabs] = useState([]);
-    const [task, setTask] = useState({});
     const [titleList, setTitleList] = useState('');
     const [isOpenModalTaskTitle, setIsOpenModalTaskTitle] = useState(false);
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
@@ -14,140 +13,127 @@ export function useDefaultPage() {
     const [errTitle, setErrTitle] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
+    const previousTabRef = useRef('');
+    const isInitialMount = useRef(true);
 
     const { toast } = useContext(ToastContext);
-    const [stackedToast, setStackedToast] = useState(0);
-    const [pathId, setPathId] = useState('');
-    const pendingTasksRef = useRef(new Map());
-    const stackedRef = useRef(0);
-    console.log({ stackedToast });
 
+    const {
+        tabs,
+        task,
+        currentTabId,
+        stackedToast,
+        setTabs,
+        setCurrentTabId,
+        loadTaskList,
+        resetOnTabChange,
+        increaseToast,
+        decreaseToast,
+        fixChecked,
+        undoLocalStatus,
+        optimisticToggle,
+        refreshPendingTabs,
+    } = useTaskStore();
+
+    // Initial load tabs
     useEffect(() => {
-        setTabs(() => getAllTasks());
-    }, []);
+        setTabs();
+    }, [setTabs]);
 
+    // Handle tab navigation and loading
     useEffect(() => {
         const currentTab = location.pathname.split('/')[1] || 'main-task';
-        setPathId(currentTab);
 
-        const newTaskList = getTaskListById(currentTab);
-
-        console.log({ newTaskList, currentTab });
-
-        setTask(newTaskList);
-
-        setIsLoadedTaskList(false);
-
-        console.log('New Task List: ', newTaskList);
-        if (!newTaskList) {
-            navigate('/', { replace: true });
-            setTask(getTaskListById('main-task'));
-            setIsLoadedTaskList(false);
-
+        // Skip jika tab tidak berubah
+        if (previousTabRef.current === currentTab && !isInitialMount.current) {
             return;
         }
 
-        if (newTaskList.id === 'main-task' && currentTab !== 'main-task') {
-            navigate('/');
+        const isFirstLoad = isInitialMount.current;
+        isInitialMount.current = false;
+
+        console.log(`Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`);
+
+        // Deteksi perubahan tab
+        if (previousTabRef.current !== '' && previousTabRef.current !== currentTab) {
+            // Tab changed
+            resetOnTabChange(currentTab);
         } else {
-            navigate(`/${currentTab}`);
+            // First load - langsung set tanpa reset
+            const data = getTaskListById(currentTab);
+            if (data) {
+                setCurrentTabId(currentTab);
+                loadTaskList(currentTab);
+            } else {
+                navigate('/main-task', { replace: true });
+                return;
+            }
         }
-        return;
-    }, [navigate, location.pathname, isOpenModalTask]);
+
+        previousTabRef.current = currentTab;
+        setIsLoadedTaskList(false);
+    }, [location.pathname, loadTaskList, navigate, resetOnTabChange, setCurrentTabId]);
+
+    // Handle toast completion - refresh pending tabs
+    useEffect(() => {
+        if (stackedToast === 0) {
+            refreshPendingTabs();
+        }
+    }, [stackedToast, refreshPendingTabs]);
 
     const handleSubmitTitleList = useCallback(async () => {
         setIsLoadingTitle(true);
         const { id, err } = await addTaskTitle({ title: titleList });
         if (err) {
             setErrTitle(err);
+            setIsLoadingTitle(false);
             return;
         }
 
         setTimeout(() => {
-            setTabs(getAllTasks());
-
+            setTabs();
             setErrTitle('');
             setIsOpenModalTaskTitle(false);
             setTitleList('');
-
             setIsLoadingTitle(false);
             navigate(`/${id}`);
         }, 1000);
-    }, [navigate, titleList]);
-
-    useEffect(() => {
-        stackedRef.current = stackedToast;
-    }, [stackedToast, pathId]);
-
-    // Effect untuk cleanup saat berpindah tab
-    useEffect(() => {
-        // Reset stacked toast saat pindah tab jika ada toast aktif
-        if (stackedToast > 0) {
-            console.log('Tab changed with active toasts, resetting...');
-            setStackedToast(0);
-            pendingTasksRef.current.clear();
-        }
-    }, [pathId, stackedToast]);
-
-    // Effect untuk trigger refresh task ketika stackedToast menjadi 0
-    useEffect(() => {
-        if (stackedToast === 0 && pathId && pendingTasksRef.current.size > 0) {
-            console.log('REFRESH TASK - stackedToast === 0');
-            // Refresh semua tab yang memiliki pending tasks
-            pendingTasksRef.current.forEach((_, tabId) => {
-                if (tabId === pathId) {
-                    setTask(getTaskListById(pathId));
-                }
-            });
-            pendingTasksRef.current.clear();
-        }
-    }, [stackedToast, pathId]);
-
-    const fixChecked = useCallback(async (id, taskPathId) => {
-        await toggleStatusTask(id);
-        console.log({ FixCheckedStacked: stackedRef.current, taskPathId });
-
-        // Tandai bahwa tab ini memiliki pending update
-        if (!pendingTasksRef.current.has(taskPathId)) {
-            pendingTasksRef.current.set(taskPathId, 1);
-        } else {
-            pendingTasksRef.current.set(taskPathId, pendingTasksRef.current.get(taskPathId) + 1);
-        }
-    }, []);
-
-    const undoChecked = useCallback((id) => {
-        setTask((prev) => ({
-            ...prev,
-            tasks: prev.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
-        }));
-    }, []);
+    }, [navigate, titleList, setTabs]);
 
     const handleChecked = useCallback(
         async (id) => {
-            console.log({ handleCheckId: id });
-            const currentPathId = pathId;
-            setStackedToast((prev) => prev + 1);
-            setTimeout(async () => {
-                const updated = {
-                    ...task,
-                    tasks: task.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
-                };
-                const target = task.tasks.find((t) => t.id === id);
+            console.log({ handleCheckId: id, currentTabId });
 
+            increaseToast();
+
+            setTimeout(async () => {
+                // Optimistic update - UI berubah langsung
+                optimisticToggle(id);
+
+                const target = task.tasks.find((t) => t.id === id);
                 const message = target?.status === false ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
-                setTask(updated);
 
                 toast.undo(
                     message,
-                    () => undoChecked(id),
-                    () => fixChecked(id, currentPathId),
-                    () => setStackedToast((prev) => Math.max(prev - 1, 0))
+                    () => {
+                        // Undo callback - revert UI
+                        console.log('Undo clicked');
+                        undoLocalStatus(id);
+                    },
+                    () => {
+                        // OnClose callback - commit to localStorage
+                        console.log('Toast closed, committing to localStorage');
+                        fixChecked(id, currentTabId);
+                    },
+                    () => {
+                        // After close - decrease counter
+                        console.log('Toast animation complete');
+                        decreaseToast();
+                    }
                 );
-
-                console.log({ task });
-            }, 500);
+            }, 300); // Reduced delay for better UX
         },
-        [task, toast, fixChecked, undoChecked, pathId]
+        [task, currentTabId, toast, increaseToast, decreaseToast, optimisticToggle, fixChecked, undoLocalStatus]
     );
 
     return {
