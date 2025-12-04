@@ -23,7 +23,7 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
             <div
                 className="ModalTaskTitle flex flex-col 
                 w-98 h-auto 
-                gap-6 p-4 
+                gap-6 p-4! 
                 justify-center items-center 
                 rounded-3xl 
                 border 
@@ -44,7 +44,7 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                     <input
                         type="text"
                         value={titleList}
-                        className=" border rounded-xl p-2"
+                        className=" border rounded-xl p-2!"
                         onChange={handleOnChange}
                         placeholder="Masukan Nama Daftar Baru ..."
                         maxLength={20}
@@ -58,7 +58,7 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                         bg-(--button-color)
                         border
                         border-(--border-color)
-                        p-0.5
+                        p-0.5!
                         rounded-xl
                         transition-all!
                         duration-300

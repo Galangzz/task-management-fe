@@ -10,8 +10,6 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
     const [viewClock, setViewClock] = useState('hours');
     const [clickCount, setClickCount] = useState(0);
     const [errTimeField, setErrTimeField] = useState(null);
-    // const [date, setDate] = useState(new Date());
-    // console.log({date})
 
     useEffect(() => {
         if (clickCount === 3) {
@@ -19,17 +17,11 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
             setClickCount(0);
         }
 
-        // reset counter setelah 500ms tanpa klik
         const timer = setTimeout(() => setClickCount(0), 500);
 
         return () => clearTimeout(timer);
     }, [clickCount]);
 
-    // useEffect(() => {
-    //     if (selectedTime && selectedTime.getTime() !== date.getTime()) {
-    //         setDate(selectedTime);
-    //     }
-    // }, [selectedTime, date]);
 
     return (
         <Modal setToggle={toggleTime}>
@@ -42,12 +34,12 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
             w-96
             h-auto
             rounded-2xl
-            py-4
-            m-2
+            py-4!
+            m-2!
             "
                 onClick={(e) => e.stopPropagation()}
             >
-                <p className="flex w-full px-4">Pilih Waktu</p>
+                <p className="flex w-full px-4!">Pilih Waktu</p>
                 <div
                     className="
                     flex
@@ -57,7 +49,7 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                     text-4xl
                     font-bold
                     w-full
-                    p-2
+                    p-2!
                     "
                 >
                     <CustomTimeField
@@ -113,11 +105,11 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                     className="
                     flex
                     items-center
-                    p-2
+                    p-2!
                     w-full
                 "
                 >
-                    <div className="flex-1 text-2xl pl-6">
+                    <div className="flex-1 text-2xl pl-6!">
                         {inputTimeField ? (
                             <IoMdTime
                                 className="
@@ -150,7 +142,7 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                             className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                         "
@@ -163,7 +155,7 @@ function ModalTimePicker({ toggleTime, selectedTime, setSelectedTime, onSubmitTi
                             className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                             disabled:text-gray-600!

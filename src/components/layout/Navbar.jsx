@@ -10,8 +10,8 @@ function Navbar({ tabs, addList }) {
     const currentTab = location.pathname.split('/')[1] || 'main-task';
     console.log({ currentTab });
     return (
-        <div className="NavBar min-w-screen flex items-center px-10 py-2 bg-(--background-header) ">
-            <ul className="flex py-1 px-2 gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
+        <div className="NavBar w-full flex items-center px-10! py-2! bg-(--background-header) ">
+            <ul className="flex py-1! px-2! gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
                 <li className="">
                     <Button
                         type={'button'}

@@ -39,8 +39,8 @@ function ModalDayPicker({
             w-96
             h-auto
             rounded-2xl
-            py-4
-            m-2
+            py-4!
+            m-2!
             "
                     onClick={(e) => e.stopPropagation()}
                 >
@@ -57,8 +57,8 @@ function ModalDayPicker({
                         w-full
                         gap-4
                         border-y
-                        py-4
-                        px-10
+                        py-4!
+                        px-10!
                         cursor-pointer
                         hover:backdrop-brightness-125
                     "
@@ -71,7 +71,7 @@ function ModalDayPicker({
                             flex items-center 
                             w-fit
                             border
-                            p-2
+                            p-2!
                             gap-2 
                             text-xl
                             leading-none"
@@ -109,8 +109,8 @@ function ModalDayPicker({
                         items-center
                         justify-end-safe
                         w-full
-                        py-2
-                        px-12
+                        py-2!
+                        px-12!
                         font-medium
                     "
                     >
@@ -119,7 +119,7 @@ function ModalDayPicker({
                             className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                         "
@@ -132,7 +132,7 @@ function ModalDayPicker({
                             className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                         "

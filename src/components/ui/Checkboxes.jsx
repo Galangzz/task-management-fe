@@ -8,13 +8,13 @@ const Checkbox = ({ id = 'dummyChecked', checked = false, onChange }) => {
                 className="checkbox-wrapper-12"
                 onClick={(e) => {
                     e.stopPropagation();
-                    onChange()
                     console.log({ Checkbox: id, Checked: checked });
                 }}
             >
                 <div className="cbx">
                     <input
                         defaultChecked={checked}
+                        onChange={()=> onChange()}
                         type="checkbox"
                         id={`checked-${id}`}
                     />

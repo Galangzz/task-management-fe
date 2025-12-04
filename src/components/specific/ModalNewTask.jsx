@@ -49,12 +49,12 @@ function ModalNewTask({ setIsOpenModalTask }) {
                 <div
                     className="ModalTaskTitle flex flex-col 
                 w-98 h-auto 
-                gap-6 p-4 
+                gap-6 p-4!
                 justify-center items-center 
                 rounded-3xl 
                 border 
                 bg-(--background-header) 
-                m-2
+                m-2!
                 "
                     onClick={(e) => e.stopPropagation()}
                 >
@@ -80,7 +80,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             className="
                             text-xl
                             border-b-2
-                            p-2
+                            p-2!
                             rounded-xl
                             focus:outline-none
                             focus:border
@@ -101,7 +101,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                     w-full
                     h-auto
                     max-h-52 overflow-y-auto
-                    px-2
+                    px-2!
                     focus:outline-none
                     resize-none
                     "
@@ -118,8 +118,8 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             font-bold
                             border-2
                             w-fit
-                            p-2
-                            mt-2   
+                            p-2!
+                            mt-2!   
                         "
                             >
                                 <p>{formatCustomDate(selected)}</p>
@@ -154,7 +154,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
-                                p-2
+                                p-2!
                                 "
                                     onClick={handleAddDetail}
                                 >
@@ -166,7 +166,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
-                                p-2
+                                p-2!
                                 "
                                 >
                                     <IoMdTime onClick={handleOpenCalendar} />
@@ -177,7 +177,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 hover:backdrop-brightness-110
                                 cursor-pointer
                                 w-fit
-                                p-2
+                                p-2!
                                 "
                                 >
                                     <StarCheck
@@ -193,7 +193,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 className="
                             text-center
                             rounded-2xl
-                            p-2
+                            p-2!
                             text-blue-500!
                             disabled:text-gray-400!
                             hover:backdrop-brightness-110

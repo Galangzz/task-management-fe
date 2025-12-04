@@ -32,7 +32,7 @@ function DefaultPage() {
         return <LoadingPage />;
     }
     return (
-        <div className="relative w-screen min-h-screen flex flex-col">
+        <div className="relative w-full h-full flex flex-col">
             <Header />
             <Navbar
                 tabs={tabs}

@@ -14,7 +14,7 @@ function ListTask({ children, checked, stared, id, taskId, handleChecked }) {
 
     return (
         <div
-            className="flex items-center gap-4 p-2 hover:bg-(--background-color)/40 cursor-pointer rounded-xl"
+            className="flex items-center gap-4 p-2! hover:bg-(--background-color)/40 cursor-pointer rounded-xl"
             onClick={() => {
                 navigate(`/details/${taskId}/${id}`);
             }}

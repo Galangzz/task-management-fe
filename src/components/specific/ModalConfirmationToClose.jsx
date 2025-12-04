@@ -7,12 +7,12 @@ function ModalConfirmationToClose({ setToggle, onHandlerClose }) {
             <div
                 className="ModalTaskTitle flex flex-col 
                 w-98 h-auto 
-                gap-2 p-4 
+                gap-2 p-4! 
                 justify-center items-center 
                 rounded-3xl 
                 border 
                 bg-(--background-header) 
-                m-2
+                m-2!
                 "
                 onClick={(e) => e.stopPropagation()}
             >
@@ -33,7 +33,7 @@ function ModalConfirmationToClose({ setToggle, onHandlerClose }) {
                         flex w-full
                         justify-end-safe
                         gap-6
-                        mt-4
+                        mt-4!
                     "
                 >
                     <button
@@ -41,7 +41,7 @@ function ModalConfirmationToClose({ setToggle, onHandlerClose }) {
                         className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                             "
@@ -54,7 +54,7 @@ function ModalConfirmationToClose({ setToggle, onHandlerClose }) {
                         className="
                             text-(--button-text)!
                             hover:backdrop-brightness-125
-                            p-2
+                            p-2!
                             rounded-2xl
                             cursor-pointer
                         "

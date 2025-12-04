@@ -28,7 +28,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
         }) || [];
 
     return (
-        <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8">
+        <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8!">
             <div className="flex items-center justify-center w-full h-auto">
                 <Field>
                     <div className="flex">
