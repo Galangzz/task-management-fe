@@ -8,7 +8,7 @@
     transform: scale(1.05);
 }
 
-[active='true']::after {
+/* [active='true']::after {
     content: '';
     position: absolute;
     width: 10px;
@@ -35,7 +35,7 @@
     background-color: var(--button-text);
     z-index: 4;
     opacity: 50%;
-}
+} */
 
 * {
     margin: 0;
@@ -63,25 +63,9 @@ body {
     overflow-x: hidden;
 }
 
-.NavBar ul li {
-    display: flex;
-    height: 36px;
-    width: max-content;
-}
 
-.listTask {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 4px;
-    cursor: pointer;
 
-    border: 1px solid var(--border-color);
 
-    width: max-content;
-
-    transition: all 0.3s ease;
-}
 
 .listTask:hover {
     transform: scale(1.05);

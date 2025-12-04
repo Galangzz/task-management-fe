@@ -1,12 +1,13 @@
 :root {
-    --background-color: #ecf4e8;
+    --background-color: #F9F8F6;
     --border-color: #171717;
-    --background-header: #c6cbc3;
+    --background-header: #D9CFC7;
     --button-color: #ff9f9f;
     --button-color-hover: #da0037;
-    --add-button: #91adc8;
-    --star-fill: #3282b8;
+    --add-button: #D7C097;
+    --star-fill: #504B38;
     --stroke-check: #fff;
-    --button-text: oklch(37.9% 0.146 265.522);
+    --button-text: #A79277;
     --toast-bg: #53e8ff;
+    --underline-navbar: #C9B59C
 }

@@ -85,7 +85,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             focus:outline-none
                             focus:border
                         "
-                            maxLength={30}
+                            maxLength={50}
                             required
                         />
                         {error !== '' && <p>{error}</p>}
@@ -194,7 +194,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             text-center
                             rounded-2xl
                             p-2!
-                            text-blue-500!
+                            text-(--button-text)!
                             disabled:text-gray-400!
                             hover:backdrop-brightness-110
                             "
