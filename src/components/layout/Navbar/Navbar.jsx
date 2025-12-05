@@ -1,8 +1,9 @@
 import React from 'react';
 import { FaPlus, FaStar } from 'react-icons/fa';
 import { GoPlus } from 'react-icons/go';
-import Button from '../ui/Button';
+import Button from '../../ui/Button';
 import { useLocation, useNavigate } from 'react-router-dom';
+import NavbarButton from './NavbarButton';
 
 function Navbar({ tabs, addList }) {
     const navigate = useNavigate();
@@ -10,24 +11,18 @@ function Navbar({ tabs, addList }) {
     const currentTab = location.pathname.split('/')[1] || 'main-task';
     console.log({ currentTab });
     return (
-        <div className="NavBar w-full flex items-center px-10! py-2! bg-(--background-header) ">
-            <ul className="flex py-1! px-2! gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
-                <li className="">
-                    <Button
-                        type={'button'}
-                        className={'listTask flex relative'}
+        <div className="NavBar w-full flex items-center px-10!  border-b-2 ">
+            <ul className="flex px-2! gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
+                <li className="flex">
+                    <NavbarButton
                         onClick={() => navigate('/stared-task')}
                         active={currentTab === 'stared-task' ? 'true' : 'false'}
                     >
                         <FaStar className="h-full w-full flex " />
-                    </Button>
-                </li>
+                    </NavbarButton>
 
-                {tabs.map((tab) => (
-                    <li key={tab.id}>
-                        <Button
-                            type={'button'}
-                            className={'listTask'}
+                    {tabs.map((tab) => (
+                        <NavbarButton
                             onClick={() => {
                                 if (tab.id === 'main-task') {
                                     navigate('/');
@@ -36,20 +31,15 @@ function Navbar({ tabs, addList }) {
                                 navigate(`/${tab.id}`);
                             }}
                             active={currentTab === tab.id.toString() ? 'true' : 'false'}
+                            key={tab.id}
                         >
                             {tab.title}
-                        </Button>
-                    </li>
-                ))}
-                <li className="">
-                    <Button
-                        type={'button'}
-                        className={'listTask flex items-center gap-2'}
-                        onClick={addList}
-                    >
+                        </NavbarButton>
+                    ))}
+                    <NavbarButton onClick={addList}>
                         <GoPlus />
                         New List
-                    </Button>
+                    </NavbarButton>
                 </li>
             </ul>
         </div>

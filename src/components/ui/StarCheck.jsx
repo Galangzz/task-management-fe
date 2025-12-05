@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StarCheck = ({ id = 'dummyStar', checked, onChange }) => {
+const StarCheck = ({ id = 'dummyStar', checked = false, onChange }) => {
     return (
         <StyledWrapper>
             <div

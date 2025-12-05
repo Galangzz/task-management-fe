@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from '../components/layout/Header';
-import Navbar from '../components/layout/Navbar';
+import Navbar from '../components/layout/Navbar/Navbar';
 import ModalTaskTitle from '../components/specific/ModalTaskTitle';
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';

@@ -8,9 +8,15 @@ function UndoNotification({ closeToast, data }) {
 
     return (
         <div className="flex items-center w-full justify-between">
-            <span className='flex-1'>{data.message}</span>{' '}
+            <span className="flex-1">{data.message}</span>{' '}
             <button
-                className="border border-purple-400 px-2! rounded-md "
+                className="border border-gray-500 px-2! rounded-md 
+                hover:transition-all!
+                hover:duration-300!
+                hover:ease-in-out!
+                hover:backdrop-contrast-75 
+                
+                "
                 onClick={handleUndo}
             >
                 Undo

@@ -13,7 +13,10 @@ function AddButton({ onClick }) {
             hover:brightness-125
             cursor-pointer
             "
-            onClick={onClick}
+            onClick={(e) => {
+                e.stopPropagation();
+                onClick();
+            }}
         >
             <FaPlus />
         </button>

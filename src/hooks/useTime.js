@@ -63,7 +63,7 @@ function useTime() {
 
     const handleCloseModalNewTask = useCallback(
         (setIsOpenModaltask) => {
-            if (title !== '' || isSubmitDateTime) {
+            if (title.trim() !== '' || isSubmitDateTime) {
                 // @ TODO
                 console.log('handleCloseModalNewTask Called');
                 setIsOpenConfirmationToClose(true);

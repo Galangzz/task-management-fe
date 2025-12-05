@@ -1,0 +1,13 @@
+:root {
+    --background-color: #F9F8F6;
+    --border-color: #171717;
+    --background-header: #D9CFC7;
+    --button-color: #ff9f9f;
+    --button-color-hover: #da0037;
+    --add-button: #D7C097;
+    --star-fill: #504B38;
+    --stroke-check: #fff;
+    --button-text: #A79277;
+    --toast-bg: #DCCFC0;
+    --underline-navbar: #C9B59C
+}
