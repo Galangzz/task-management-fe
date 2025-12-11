@@ -13,6 +13,8 @@ export async function getTaskTabs() {
         : resData;
 }
 export async function addTaskTabTitle({ title }) {
+    ensureBase();
+
     try {
         if (!title || title.trim() === '') {
             return { id: null, err: 'Judul tidak boleh kosong' };
@@ -44,6 +46,8 @@ export async function addTaskTabTitle({ title }) {
 }
 
 export async function getTaskTabWithTasks(id = 'main-task') {
+    ensureBase();
+
     const url = `/task-tabs/${id}`;
     const res = await api.get(url, {
         params: {
@@ -58,4 +62,16 @@ export async function getTaskTabWithTasks(id = 'main-task') {
     return resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
         : resData;
+}
+
+export async function getTaskTabById(id) {
+    ensureBase();
+    const url = `/task-tabs/tab/${id}`;
+    const res = await api.get(url, {
+        withCredentials: false,
+    });
+    const resData = res?.data;
+    return resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
+        ? resData.data?.id
+        : null;
 }

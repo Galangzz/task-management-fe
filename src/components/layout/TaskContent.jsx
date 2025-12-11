@@ -13,15 +13,13 @@ import { ThemeContext } from '../../context/Theme';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const { theme } = useContext(ThemeContext);
-    console.log({ TaskTaskContent: task });
 
     const activeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 0) || [], [task]);
-    console.log({ activeTask });
 
     const completeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 1) || [], [task]);
-    console.log({ completeTask });
 
     const taskId = task?.id || '';
+    //TODO change formate date GROUP HARI INI
     const groupedData = activeTask?.reduce((acc, item) => {
         const dateKey = item.deadline ? item.deadline : 'Tanpa tanggal';
 

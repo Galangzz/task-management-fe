@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addNewTask, getTaskListById } from '../services/localService';
+// import { addNewTask, getTaskListById } from '../services/localService';
 import { useTaskStore } from './useTaskStore';
+import { addTask } from '../services/tasksService';
+import { getTaskTabById } from '../services/taskTabsService';
+import { ToastContext } from '../context/Toast';
 
 function useTime() {
     const location = useLocation();
@@ -14,11 +17,13 @@ function useTime() {
     const [isOpenTime, setIsOpenTime] = useState(false);
     const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
     const [isSubmitTime, setIsSubmitTime] = useState(false);
-    const [stared, setStared] = useState(false);
+    const [starred, setStarred] = useState(false);
     const [isOpenConfirmationToClose, setIsOpenConfirmationToClose] = useState(false);
-    const [error, setError] = useState('');
+    // const [error, setError] = useState('');
     const [selected, setSelected] = useState(new Date());
     const textRef = useRef(null);
+
+    const { toast } = useContext(ToastContext);
 
     useEffect(() => {
         let date = new Date();
@@ -84,45 +89,22 @@ function useTime() {
         async (e, setIsOpenModaltask) => {
             e.preventDefault();
             console.log('handleSubmitNewTask');
-            let id = '';
-            let newTask = {};
-            let deadline = null;
+            const currentTab = (await getTaskTabById(location.pathname.split('/')[1] || 'main-task')) ?? 'main-task';
 
-            if (isSubmitDateTime) {
-                const date = new Date(selected);
-
-                if (!isSubmitTime) {
-                    date.setHours(0, 0, 0, 0);
-                }
-                deadline = date;
-            }
-            newTask = {
-                name: title.trim(),
+            const newTask = {
+                title: title.trim(),
                 detail: detail,
-                dateDeadline: deadline,
-                stared: stared,
-                status: false,
+                deadline: isSubmitDateTime ? selected : null,
+                hasDate: Number(isSubmitDateTime),
+                hasTime: Number(isSubmitTime),
+                starred: starred,
+                isCompleted: Number(false),
             };
+            await addTask(currentTab, newTask);
+            toast.success('Catatan Berhasil ditambahkan');
 
-            const currentTab = location.pathname.split('/')[1];
-            const newTaskList = getTaskListById(currentTab);
-            if (!newTaskList && currentTab) {
-                id = 'main-task';
-                const { err } = await addNewTask(id, newTask);
-                if (err) {
-                    setError(err);
-                    return;
-                }
-                navigate('/', { replace: true });
-            } else {
-                id = newTaskList.id;
-                const { err } = await addNewTask(id, newTask);
-                if (err) {
-                    setError(err);
-                    return;
-                }
-                navigate(`/${currentTab}`);
-            }
+            currentTab === 'main-task' ? navigate('/', { replace: true }) : navigate(`/${currentTab}`);
+
             useTaskStore.getState().refreshCurrentTask();
             onResetTitle();
             onResetDetail();
@@ -133,12 +115,13 @@ function useTime() {
             title,
             isSubmitTime,
             selected,
-            stared,
+            starred,
             location.pathname,
             navigate,
             detail,
             onResetDetail,
             onResetTitle,
+            toast,
         ]
     );
 
@@ -152,12 +135,11 @@ function useTime() {
         isSubmitTime,
         isOpenConfirmationToClose,
         selected,
-        // time,
         textRef,
         setTitle,
-        stared,
-        error,
-        setStared,
+        starred,
+        // error,
+        setStarred,
         setIsSubmitDateTime,
         setIsSubmitTime,
         handleSubmitTime,

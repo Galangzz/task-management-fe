@@ -16,9 +16,9 @@ function useToast() {
                 },
 
                 autoClose: 3000,
-                
             }),
-        success: (msg) => toast.success(msg),
+        //TODO change text-color
+        success: (msg) => toast.success(msg, { autoClose: 2000, className: 'bg-red-500 text-white' }),
         error: (msg) => toast.error(msg),
     };
     return [notify];

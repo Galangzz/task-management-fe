@@ -20,10 +20,10 @@ function ModalNewTask({ setIsOpenModalTask }) {
         isSubmitTime,
         selected,
         textRef,
-        stared,
+        starred,
         isOpenConfirmationToClose,
-        error,
-        setStared,
+        // error,
+        setStarred,
         setTitle,
         setIsSubmitDateTime,
         setIsSubmitTime,
@@ -88,7 +88,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             maxLength={50}
                             required
                         />
-                        {error !== '' && <p>{error}</p>}
+                        {/* {error !== '' && <p>{error}</p>} */}
                         {isOpenDetail && (
                             <textarea
                                 ref={textRef}
@@ -182,8 +182,8 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 >
                                     <StarCheck
                                         id="newTask"
-                                        checked={stared}
-                                        onChange={() => setStared(!stared)}
+                                        checked={starred}
+                                        onChange={() => setStarred(!starred)}
                                     />
                                 </div>
                             </div>
