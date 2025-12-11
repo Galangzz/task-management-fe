@@ -12,14 +12,15 @@ import { ThemeContext } from '../../context/Theme';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const { theme } = useContext(ThemeContext);
+    console.log({TaskTaskContent: task})
 
-    const activeTask = useMemo(() => task?.tasks?.filter((t) => t.status === false) || [], [task]);
+    const activeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 0) || [], [task]);
 
-    const completeTask = useMemo(() => task?.tasks?.filter((t) => t.status === true) || [], [task]);
+    const completeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 1) || [], [task]);
 
     const taskId = task?.id || '';
     const groupedData = activeTask?.reduce((acc, item) => {
-        const dateKey = item.dateDeadline ? item.dateDeadline : 'Tanpa tanggal';
+        const dateKey = item.deadline ? item.deadline : 'Tanpa tanggal';
 
         if (!acc[dateKey]) acc[dateKey] = [];
         acc[dateKey].push(item);
@@ -38,7 +39,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
             <div className="flex items-center justify-center w-full h-auto">
                 <Field>
                     <div className="flex">
-                        <h1 className="font-bold text-xl tracking-wide mb-6">{task.title ?? 'Stared Task'}</h1>
+                        <h1 className="font-bold text-xl tracking-wide mb-6">{task.name ?? 'Stared Task'}</h1>
                     </div>
                     {isLoading ? (
                         <CgSpinner />
@@ -59,15 +60,15 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                     {groupedData[date].map((t, idx) => (
                                         <ListTask
                                             key={idx}
-                                            checked={t?.status}
+                                            checked={t?.isCompleted}
                                             stared={t?.stared}
                                             id={t?.id}
                                             taskId={taskId}
                                             handleChecked={handleChecked}
                                         >
-                                            {console.log({ TaskActive: t.name, status: t.status })}
+                                            {console.log({ TaskActive: t.name, isCompleted: t.isCompleted })}
 
-                                            {t.name}
+                                            {t.title}
                                         </ListTask>
                                     ))}
                                 </div>
@@ -80,8 +81,11 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                 alt="aa"
                                 className="h-auto w-60 object-contain"
                             />
-                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">Task Telah Selesai<br/>Kerja Bagus</p>
-                            
+                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">
+                                Task Telah Selesai
+                                <br />
+                                Kerja Bagus
+                            </p>
                         </div>
                     ) : (
                         <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">

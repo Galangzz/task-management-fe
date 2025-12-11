@@ -1,5 +1,4 @@
 import React from 'react';
-import Modal from './Modal';
 import { CgSpinnerTwo } from 'react-icons/cg';
 
 function LoadingPage() {

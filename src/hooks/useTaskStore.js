@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import { getAllTasks, getTaskListById, toggleStatusTask } from '../services/localService';
+import { toggleStatusTask } from '../services/localService';
+import { getTaskTabs, getTaskTabWithTasks } from '../services/taskTabsService';
 
 export const useTaskStore = create((set, get) => ({
-    tabs: getAllTasks(),
+    tabs: null,
     currentTabId: 'main-task',
-    task: getTaskListById('main-task'),
+    task: null,
     pendingUpdates: new Map(),
     stackedToast: 0,
 
@@ -12,10 +13,10 @@ export const useTaskStore = create((set, get) => ({
     setCurrentTabId: (tabId) => set({ currentTabId: tabId }),
 
     // Refresh tabs list
-    setTabs: () => set({ tabs: getAllTasks() }),
+    setTabs: async () => set({ tabs: await getTaskTabs() }),
 
     // Load task list for specific tab
-    loadTaskList: (tabId) => {
+    loadTaskList: async (tabId) => {
         const currentState = get();
         // Hanya update jika data benar-benar berbeda
         if (currentState.task?.id === tabId) {
@@ -23,13 +24,13 @@ export const useTaskStore = create((set, get) => ({
             return;
         }
 
-        const data = getTaskListById(tabId);
+        const data = await getTaskTabWithTasks(tabId);
         set({ task: data, currentTabId: tabId });
     },
 
-    refreshCurrentTask: () => {
+    refreshCurrentTask: async () => {
         const { currentTabId } = get();
-        const data = getTaskListById(currentTabId);
+        const data = await getTaskTabWithTasks(currentTabId);
         console.log('Force refreshing task:', currentTabId);
         set({ task: data });
     },
@@ -100,7 +101,7 @@ export const useTaskStore = create((set, get) => ({
     },
 
     // Reset state when changing tabs with active toasts
-    resetOnTabChange: (newTabId) => {
+    resetOnTabChange: async (newTabId) => {
         const { stackedToast, currentTabId, resetToast, clearAllPending } = get();
 
         // Skip jika tab tidak berubah
@@ -116,7 +117,7 @@ export const useTaskStore = create((set, get) => ({
         }
 
         // Load fresh data for new tab
-        const data = getTaskListById(newTabId);
+        const data = await getTaskTabWithTasks(newTabId);
         set({ task: data, currentTabId: newTabId });
     },
 }));

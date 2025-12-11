@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import Header from '../components/layout/Header';
 import Navbar from '../components/layout/Navbar/Navbar';
 import ModalTaskTitle from '../components/specific/ModalTaskTitle';
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
 import ModalNewTask from '../components/specific/ModalNewTask';
-import LoadingPage from '../components/ui/LoadingPage';
+const LoadingPage = lazy(() => import('../components/ui/LoadingPage'));
 import { useDefaultPage } from '../hooks/useDefaultPage';
 
 function DefaultPage() {
@@ -19,15 +19,13 @@ function DefaultPage() {
         isOpenModalTask,
         setIsOpenModalTask,
         isLoadingTitle,
-        // setIsLoadingTitle,
         isLoadedTaskList,
-        // setIsLoadedTaskList,
         errTitle,
         setErrTitle,
         handleSubmitTitleList,
         handleChecked,
     } = useDefaultPage();
-
+    console.log({ DefaultPagesTask: task });
     if (isLoadedTaskList) {
         return <LoadingPage />;
     }
@@ -58,13 +56,12 @@ function DefaultPage() {
             {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />}
 
             <TaskContent
-                task={task ?? {}}
+                task={task}
                 isLoading={isLoadedTaskList}
                 handleChecked={handleChecked}
             />
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />
-                
         </div>
     );
 }

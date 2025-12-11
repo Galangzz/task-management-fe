@@ -38,7 +38,7 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                                     handleChecked={handleChecked}
                                 >
                                     {console.log({ taskDropDown: t.name, status: t.status })}
-                                    {t.name}
+                                    {t.title}
                                 </ListTask>
                             </li>
                         ))}

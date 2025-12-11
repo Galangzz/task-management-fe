@@ -33,7 +33,7 @@ function Navbar({ tabs, addList }) {
                             active={currentTab === tab.id.toString() ? 'true' : 'false'}
                             key={tab.id}
                         >
-                            {tab.title}
+                            {tab.name}
                         </NavbarButton>
                     ))}
                     <NavbarButton onClick={addList}>

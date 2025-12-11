@@ -1,8 +1,9 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addTaskTitle, getTaskListById } from '../services/localService';
+import {  getTaskListById } from '../services/localService';
 import { ToastContext } from '../context/Toast';
 import { useTaskStore } from './useTaskStore';
+import { addTaskTabTitle } from '../services/taskTabsService';
 
 export function useDefaultPage() {
     const [titleList, setTitleList] = useState('');
@@ -35,6 +36,7 @@ export function useDefaultPage() {
         refreshPendingTabs,
     } = useTaskStore();
 
+    console.log({task})
     // Initial load tabs
     useEffect(() => {
         setTabs();
@@ -71,7 +73,10 @@ export function useDefaultPage() {
         }
 
         previousTabRef.current = currentTab;
-        setIsLoadedTaskList(false);
+        setTimeout(() => {
+            
+            setIsLoadedTaskList(false);
+        }, 1000);
     }, [location.pathname, loadTaskList, navigate, resetOnTabChange, setCurrentTabId]);
 
     // Handle toast completion - refresh pending tabs
@@ -83,7 +88,7 @@ export function useDefaultPage() {
 
     const handleSubmitTitleList = useCallback(async () => {
         setIsLoadingTitle(true);
-        const { id, err } = await addTaskTitle({ title: titleList });
+        const { id, err } = await addTaskTabTitle({ title: titleList });
         if (err) {
             setErrTitle(err);
             setIsLoadingTitle(false);
