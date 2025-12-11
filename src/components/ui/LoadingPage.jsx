@@ -4,11 +4,9 @@ import { CgSpinnerTwo } from 'react-icons/cg';
 
 function LoadingPage() {
     return (
-        <Modal setToggle={(e) => e.stopPropagation()}>
-            <div className="flex animate-spin text-6xl">
-                <CgSpinnerTwo />
-            </div>
-        </Modal>
+        <div className="flex justify-center items-center w-screen h-screen text-6xl bg(--background-header)">
+            <CgSpinnerTwo className='animate-spin'/>
+        </div>
     );
 }
 
