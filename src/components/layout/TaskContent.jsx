@@ -1,8 +1,9 @@
-import React, { useContext, useMemo } from 'react';
+import React, { lazy, useContext, useMemo } from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
-import { CgSpinner } from 'react-icons/cg';
+
+const { CgSpinner } = lazy(() => import('react-icons/cg'));
 import emptyNoteLight from '../../assets/empty-note-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
@@ -12,11 +13,13 @@ import { ThemeContext } from '../../context/Theme';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const { theme } = useContext(ThemeContext);
-    console.log({TaskTaskContent: task})
+    console.log({ TaskTaskContent: task });
 
     const activeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 0) || [], [task]);
+    console.log({ activeTask });
 
     const completeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 1) || [], [task]);
+    console.log({ completeTask });
 
     const taskId = task?.id || '';
     const groupedData = activeTask?.reduce((acc, item) => {
@@ -61,12 +64,12 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                         <ListTask
                                             key={idx}
                                             checked={t?.isCompleted}
-                                            stared={t?.stared}
+                                            stared={t?.starred}
                                             id={t?.id}
                                             taskId={taskId}
                                             handleChecked={handleChecked}
                                         >
-                                            {console.log({ TaskActive: t.name, isCompleted: t.isCompleted })}
+                                            {console.log({ TaskActive: t.title, isCompleted: t.isCompleted })}
 
                                             {t.title}
                                         </ListTask>

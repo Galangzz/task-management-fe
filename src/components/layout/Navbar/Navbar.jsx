@@ -15,7 +15,7 @@ function Navbar({ tabs, addList }) {
             <ul className="flex px-2! gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
                 <li className="flex">
                     <NavbarButton
-                        onClick={() => navigate('/stared-task')}
+                        onClick={() => navigate('/starred-task')}
                         active={currentTab === 'stared-task' ? 'true' : 'false'}
                     >
                         <FaStar className="h-full w-full flex " />

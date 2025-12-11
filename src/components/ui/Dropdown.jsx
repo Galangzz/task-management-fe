@@ -31,13 +31,13 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                                 role="listitem"
                             >
                                 <ListTask
-                                    checked={t.status}
-                                    stared={t.stared}
+                                    checked={t.isCompleted}
+                                    stared={t.starred}
                                     id={t.id}
                                     taskId={taskId}
                                     handleChecked={handleChecked}
                                 >
-                                    {console.log({ taskDropDown: t.name, status: t.status })}
+                                    {console.log({ taskDropDown: t.title, status: t.isCompleted })}
                                     {t.title}
                                 </ListTask>
                             </li>

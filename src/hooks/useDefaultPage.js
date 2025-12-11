@@ -116,7 +116,7 @@ export function useDefaultPage() {
                 optimisticToggle(id);
 
                 const target = task.tasks.find((t) => t.id === id);
-                const message = target?.status === false ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
+                const message = target?.isCompleted === Number(false) ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
 
                 toast.undo(
                     message,

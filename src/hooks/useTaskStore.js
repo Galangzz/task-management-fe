@@ -71,16 +71,16 @@ export const useTaskStore = create((set, get) => ({
         set((state) => ({
             task: {
                 ...state.task,
-                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
+                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t)),
             },
         })),
 
     // Optimistic UI update
-    optimisticToggle: (id) =>
+    optimisticToggle: async (id) =>
         set((state) => ({
             task: {
                 ...state.task,
-                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, status: !t.status } : t)),
+                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t)),
             },
         })),
 
