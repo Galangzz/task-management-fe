@@ -20,13 +20,14 @@ function useTime() {
     const [starred, setStarred] = useState(false);
     const [isOpenConfirmationToClose, setIsOpenConfirmationToClose] = useState(false);
     // const [error, setError] = useState('');
-    const [selected, setSelected] = useState(new Date());
+    const [selected, setSelected] = useState(null);
     const textRef = useRef(null);
 
     const { toast } = useContext(ToastContext);
+    console.log({ selected: new Date(selected).toISOString()});
 
     useEffect(() => {
-        let date = new Date();
+        let date = new Date().setHours(0, 0, 0, 0);
         const isValid = selected instanceof Date && !isNaN(selected.getTime());
 
         if (!isValid) {
@@ -94,7 +95,7 @@ function useTime() {
             const newTask = {
                 title: title.trim(),
                 detail: detail,
-                deadline: isSubmitDateTime ? selected : null,
+                deadline: isSubmitDateTime ? selected : Number(null),
                 hasDate: Number(isSubmitDateTime),
                 hasTime: Number(isSubmitTime),
                 starred: starred,

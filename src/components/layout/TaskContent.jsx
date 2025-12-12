@@ -19,21 +19,29 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const completeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 1) || [], [task]);
 
     const taskId = task?.id || '';
-    //TODO change formate date GROUP HARI INI
+
     const groupedData = activeTask?.reduce((acc, item) => {
-        const dateKey = item.deadline ? item.deadline : 'Tanpa tanggal';
+        const dateKey = item?.deadline ? new Date(item?.deadline).toLocaleDateString() : '';
 
         if (!acc[dateKey]) acc[dateKey] = [];
         acc[dateKey].push(item);
         return acc;
     }, {});
+    console.log({ groupedData });
 
-    const sortedDates =
-        Object.keys(groupedData).sort((a, b) => {
-            if (a === 'Tanpa tanggal') return 1;
-            if (b === 'Tanpa tanggal') return -1;
-            return a.localeCompare(b);
-        }) || [];
+    const sortedDates = Object.keys(groupedData).sort((a, b) => {
+        if (a === '') return 1;
+        if (b === '') return -1;
+        return a.localeCompare(b);
+    });
+    console.log({ sortedDates });
+    console.log({ groupedDataAfterSorted: groupedData });
+
+    const colorDate = (d) => {
+        const color = d === 'Hari ini' ? 'text-blue-400!' : d === 'Terlewat' ? 'text-red-500!' : '';
+
+        return color;
+    };
 
     return (
         <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8!">
@@ -46,34 +54,32 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                         <CgSpinner />
                     ) : activeTask.length > 0 ? (
                         <div className="flex flex-col gap-4">
-                            {sortedDates.map((date) => (
-                                <div
-                                    key={date}
-                                    className="flex flex-col gap-4"
-                                >
-                                    {formatCustomDate(date) === 'Hari ini' ? (
-                                        <h2 className="font-bold text-lg text-red-400!">{formatCustomDate(date)}</h2>
-                                    ) : formatCustomDate(date) === 'Besok' ? (
-                                        <h2 className="font-bold text-lg text-blue-400!">{formatCustomDate(date)}</h2>
-                                    ) : (
-                                        <h2 className="font-bold text-lg">{formatCustomDate(date)}</h2>
-                                    )}
-                                    {groupedData[date].map((t, idx) => (
-                                        <ListTask
-                                            key={idx}
-                                            checked={t?.isCompleted}
-                                            stared={t?.starred}
-                                            id={t?.id}
-                                            taskId={taskId}
-                                            handleChecked={handleChecked}
-                                        >
-                                            {console.log({ TaskActive: t.title, isCompleted: t.isCompleted })}
+                            {sortedDates.map((date) => {
+                                const label = formatCustomDate(date);
+                                return (
+                                    <div
+                                        key={date}
+                                        className="flex flex-col gap-4"
+                                    >
+                                        <h2 className={`font-bold text-lg ${colorDate(label)}`}>{label}</h2>
 
-                                            {t.title}
-                                        </ListTask>
-                                    ))}
-                                </div>
-                            ))}
+                                        {groupedData[date].map((t, idx) => (
+                                            <ListTask
+                                                key={idx}
+                                                checked={t?.isCompleted}
+                                                stared={t?.starred}
+                                                id={t?.id}
+                                                taskId={taskId}
+                                                handleChecked={handleChecked}
+                                            >
+                                                {/* {console.log({ TaskActive: t.title, isCompleted: t.isCompleted })} */}
+
+                                                {t.title}
+                                            </ListTask>
+                                        ))}
+                                    </div>
+                                );
+                            })}
                         </div>
                     ) : completeTask.length > 0 ? (
                         <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">

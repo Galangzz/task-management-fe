@@ -41,8 +41,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
         handleConfirmationToClose,
     } = useTime();
 
-    const hours = selected.getHours();
-    const minutes = selected.getMinutes();
+
     return (
         <>
             <Modal setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}>
@@ -124,10 +123,9 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             >
                                 <p>{formatCustomDate(selected)}</p>
                                 {isSubmitTime && (
-                                    <p className="m-0">{`${String(hours).padStart(2, '0')}:${String(minutes).padStart(
-                                        2,
-                                        '0'
-                                    )}`}</p>
+                                    <p className="m-0">{`${String(selected?.getHours()).padStart(2, '0')}:${String(
+                                        selected?.getMinutes()
+                                    ).padStart(2, '0')}`}</p>
                                 )}
                                 <div
                                     className="flex justify-center items-center 
@@ -228,7 +226,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                     setToggle={() => setIsOpenConfirmationToClose(false)}
                     onHandlerClose={() => {
                         handleConfirmationToClose();
-                        setIsOpenModalTask(false)
+                        setIsOpenModalTask(false);
                     }}
                 />
             )}
