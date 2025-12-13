@@ -8,7 +8,9 @@ export async function getTaskTabs() {
         withCredentials: false,
     });
     const resData = res?.data;
-    return resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
         : resData;
 }
@@ -35,7 +37,9 @@ export async function addTaskTabTitle({ title }) {
 
         const resData = res?.data;
         const id =
-            resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
+            resData &&
+            typeof resData === 'object' &&
+            Object.prototype.hasOwnProperty.call(resData, 'data')
                 ? resData.data?.id
                 : null;
         return { id: id, err: null };
@@ -56,7 +60,9 @@ export async function getTaskTabWithTasks(id = 'main-task') {
 
     const resData = res?.data;
     console.log('DATA:', resData);
-    return resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
         : resData;
 }
@@ -68,7 +74,9 @@ export async function getTaskTabById(id) {
         withCredentials: false,
     });
     const resData = res?.data;
-    return resData && typeof resData === 'object' && Object.prototype.hasOwnProperty.call(resData, 'data')
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data?.id
         : null;
 }

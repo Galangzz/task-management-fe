@@ -6,7 +6,7 @@ function Header() {
     const { theme, toggleTheme } = useContext(ThemeContext);
 
     return (
-        <div className="header realtive p-2! w-full justify-center flex text-2xl font-extrabold">
+        <div className="header realtive flex w-full justify-center p-2! text-2xl font-extrabold">
             <h1>Task</h1>
             <Switch
                 className={'absolute right-0'}

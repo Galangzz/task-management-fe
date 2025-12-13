@@ -14,9 +14,15 @@ import { ThemeContext } from '../../context/Theme';
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const { theme } = useContext(ThemeContext);
 
-    const activeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 0) || [], [task]);
+    const activeTask = useMemo(
+        () => task?.tasks?.filter((t) => t.isCompleted === 0) || [],
+        [task]
+    );
 
-    const completeTask = useMemo(() => task?.tasks?.filter((t) => t.isCompleted === 1) || [], [task]);
+    const completeTask = useMemo(
+        () => task?.tasks?.filter((t) => t.isCompleted === 1) || [],
+        [task]
+    );
 
     const taskId = task?.id || '';
 
@@ -51,7 +57,6 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
         [activeTask, getGroupKey]
     );
 
-
     const sortedKeys = useMemo(
         () =>
             Object.keys(groupedData).sort((a, b) => {
@@ -76,16 +81,23 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     );
 
     const colorDate = useCallback((d) => {
-        const color = d === 'Hari ini' ? 'text-blue-400!' : d === 'Terlewat' ? 'text-red-500!' : '';
+        const color =
+            d === 'Hari ini'
+                ? 'text-blue-400!'
+                : d === 'Terlewat'
+                  ? 'text-red-500!'
+                  : '';
 
         return color;
     }, []);
     return (
-        <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8!">
-            <div className="flex items-center justify-center w-full h-auto">
+        <div className="flex h-auto w-full flex-col items-center justify-center gap-8 p-8!">
+            <div className="flex h-auto w-full items-center justify-center">
                 <Field>
                     <div className="flex">
-                        <h1 className="font-bold text-xl tracking-wide mb-6">{task.name ?? 'Stared Task'}</h1>
+                        <h1 className="mb-6 text-xl font-bold tracking-wide">
+                            {task.name ?? 'Stared Task'}
+                        </h1>
                     </div>
                     {isLoading ? (
                         // TODO lAZY
@@ -99,7 +111,11 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                         key={date}
                                         className="flex flex-col gap-4"
                                     >
-                                        <h2 className={`font-bold text-lg ${colorDate(label)}`}>{label}</h2>
+                                        <h2
+                                            className={`text-lg font-bold ${colorDate(label)}`}
+                                        >
+                                            {label}
+                                        </h2>
 
                                         {groupedData[date].map((t, idx) => (
                                             <ListTask
@@ -120,32 +136,42 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                             })}
                         </div>
                     ) : completeTask.length > 0 ? (
-                        <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
+                        <div className="flex h-fit flex-col items-center justify-center gap-12 py-6">
                             <img
-                                src={theme === 'dark' ? completedTaskDark : completedTaskLight}
+                                src={
+                                    theme === 'dark'
+                                        ? completedTaskDark
+                                        : completedTaskLight
+                                }
                                 alt="aa"
                                 className="h-auto w-60 object-contain"
                             />
-                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">
+                            <p className="w-full text-center text-3xl font-semibold tracking-widest">
                                 Task Telah Selesai
                                 <br />
                                 Kerja Bagus
                             </p>
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-12 justify-center items-center h-fit py-6">
+                        <div className="flex h-fit flex-col items-center justify-center gap-12 py-6">
                             <img
-                                src={theme === 'dark' ? emptyNoteDark : emptyNoteLight}
+                                src={
+                                    theme === 'dark'
+                                        ? emptyNoteDark
+                                        : emptyNoteLight
+                                }
                                 alt="aa"
                                 className="h-auto w-60 object-contain"
                             />
-                            <p className="w-full font-semibold tracking-widest  text-center text-3xl">Task Kosong</p>
+                            <p className="w-full text-center text-3xl font-semibold tracking-widest">
+                                Task Kosong
+                            </p>
                         </div>
                     )}
                 </Field>
             </div>
             {completeTask.length > 0 && (
-                <div className="flex items-center justify-center w-full h-auto">
+                <div className="flex h-auto w-full items-center justify-center">
                     <Dropdown
                         tasks={completeTask}
                         taskId={taskId}

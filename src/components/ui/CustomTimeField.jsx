@@ -4,13 +4,25 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 
-function CustomTimeField({ id, view, format, time, readOnly, onChange, onClick, onError }) {
+function CustomTimeField({
+    id,
+    view,
+    format,
+    time,
+    readOnly,
+    onChange,
+    onClick,
+    onError,
+}) {
     const handlePrevent = (e) => {
         e.preventDefault();
     };
 
     const handleKeyDown = (e) => {
-        if ((e.ctrlKey || e.metaKey) && ['c', 'v', 'x'].includes(e.key.toLowerCase())) {
+        if (
+            (e.ctrlKey || e.metaKey) &&
+            ['c', 'v', 'x'].includes(e.key.toLowerCase())
+        ) {
             e.preventDefault();
         }
     };
@@ -55,9 +67,10 @@ function CustomTimeField({ id, view, format, time, readOnly, onChange, onClick, 
                         cursor: 'pointer',
                         border: 'none',
                     },
-                    '& .MuiPickersInputBase-root.MuiPickersOutlinedInput-root.Mui-focused': {
-                        borderRadius: 2,
-                    },
+                    '& .MuiPickersInputBase-root.MuiPickersOutlinedInput-root.Mui-focused':
+                        {
+                            borderRadius: 2,
+                        },
                 }}
                 slotProps={{
                     textField: {

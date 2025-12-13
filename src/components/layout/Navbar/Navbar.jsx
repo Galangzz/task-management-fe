@@ -11,14 +11,14 @@ function Navbar({ tabs, addList }) {
     const currentTab = location.pathname.split('/')[1] || 'main-task';
     console.log({ currentTab });
     return (
-        <div className="NavBar w-full flex items-center px-10!  border-b-2 ">
-            <ul className="flex px-2! gap-x-3 font-mono text-xl items-center w-max h-full snap-x snap-mandatory overflow-x-auto overflow-y-clip scrollbar-hide">
+        <div className="NavBar flex w-full items-center border-b-2 px-10!">
+            <ul className="scrollbar-hide flex h-full w-max snap-x snap-mandatory items-center gap-x-3 overflow-x-auto overflow-y-clip px-2! font-mono text-xl">
                 <li className="flex">
                     <NavbarButton
                         onClick={() => navigate('/starred-task')}
                         active={currentTab === 'stared-task' ? 'true' : 'false'}
                     >
-                        <FaStar className="h-full w-full flex " />
+                        <FaStar className="flex h-full w-full" />
                     </NavbarButton>
 
                     {tabs.map((tab) => (
@@ -30,7 +30,11 @@ function Navbar({ tabs, addList }) {
                                 }
                                 navigate(`/${tab.id}`);
                             }}
-                            active={currentTab === tab.id.toString() ? 'true' : 'false'}
+                            active={
+                                currentTab === tab.id.toString()
+                                    ? 'true'
+                                    : 'false'
+                            }
                             key={tab.id}
                         >
                             {tab.name}

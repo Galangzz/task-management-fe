@@ -2,7 +2,15 @@ import { CgSpinnerTwo } from 'react-icons/cg';
 import { getTaskListByTitle } from '../../services/localService';
 import Modal from '../ui/Modal';
 
-function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitTitleList, err, setErr, isLoading }) {
+function ModalTaskTitle({
+    titleList,
+    setTitleList,
+    setToggleTitle,
+    handleSubmitTitleList,
+    err,
+    setErr,
+    isLoading,
+}) {
     const handleOnChange = (e) => {
         const value = e.target.value;
         setTitleList(value);
@@ -21,15 +29,7 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
     return (
         <Modal setToggle={() => setToggleTitle(false)}>
             <div
-                className="ModalTaskTitle flex flex-col 
-                w-98 h-auto 
-                gap-6 p-4! 
-                justify-center items-center 
-                rounded-3xl 
-                border 
-                bg-(--background-header) 
-
-                "
+                className="ModalTaskTitle flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h3>Masukan Nama Daftar Baru</h3>
@@ -44,32 +44,23 @@ function ModalTaskTitle({ titleList, setTitleList, setToggleTitle, handleSubmitT
                     <input
                         type="text"
                         value={titleList}
-                        className=" border rounded-xl p-2!"
+                        className="rounded-xl border p-2!"
                         onChange={handleOnChange}
                         placeholder="Masukan Nama Daftar Baru ..."
                         maxLength={20}
                     />
-                    {err && <p className="text-red-500! text-sm italic mt-1">{err}</p>}
+                    {err && (
+                        <p className="mt-1 text-sm text-red-500! italic">
+                            {err}
+                        </p>
+                    )}
                     <button
                         type="submit"
-                        className="
-                        flex
-                        justify-center
-                        bg-(--button-color)
-                        border
-                        border-(--border-color)
-                        p-0.5!
-                        rounded-xl
-                        transition-all!
-                        duration-300
-                        ease-in-out
-                        hover:scale-102
-                        hover:bg-(--button-color-hover)
-                        disabled:opacity-50 hover:disabled:transform-none! hover:disabled:bg-(--button-color)!"
+                        className="flex justify-center rounded-xl border border-(--border-color) bg-(--button-color) p-0.5! transition-all! duration-300 ease-in-out hover:scale-102 hover:bg-(--button-color-hover) disabled:opacity-50 hover:disabled:transform-none! hover:disabled:bg-(--button-color)!"
                         disabled={titleList === '' || err !== ''}
                     >
                         {isLoading ? (
-                                <CgSpinnerTwo className="flex animate-spin "/>
+                            <CgSpinnerTwo className="flex animate-spin" />
                         ) : (
                             'Submit'
                         )}

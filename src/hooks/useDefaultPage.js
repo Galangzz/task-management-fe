@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {  getTaskListById } from '../services/localService';
+import { getTaskListById } from '../services/localService';
 import { ToastContext } from '../context/Toast';
 import { useTaskStore } from './useTaskStore';
 import { addTaskTabTitle } from '../services/taskTabsService';
@@ -36,7 +36,7 @@ export function useDefaultPage() {
         refreshPendingTabs,
     } = useTaskStore();
 
-    console.log({task})
+    console.log({ task });
     // Initial load tabs
     useEffect(() => {
         setTabs();
@@ -54,10 +54,15 @@ export function useDefaultPage() {
         const isFirstLoad = isInitialMount.current;
         isInitialMount.current = false;
 
-        console.log(`Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`);
+        console.log(
+            `Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`
+        );
 
         // Deteksi perubahan tab
-        if (previousTabRef.current !== '' && previousTabRef.current !== currentTab) {
+        if (
+            previousTabRef.current !== '' &&
+            previousTabRef.current !== currentTab
+        ) {
             // Tab changed
             resetOnTabChange(currentTab);
         } else {
@@ -74,10 +79,15 @@ export function useDefaultPage() {
 
         previousTabRef.current = currentTab;
         setTimeout(() => {
-            
             setIsLoadedTaskList(false);
         }, 1000);
-    }, [location.pathname, loadTaskList, navigate, resetOnTabChange, setCurrentTabId]);
+    }, [
+        location.pathname,
+        loadTaskList,
+        navigate,
+        resetOnTabChange,
+        setCurrentTabId,
+    ]);
 
     // Handle toast completion - refresh pending tabs
     useEffect(() => {
@@ -116,7 +126,10 @@ export function useDefaultPage() {
                 optimisticToggle(id);
 
                 const target = task.tasks.find((t) => t.id === id);
-                const message = target?.isCompleted === Number(false) ? 'Tugas Selesai' : 'Tugas ditandai belum selesai';
+                const message =
+                    target?.isCompleted === Number(false)
+                        ? 'Tugas Selesai'
+                        : 'Tugas ditandai belum selesai';
 
                 toast.undo(
                     message,
@@ -138,7 +151,16 @@ export function useDefaultPage() {
                 );
             }, 300); // Reduced delay for better UX
         },
-        [task, currentTabId, toast, increaseToast, decreaseToast, optimisticToggle, fixChecked, undoLocalStatus]
+        [
+            task,
+            currentTabId,
+            toast,
+            increaseToast,
+            decreaseToast,
+            optimisticToggle,
+            fixChecked,
+            undoLocalStatus,
+        ]
     );
 
     return {

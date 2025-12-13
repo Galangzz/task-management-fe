@@ -22,7 +22,11 @@ const formatCustomDate = (dateString) => {
 
     let formattedDate = dateObj.toLocaleDateString('id-ID', dateOptions);
 
-    formattedDate = formattedDate.replace(/\./g, '').replace(/,\s+/g, ' ').replace(/,\s*$/g, '').trim();
+    formattedDate = formattedDate
+        .replace(/\./g, '')
+        .replace(/,\s+/g, ' ')
+        .replace(/,\s*$/g, '')
+        .trim();
 
     const parts = formattedDate.split(/\s+/).filter((p) => p.length > 0);
     if (parts.length >= 3) {

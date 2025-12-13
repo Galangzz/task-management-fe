@@ -11,7 +11,8 @@ export const api = axios.create({
 
 export function ensureBase() {
     if (!API_BASE) {
-        throw new Error('VITE_API_BASE belum dikonfigurasi. Set di front-end/.env');
+        throw new Error(
+            'VITE_API_BASE belum dikonfigurasi. Set di front-end/.env'
+        );
     }
 }
-

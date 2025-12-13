@@ -41,31 +41,19 @@ function ModalNewTask({ setIsOpenModalTask }) {
         handleConfirmationToClose,
     } = useTime();
 
-
     return (
         <>
-            <Modal setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}>
+            <Modal
+                setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}
+            >
                 <div
-                    className="ModalTaskTitle flex flex-col 
-                w-98 h-auto 
-                gap-6 p-4!
-                justify-center items-center 
-                rounded-3xl 
-                border 
-                bg-(--background-header) 
-                m-2!
-                "
+                    className="ModalTaskTitle m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <form
                         id="newTaskForm"
                         action="submit"
-                        className="
-                    flex flex-col
-                    gap-2
-                    w-full
-                    
-                    "
+                        className="flex w-full flex-col gap-2"
                         onSubmit={(e) => {
                             handleSubmitNewTask(e, setIsOpenModalTask);
                         }}
@@ -76,14 +64,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
-                            className="
-                            text-xl
-                            border-b-2
-                            p-2!
-                            rounded-xl
-                            focus:outline-none
-                            focus:border
-                        "
+                            className="rounded-xl border-b-2 p-2! text-xl focus:border focus:outline-none"
                             maxLength={50}
                             required
                         />
@@ -95,89 +76,42 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 onInput={handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
-                                className="
-                    scrollbar-custom-textarea
-                    w-full
-                    h-auto
-                    max-h-52 overflow-y-auto
-                    px-2!
-                    focus:outline-none
-                    resize-none
-                    "
+                                className="scrollbar-custom-textarea h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
                                 rows={1}
                             />
                         )}
                         {isSubmitDateTime && (
-                            <div
-                                className="
-                            flex 
-                            gap-2 
-                            items-center
-                            text-[14px]
-                            font-bold
-                            border-2
-                            w-fit
-                            p-2!
-                            mt-2!   
-                        "
-                            >
-                                <p>{formatCustomDate(new Date(selected).toLocaleDateString())}</p>
+                            <div className="mt-2! flex w-fit items-center gap-2 border-2 p-2! text-[14px] font-bold">
+                                <p>
+                                    {formatCustomDate(
+                                        new Date(selected).toLocaleDateString()
+                                    )}
+                                </p>
                                 {isSubmitTime && (
                                     <p className="m-0">{`${String(selected?.getHours()).padStart(2, '0')}:${String(
                                         selected?.getMinutes()
                                     ).padStart(2, '0')}`}</p>
                                 )}
                                 <div
-                                    className="flex justify-center items-center 
-                            transition!
-                            duration-300
-                            ease-in-out
-                            hover:scale-125 
-                            cursor-pointer"
+                                    className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
                                     onClick={() => setIsSubmitDateTime(false)}
                                 >
                                     <RxCross2 size={18} />
                                 </div>
                             </div>
                         )}
-                        <div
-                            className="
-                        flex justify-between items-center text-center
-                        "
-                        >
-                            <div className="flex flex-1 gap-2 items-center text-2xl mt-2">
+                        <div className="flex items-center justify-between text-center">
+                            <div className="mt-2 flex flex-1 items-center gap-2 text-2xl">
                                 <div
-                                    className="
-                                rounded-4xl
-                                hover:backdrop-brightness-110
-                                cursor-pointer
-                                w-fit
-                                p-2!
-                                "
+                                    className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110"
                                     onClick={handleAddDetail}
                                 >
                                     <CgDetailsMore />
                                 </div>
-                                <div
-                                    className="
-                                rounded-4xl
-                                hover:backdrop-brightness-110
-                                cursor-pointer
-                                w-fit
-                                p-2!
-                                "
-                                >
+                                <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
                                     <IoMdTime onClick={handleOpenCalendar} />
                                 </div>
-                                <div
-                                    className="
-                                rounded-4xl
-                                hover:backdrop-brightness-110
-                                cursor-pointer
-                                w-fit
-                                p-2!
-                                "
-                                >
+                                <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
                                     <StarCheck
                                         id="newTask"
                                         checked={starred}
@@ -188,14 +122,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             <button
                                 // disabled
                                 type="submit"
-                                className="
-                            text-center
-                            rounded-2xl
-                            p-2!
-                            text-(--button-text)!
-                            disabled:text-gray-400!
-                            hover:backdrop-brightness-110
-                            "
+                                className="rounded-2xl p-2! text-center text-(--button-text)! hover:backdrop-brightness-110 disabled:text-gray-400!"
                             >
                                 Simpan
                             </button>
