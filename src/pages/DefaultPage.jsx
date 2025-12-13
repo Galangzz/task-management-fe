@@ -30,7 +30,7 @@ function DefaultPage() {
         return <LoadingPage />;
     }
     return (
-        <div className="relative w-full h-full flex flex-col">
+        <div className="relative flex h-full w-full flex-col">
             <Header />
             <Navbar
                 tabs={tabs}
@@ -53,7 +53,9 @@ function DefaultPage() {
                 />
             )}
 
-            {isOpenModalTask && <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />}
+            {isOpenModalTask && (
+                <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />
+            )}
 
             <TaskContent
                 task={task}

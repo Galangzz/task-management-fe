@@ -18,17 +18,18 @@ function useTime() {
     const [isSubmitDateTime, setIsSubmitDateTime] = useState(false);
     const [isSubmitTime, setIsSubmitTime] = useState(false);
     const [starred, setStarred] = useState(false);
-    const [isOpenConfirmationToClose, setIsOpenConfirmationToClose] = useState(false);
+    const [isOpenConfirmationToClose, setIsOpenConfirmationToClose] =
+        useState(false);
     // const [error, setError] = useState('');
     const [selected, setSelected] = useState(null);
     const textRef = useRef(null);
 
     const { toast } = useContext(ToastContext);
-    
+
     useMemo(() => {
         let date = new Date().setHours(0, 0, 0, 0);
         const isValid = selected instanceof Date && !isNaN(selected.getTime());
-        console.log({ selected});
+        console.log({ selected });
 
         if (!isValid) {
             setSelected(date);
@@ -90,7 +91,10 @@ function useTime() {
         async (e, setIsOpenModaltask) => {
             e.preventDefault();
             console.log('handleSubmitNewTask');
-            const currentTab = (await getTaskTabById(location.pathname.split('/')[1] || 'main-task')) ?? 'main-task';
+            const currentTab =
+                (await getTaskTabById(
+                    location.pathname.split('/')[1] || 'main-task'
+                )) ?? 'main-task';
 
             const newTask = {
                 title: title.trim(),
@@ -104,7 +108,9 @@ function useTime() {
             await addTask(currentTab, newTask);
             toast.success('Catatan Berhasil ditambahkan');
 
-            currentTab === 'main-task' ? navigate('/', { replace: true }) : navigate(`/${currentTab}`);
+            currentTab === 'main-task'
+                ? navigate('/', { replace: true })
+                : navigate(`/${currentTab}`);
 
             useTaskStore.getState().refreshCurrentTask();
             onResetTitle();

@@ -13,7 +13,7 @@ function App() {
     return (
         <ThemeProvider value={{ theme, toggleTheme }}>
             <ToastProvider value={{ toast }}>
-                <div className="App min-h-screen w-screen ">
+                <div className="App min-h-screen w-screen">
                     <AppRoutes />
                     <ToastContainer
                         autoClose={3000}

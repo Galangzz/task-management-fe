@@ -7,14 +7,13 @@ import { useNavigate } from 'react-router-dom';
 function ListTask({ children, checked, stared, id, taskId, handleChecked }) {
     const navigate = useNavigate();
 
-
     const handleStared = (id) => {
         toggleStaredTask(id);
     };
 
     return (
         <div
-            className="flex items-center gap-4 p-2! hover:bg-(--background-color)/40 cursor-pointer rounded-xl"
+            className="flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40"
             onClick={() => {
                 navigate(`/details/${taskId}/${id}`);
             }}
@@ -24,7 +23,11 @@ function ListTask({ children, checked, stared, id, taskId, handleChecked }) {
                 checked={checked}
                 onChange={() => handleChecked(id)}
             />
-            <h3 className={`flex-1 ${checked ? 'line-through decoration-2' : ''}`}>{children}</h3>
+            <h3
+                className={`flex-1 ${checked ? 'line-through decoration-2' : ''}`}
+            >
+                {children}
+            </h3>
             {!checked && (
                 <StarCheck
                     id={id}

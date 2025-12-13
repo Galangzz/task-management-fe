@@ -12,11 +12,11 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                         type="checkbox"
                         name="state-dropdow"
                         id="state-dropdown"
-                        className="bg-red-950 sr-only"
+                        className="sr-only bg-red-950"
                     />
                     <label
                         aria-label="dropdown scrollbar"
-                        className="trigger "
+                        className="trigger"
                         htmlFor="state-dropdown"
                     ></label>
                     <ul
@@ -37,7 +37,10 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                                     taskId={taskId}
                                     handleChecked={handleChecked}
                                 >
-                                    {console.log({ taskDropDown: t.title, status: t.isCompleted })}
+                                    {console.log({
+                                        taskDropDown: t.title,
+                                        status: t.isCompleted,
+                                    })}
                                     {t.title}
                                 </ListTask>
                             </li>

@@ -56,7 +56,8 @@ async function addTaskTitle({ title }) {
             return { id: null, err: 'Judul tidak boleh kosong' };
         }
         const checkDuplicate = getTaskListByTitle(title);
-        if (checkDuplicate) return { id: null, err: 'Judul task list tidak boleh duplikat' };
+        if (checkDuplicate)
+            return { id: null, err: 'Judul task list tidak boleh duplikat' };
 
         const id = nanoid(16);
 
@@ -79,7 +80,10 @@ async function addTaskTitle({ title }) {
     }
 }
 
-async function addNewTask(idList, { name, dateDeadline, detail, stared, status }) {
+async function addNewTask(
+    idList,
+    { name, dateDeadline, detail, stared, status }
+) {
     const taskStorage = localStorage.getItem('task');
 
     let tasks = taskStorage ? JSON.parse(taskStorage) : [...task];
@@ -98,7 +102,9 @@ async function addNewTask(idList, { name, dateDeadline, detail, stared, status }
         id: newId,
         name,
         detail,
-        dateDeadline: dateDeadline ? new Date(dateDeadline).toISOString() : null,
+        dateDeadline: dateDeadline
+            ? new Date(dateDeadline).toISOString()
+            : null,
         created,
         stared,
         status,
@@ -142,7 +148,9 @@ function getTaskListById(id) {
     }
 
     if (id == 'stared-task') {
-        const staredTasks = tasks.flatMap((list) => list.tasks.filter((t) => t.stared === true) || []);
+        const staredTasks = tasks.flatMap(
+            (list) => list.tasks.filter((t) => t.stared === true) || []
+        );
         return {
             id: 'stared-task',
             title: 'Stared Task',
@@ -169,7 +177,9 @@ async function toggleStatusTask(id) {
     tasks = await tasks.map((taskDoc) => ({
         ...taskDoc,
         tasks: taskDoc.tasks.map((taskItem) =>
-            taskItem.id === id ? { ...taskItem, status: !taskItem.status } : taskItem
+            taskItem.id === id
+                ? { ...taskItem, status: !taskItem.status }
+                : taskItem
         ),
     }));
 
@@ -182,7 +192,9 @@ function toggleStaredTask(id) {
     tasks = tasks.map((taskDoc) => ({
         ...taskDoc,
         tasks: taskDoc.tasks.map((taskItem) =>
-            taskItem.id === id ? { ...taskItem, stared: !taskItem.stared } : taskItem
+            taskItem.id === id
+                ? { ...taskItem, stared: !taskItem.stared }
+                : taskItem
         ),
     }));
     localStorage.setItem('task', JSON.stringify(tasks));

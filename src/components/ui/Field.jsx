@@ -1,11 +1,12 @@
 import React from 'react';
 
-function Field({children, className}) {
+function Field({ children, className }) {
     return (
-            <div className={`flex flex-col w-full max-w-4xl h-auto bg-(--background-header) rounded-3xl p-4! ${className}`}>
-                {children}
-            </div>
-        
+        <div
+            className={`flex h-auto w-full max-w-4xl flex-col rounded-3xl bg-(--background-header) p-4! ${className}`}
+        >
+            {children}
+        </div>
     );
 }
 

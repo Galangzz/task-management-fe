@@ -36,7 +36,8 @@ export const useTaskStore = create((set, get) => ({
     },
 
     // Toast counter management
-    increaseToast: () => set((state) => ({ stackedToast: state.stackedToast + 1 })),
+    increaseToast: () =>
+        set((state) => ({ stackedToast: state.stackedToast + 1 })),
 
     decreaseToast: () =>
         set((state) => ({
@@ -71,7 +72,9 @@ export const useTaskStore = create((set, get) => ({
         set((state) => ({
             task: {
                 ...state.task,
-                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t)),
+                tasks: state.task.tasks.map((t) =>
+                    t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t
+                ),
             },
         })),
 
@@ -80,16 +83,22 @@ export const useTaskStore = create((set, get) => ({
         set((state) => ({
             task: {
                 ...state.task,
-                tasks: state.task.tasks.map((t) => (t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t)),
+                tasks: state.task.tasks.map((t) =>
+                    t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t
+                ),
             },
         })),
 
     // Refresh pending tabs when toast count reaches 0
     refreshPendingTabs: () => {
-        const { pendingUpdates, loadTaskList, currentTabId, clearAllPending } = get();
+        const { pendingUpdates, loadTaskList, currentTabId, clearAllPending } =
+            get();
 
         if (pendingUpdates.size > 0) {
-            console.log('Refreshing pending tabs:', Array.from(pendingUpdates.keys()));
+            console.log(
+                'Refreshing pending tabs:',
+                Array.from(pendingUpdates.keys())
+            );
 
             // Hanya refresh tab yang sedang aktif
             if (pendingUpdates.has(currentTabId)) {
@@ -102,7 +111,8 @@ export const useTaskStore = create((set, get) => ({
 
     // Reset state when changing tabs with active toasts
     resetOnTabChange: async (newTabId) => {
-        const { stackedToast, currentTabId, resetToast, clearAllPending } = get();
+        const { stackedToast, currentTabId, resetToast, clearAllPending } =
+            get();
 
         // Skip jika tab tidak berubah
         if (currentTabId === newTabId) {

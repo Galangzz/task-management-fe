@@ -1,9 +1,5 @@
 @import 'tailwindcss';
 
-
-
-
-
 [active='true'] {
     transform: scale(1.05);
 }
@@ -62,10 +58,6 @@ body {
     width: 100%;
     overflow-x: hidden;
 }
-
-
-
-
 
 .listTask:hover {
     transform: scale(1.05);
