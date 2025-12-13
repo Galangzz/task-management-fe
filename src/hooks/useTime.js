@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
 // import { addNewTask, getTaskListById } from '../services/localService';
@@ -24,11 +24,11 @@ function useTime() {
     const textRef = useRef(null);
 
     const { toast } = useContext(ToastContext);
-    console.log({ selected: new Date(selected).toISOString()});
-
-    useEffect(() => {
+    
+    useMemo(() => {
         let date = new Date().setHours(0, 0, 0, 0);
         const isValid = selected instanceof Date && !isNaN(selected.getTime());
+        console.log({ selected});
 
         if (!isValid) {
             setSelected(date);

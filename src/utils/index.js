@@ -1,15 +1,10 @@
 const formatCustomDate = (dateString) => {
-    if (dateString === '') return 'Tanpa tanggal';
-    const dateObj = new Date(dateString);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (tomorrow.toLocaleDateString() === dateObj.toLocaleDateString()) return 'Besok';
-    if (today.toLocaleDateString() === dateObj.toLocaleDateString()) return 'Hari ini';
-    if (today.toLocaleDateString() > dateObj.toLocaleDateString()) return 'Terlewat';
+    if (dateString === 'TERLEWAT') return 'Terlewat';
+    if (dateString === 'HARI_INI') return 'Hari ini';
+    if (dateString === 'BESOK') return 'Besok';
+    if (dateString === 'TANPA_TANGGAL') return 'Tanpa tanggal';
+    const [month, day, year] = dateString.split('/').map(Number);
+    const dateObj = new Date(year, month - 1, day);
 
     const currentYear = new Date().getFullYear();
     const targetYear = dateObj.getFullYear();

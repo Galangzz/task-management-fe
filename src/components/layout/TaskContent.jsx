@@ -1,4 +1,4 @@
-import React, { lazy, useContext, useMemo } from 'react';
+import React, { lazy, useCallback, useContext, useMemo } from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
@@ -8,7 +8,7 @@ import emptyNoteLight from '../../assets/empty-note-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
 import completedTaskLight from '../../assets/completed-task-light.svg';
-import Dropdown from '../ui/Dropdown';
+const Dropdown = lazy(() => import('../ui/Dropdown'));
 import { ThemeContext } from '../../context/Theme';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
@@ -20,29 +20,66 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
 
     const taskId = task?.id || '';
 
-    const groupedData = activeTask?.reduce((acc, item) => {
-        const dateKey = item?.deadline ? new Date(item?.deadline).toLocaleDateString() : '';
+    const getGroupKey = useCallback((deadline) => {
+        if (!deadline) return 'TANPA_TANGGAL';
 
-        if (!acc[dateKey]) acc[dateKey] = [];
-        acc[dateKey].push(item);
-        return acc;
-    }, {});
-    console.log({ groupedData });
+        // const now = new Date();
 
-    const sortedDates = Object.keys(groupedData).sort((a, b) => {
-        if (a === '') return 1;
-        if (b === '') return -1;
-        return a.localeCompare(b);
-    });
-    console.log({ sortedDates });
-    console.log({ groupedDataAfterSorted: groupedData });
+        const today = new Date();
 
-    const colorDate = (d) => {
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const d = new Date(deadline).toLocaleDateString();
+
+        if (d < today.toLocaleDateString()) return 'TERLEWAT';
+        if (d === today.toLocaleDateString()) return 'HARI_INI';
+        if (d === tomorrow.toLocaleDateString()) return 'BESOK';
+        // tanggal lain → pakai tanggal aslinya
+        return d;
+    }, []);
+
+    const groupedData = useMemo(
+        () =>
+            activeTask?.reduce((acc, item) => {
+                const dateKey = getGroupKey(item.deadline);
+
+                if (!acc[dateKey]) acc[dateKey] = [];
+                acc[dateKey].push(item);
+                return acc;
+            }, {}),
+        [activeTask, getGroupKey]
+    );
+
+
+    const sortedKeys = useMemo(
+        () =>
+            Object.keys(groupedData).sort((a, b) => {
+                const PRIORITY = ['TERLEWAT', 'HARI_INI', 'BESOK'];
+
+                // Prioritas utama
+                if (PRIORITY.includes(a) && PRIORITY.includes(b)) {
+                    return PRIORITY.indexOf(a) - PRIORITY.indexOf(b);
+                }
+                if (PRIORITY.includes(a)) return -1;
+                if (PRIORITY.includes(b)) return 1;
+
+                // Tanpa tanggal selalu terakhir
+                if (a === 'TANPA_TANGGAL') return 1;
+                if (b === 'TANPA_TANGGAL') return -1;
+
+                // DATE:YYYY-MM-DD → sort ASC
+
+                return a.localeCompare(b);
+            }),
+        [groupedData]
+    );
+
+    const colorDate = useCallback((d) => {
         const color = d === 'Hari ini' ? 'text-blue-400!' : d === 'Terlewat' ? 'text-red-500!' : '';
 
         return color;
-    };
-
+    }, []);
     return (
         <div className="flex flex-col gap-8 items-center justify-center w-full h-auto p-8!">
             <div className="flex items-center justify-center w-full h-auto">
@@ -51,10 +88,11 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                         <h1 className="font-bold text-xl tracking-wide mb-6">{task.name ?? 'Stared Task'}</h1>
                     </div>
                     {isLoading ? (
+                        // TODO lAZY
                         <CgSpinner />
                     ) : activeTask.length > 0 ? (
                         <div className="flex flex-col gap-4">
-                            {sortedDates.map((date) => {
+                            {sortedKeys.map((date) => {
                                 const label = formatCustomDate(date);
                                 return (
                                     <div

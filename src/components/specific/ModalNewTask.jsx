@@ -121,7 +121,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             mt-2!   
                         "
                             >
-                                <p>{formatCustomDate(selected)}</p>
+                                <p>{formatCustomDate(new Date(selected).toLocaleDateString())}</p>
                                 {isSubmitTime && (
                                     <p className="m-0">{`${String(selected?.getHours()).padStart(2, '0')}:${String(
                                         selected?.getMinutes()
