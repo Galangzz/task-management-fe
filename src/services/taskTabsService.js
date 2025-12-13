@@ -50,9 +50,6 @@ export async function getTaskTabWithTasks(id = 'main-task') {
 
     const url = `/task-tabs/${id}`;
     const res = await api.get(url, {
-        // params: {
-        //     t: Date.now(),
-        // },
         withCredentials: false,
     });
     console.log('FULL RES:', res);
