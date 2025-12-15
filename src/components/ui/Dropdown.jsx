@@ -10,9 +10,9 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                 <div className="dropdown">
                     <input
                         type="checkbox"
-                        name="state-dropdow"
+                        name="state-dropdown"
                         id="state-dropdown"
-                        className="sr-only bg-red-950"
+                        className="sr-only"
                     />
                     <label
                         aria-label="dropdown scrollbar"
@@ -22,11 +22,10 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                     <ul
                         className="list webkit-scrollbar"
                         role="list"
-                        dir="auto"
                     >
-                        {tasks.map((t, idx) => (
+                        {tasks.map((t) => (
                             <li
-                                key={idx}
+                                key={t.id}
                                 className="listitem"
                                 role="listitem"
                             >
@@ -37,10 +36,6 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                                     taskId={taskId}
                                     handleChecked={handleChecked}
                                 >
-                                    {console.log({
-                                        taskDropDown: t.title,
-                                        status: t.isCompleted,
-                                    })}
                                     {t.title}
                                 </ListTask>
                             </li>
@@ -58,7 +53,7 @@ const StyledWrapper = styled.div`
         overflow: hidden;
         position: relative;
         min-height: 28px;
-        width: full;
+        width: 100%;
         inset-inline: auto;
     }
 
@@ -129,7 +124,7 @@ const StyledWrapper = styled.div`
     }
     .dropdown input:where(:checked) + .trigger:before {
         rotate: 90deg;
-        transition-delay: 0ms;
+        transition-delay: 100ms;
     }
 
     .list {
@@ -170,16 +165,7 @@ const StyledWrapper = styled.div`
         background: #c1c2c5;
     }
 
-    .article {
-        padding: 1rem;
-        border-radius: 8px;
-        font-size: 15px;
-        font-weight: 500;
-        text-align: justify;
-        width: 100%;
-        border: 1px solid #c1c2c5;
-        display: inline-block;
-    }
+  
 `;
 
 export default Dropdown;
