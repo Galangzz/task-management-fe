@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { toggleStatusTask } from '../services/localService';
+// import { toggleStatusTask } from '../services/localService';
 import { getTaskTabs, getTaskTabWithTasks } from '../services/taskTabsService';
+import { updateTask } from '../services/tasksService';
 
 export const useTaskStore = create((set, get) => ({
     tabs: null,
@@ -62,8 +63,8 @@ export const useTaskStore = create((set, get) => ({
     clearAllPending: () => set({ pendingUpdates: new Map() }),
 
     // Commit changes to localStorage
-    fixChecked: async (id, tabId) => {
-        await toggleStatusTask(id);
+    fixChecked: async (id, tabId, isCompleted) => {
+        await updateTask(id, {isCompleted});
         get().addPending(tabId);
     },
 

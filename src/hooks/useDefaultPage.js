@@ -116,18 +116,18 @@ export function useDefaultPage() {
     }, [navigate, titleList, setTabs]);
 
     const handleChecked = useCallback(
-        async (id) => {
+        async (id, isCompleted) => {
             console.log({ handleCheckId: id, currentTabId });
 
             increaseToast();
 
             setTimeout(async () => {
                 // Optimistic update - UI berubah langsung
-                optimisticToggle(id);
+                await optimisticToggle(id);
 
-                const target = task.tasks.find((t) => t.id === id);
+                
                 const message =
-                    target?.isCompleted === Number(false)
+                    isCompleted === Number(false)
                         ? 'Tugas Selesai'
                         : 'Tugas ditandai belum selesai';
 
@@ -140,8 +140,8 @@ export function useDefaultPage() {
                     },
                     () => {
                         // OnClose callback - commit to localStorage
-                        console.log('Toast closed, committing to localStorage');
-                        fixChecked(id, currentTabId);
+                        console.log('Toast closed, committing to DB');
+                        fixChecked(id, currentTabId, isCompleted);
                     },
                     () => {
                         // After close - decrease counter
@@ -152,7 +152,7 @@ export function useDefaultPage() {
             }, 300); // Reduced delay for better UX
         },
         [
-            task,
+            // task,
             currentTabId,
             toast,
             increaseToast,
