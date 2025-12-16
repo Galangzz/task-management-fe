@@ -26,7 +26,7 @@ const Dropdown = ({ tasks, taskId, handleChecked }) => {
                         {tasks.map((t) => (
                             <li
                                 key={t.id}
-                                className="listitem"
+                                className="listitem animate-fade-in"
                                 role="listitem"
                             >
                                 <ListTask
