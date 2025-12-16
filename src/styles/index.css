@@ -4,35 +4,6 @@
     transform: scale(1.05);
 }
 
-/* [active='true']::after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    top: 0;
-    right: 0;
-    translate: 4px -4px;
-    background-color: var(--button-text);
-    z-index: 8;
-    animation: custom-ping 1s infinite;
-    animation-duration: 1s;
-}
-
-[active='true']::before {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    top: 0;
-    right: 0;
-    translate: 4px -4px;
-    background-color: var(--button-text);
-    z-index: 4;
-    opacity: 50%;
-} */
-
 * {
     margin: 0;
     padding: 0;

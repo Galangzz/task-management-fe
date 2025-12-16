@@ -3,7 +3,7 @@ import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
 
-const { CgSpinner } = lazy(() => import('react-icons/cg'));
+import { CgSpinner } from 'react-icons/cg';
 import emptyNoteLight from '../../assets/empty-note-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
@@ -117,26 +117,32 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                             {label}
                                         </h2>
 
-                                        {groupedData[date].map((t, idx) => (
-                                            <ListTask
-                                                key={idx}
-                                                checked={t?.isCompleted}
-                                                stared={t?.starred}
-                                                id={t?.id}
-                                                taskId={taskId}
-                                                handleChecked={handleChecked}
-                                            >
-                                                {/* {console.log({ TaskActive: t.title, isCompleted: t.isCompleted })} */}
-
-                                                {t.title}
-                                            </ListTask>
+                                        {groupedData[date].map((t) => (
+                                            <div className="overflow-hidden">
+                                                <ListTask
+                                                    key={t.id}
+                                                    checked={
+                                                        t?.isCompleted == 1
+                                                    }
+                                                    stared={t?.starred}
+                                                    id={t?.id}
+                                                    taskId={taskId}
+                                                    handleChecked={
+                                                        handleChecked
+                                                    }
+                                                >
+                                                    {t.title}
+                                                </ListTask>
+                                            </div>
                                         ))}
                                     </div>
                                 );
                             })}
                         </div>
                     ) : completeTask.length > 0 ? (
-                        <div className="flex h-fit flex-col items-center justify-center gap-12 py-6">
+                        <div
+                            className={`flex h-fit flex-col items-center justify-center gap-12 py-6 transition-opacity! duration-500! ease-in-out! ${completeTask.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                        >
                             <img
                                 src={
                                     theme === 'dark'

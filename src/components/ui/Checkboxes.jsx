@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Checkbox = ({ id = 'dummyChecked', checked = false, onChange }) => {
+
     return (
         <StyledWrapper>
             <div
@@ -13,8 +14,8 @@ const Checkbox = ({ id = 'dummyChecked', checked = false, onChange }) => {
             >
                 <div className="cbx">
                     <input
-                        defaultChecked={checked}
-                        onChange={() => onChange()}
+                        checked={checked}
+                        onChange={(e) => onChange(e.target.checked)}
                         type="checkbox"
                         id={`checked-${id}`}
                     />

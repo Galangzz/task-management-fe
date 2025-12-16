@@ -26,3 +26,21 @@ export async function addTask(
         }
     );
 }
+
+export async function updateTask(id, { starred = null, isCompleted = null }) {
+    ensureBase();
+    const url = `/tasks/${id}`;
+    await api.patch(
+        url,
+        {
+            starred: starred,
+            isCompleted: isCompleted,
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: false,
+        }
+    );
+}
