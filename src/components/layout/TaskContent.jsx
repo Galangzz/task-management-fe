@@ -92,7 +92,6 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                 if (a === 'TANPA_TANGGAL') return 1;
                 if (b === 'TANPA_TANGGAL') return -1;
 
-
                 return a.localeCompare(b);
             }),
         [groupedData]
@@ -114,7 +113,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
 
     return (
         <div className="flex h-auto w-full flex-col items-center justify-center gap-8 p-8!">
-            <div className="flex h-auto w-full items-center justify-center">
+            <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                 <Field>
                     <div className="flex">
                         <h1 className="mb-6 text-xl font-bold tracking-wide">
@@ -136,27 +135,52 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                             {label}
                                         </h2>
 
-                                        {groupedData[date].map((t) => (
-                                            <div
-                                                key={t.id}
-                                                className="animate-fade-in overflow-hidden"
-                                            >
-                                                <ListTask
+                                        {groupedData[date].map((t) => {
+                                            const dl = new Date(t?.deadline);
+                                            return (
+                                                <div
                                                     key={t.id}
-                                                    checked={
-                                                        t?.isCompleted == 1
-                                                    }
-                                                    stared={t?.starred}
-                                                    id={t?.id}
-                                                    taskId={taskId}
-                                                    handleChecked={
-                                                        handleChecked
-                                                    }
+                                                    className="animate-fade-in overflow-hidden"
                                                 >
-                                                    {t.title}
-                                                </ListTask>
-                                            </div>
-                                        ))}
+                                                    <ListTask
+                                                        key={t.id}
+                                                        checked={
+                                                            t?.isCompleted == 1
+                                                        }
+                                                        stared={t?.starred}
+                                                        id={t?.id}
+                                                        taskId={taskId}
+                                                        handleChecked={
+                                                            handleChecked
+                                                        }
+                                                    >
+                                                        {t.title}
+                                                        {t.hasTime ? (
+                                                            <>
+                                                                <br />
+                                                                <div className="mt-2! ml-2! flex w-fit items-center justify-center rounded-md border px-2! opacity-80">
+                                                                    {String(
+                                                                        dl.getHours()
+                                                                    ).padStart(
+                                                                        2,
+                                                                        '0'
+                                                                    )}
+                                                                    :
+                                                                    {String(
+                                                                        dl.getMinutes()
+                                                                    ).padStart(
+                                                                        2,
+                                                                        '0'
+                                                                    )}
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            ''
+                                                        )}
+                                                    </ListTask>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 );
                             })}
@@ -192,7 +216,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                 </Field>
             </div>
             {completeTask.length > 0 && (
-                <div className="flex h-auto w-full items-center justify-center">
+                <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                     <Dropdown
                         tasks={completeTask}
                         taskId={taskId}
