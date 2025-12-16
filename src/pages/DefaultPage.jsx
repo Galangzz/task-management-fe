@@ -20,13 +20,14 @@ function DefaultPage() {
         setIsOpenModalTask,
         isLoadingTitle,
         isLoadedTaskList,
+        isLoadedPage,
         errTitle,
         setErrTitle,
         handleSubmitTitleList,
         handleChecked,
     } = useDefaultPage();
-    console.log({ DefaultPagesTask: task });
-    if (isLoadedTaskList) {
+    console.log({isLoadedTaskList})
+    if (isLoadedPage) {
         return <LoadingPage />;
     }
     return (
