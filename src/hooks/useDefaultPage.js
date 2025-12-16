@@ -1,9 +1,10 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getTaskListById } from '../services/localService';
+// import { getTaskListById } from '../services/localService';
 import { ToastContext } from '../context/Toast';
 import { useTaskStore } from './useTaskStore';
-import { addTaskTabTitle } from '../services/taskTabsService';
+import { addTaskTabTitle, getTaskTabById } from '../services/taskTabsService';
+import { updateTask } from '../services/tasksService';
 
 export function useDefaultPage() {
     const [titleList, setTitleList] = useState('');
@@ -33,7 +34,8 @@ export function useDefaultPage() {
         decreaseToast,
         fixChecked,
         undoLocalStatus,
-        optimisticToggle,
+        optimisticToggleChecked,
+        optimisticToggleStarred,
         refreshPendingTabs,
     } = useTaskStore();
 
@@ -45,6 +47,7 @@ export function useDefaultPage() {
 
     // Handle tab navigation and loading
     useEffect(() => {
+        let isCancelled;
         const currentTab = location.pathname.split('/')[1] || 'main-task';
 
         // Skip jika tab tidak berubah
@@ -58,28 +61,35 @@ export function useDefaultPage() {
         console.log(
             `Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`
         );
-
-        // Deteksi perubahan tab
-        if (
-            previousTabRef.current !== '' &&
-            previousTabRef.current !== currentTab
-        ) {
-            // Tab changed
-            setIsLoadedTaskList(true)
-            resetOnTabChange(currentTab);
-        } else {
-            // First load - langsung set tanpa reset
-            const data = getTaskListById(currentTab);
-            if (data) {
-                setCurrentTabId(currentTab);
-                loadTaskList(currentTab);
+        const run = async () => {
+            // Deteksi perubahan tab
+            if (
+                previousTabRef.current !== '' &&
+                previousTabRef.current !== currentTab
+            ) {
+                // Tab changed
+                setIsLoadedTaskList(true);
+                resetOnTabChange(currentTab);
             } else {
-                navigate('/main-task', { replace: true });
-                return;
+                // First load - langsung set tanpa reset
+                const data = await getTaskTabById(currentTab);
+                console.log({ data });
+                if (isCancelled) return;
+                if (data) {
+                    setCurrentTabId(currentTab);
+                    loadTaskList(currentTab);
+                } else {
+                    navigate('/main-task', { replace: true });
+                    return;
+                }
             }
-        }
 
-        previousTabRef.current = currentTab;
+            previousTabRef.current = currentTab;
+        };
+        run();
+        return () => {
+            isCancelled = true;
+        };
     }, [
         location.pathname,
         loadTaskList,
@@ -101,7 +111,6 @@ export function useDefaultPage() {
     useEffect(() => {
         if (task) {
             setTimeout(() => {
-                
                 setIsLoadedTaskList(false);
             }, 500);
         }
@@ -141,7 +150,7 @@ export function useDefaultPage() {
 
             setTimeout(async () => {
                 // Optimistic update - UI berubah langsung
-                await optimisticToggle(id);
+                await optimisticToggleChecked(id);
 
                 const message =
                     isCompleted === Number(false)
@@ -174,10 +183,18 @@ export function useDefaultPage() {
             toast,
             increaseToast,
             decreaseToast,
-            optimisticToggle,
+            optimisticToggleChecked,
             fixChecked,
             undoLocalStatus,
         ]
+    );
+
+    const handleStarred = useCallback(
+        async (id, starred) => {
+            await optimisticToggleStarred(id);
+            await updateTask(id, { starred });
+        },
+        [optimisticToggleStarred]
     );
 
     return {
@@ -198,5 +215,6 @@ export function useDefaultPage() {
         setErrTitle,
         handleSubmitTitleList,
         handleChecked,
+        handleStarred,
     };
 }

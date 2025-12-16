@@ -25,6 +25,7 @@ function DefaultPage() {
         setErrTitle,
         handleSubmitTitleList,
         handleChecked,
+        handleStarred
     } = useDefaultPage();
     console.log({isLoadedTaskList})
     if (isLoadedPage) {
@@ -62,6 +63,7 @@ function DefaultPage() {
                 task={task}
                 isLoading={isLoadedTaskList}
                 handleChecked={handleChecked}
+                handleStarred={handleStarred}
             />
 
             <AddButton onClick={() => setIsOpenModalTask(true)} />

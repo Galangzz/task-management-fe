@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import Checkbox from '../ui/Checkboxes';
 import StarCheck from '../ui/StarCheck';
-import { toggleStaredTask } from '../../services/localService';
+// import { toggleStaredTask } from '../../services/localService';
 import { useNavigate } from 'react-router-dom';
+// import { updateTask } from '../../services/tasksService';
 
-function ListTask({ children, checked, stared, id, taskId, handleChecked }) {
+function ListTask({ children, checked, stared, id, taskId, handleChecked, handleStarred }) {
     const navigate = useNavigate();
 
-    const handleStared = (id) => {
-        toggleStaredTask(id);
-    };
+    
 
     const [localChecked, setLocalChecked] = useState(checked);
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -51,7 +50,7 @@ function ListTask({ children, checked, stared, id, taskId, handleChecked }) {
                 <StarCheck
                     id={id}
                     checked={stared}
-                    onChange={() => handleStared(id)}
+                    onChange={(value) => handleStarred(id, value)}
                 />
             )}
         </div>

@@ -64,7 +64,7 @@ export const useTaskStore = create((set, get) => ({
 
     // Commit changes to localStorage
     fixChecked: async (id, tabId, isCompleted) => {
-        await updateTask(id, {isCompleted});
+        await updateTask(id, { isCompleted });
         get().addPending(tabId);
     },
 
@@ -80,12 +80,22 @@ export const useTaskStore = create((set, get) => ({
         })),
 
     // Optimistic UI update
-    optimisticToggle: async (id) =>
+    optimisticToggleChecked: async (id) =>
         set((state) => ({
             task: {
                 ...state.task,
                 tasks: state.task.tasks.map((t) =>
                     t.id === id ? { ...t, isCompleted: 1 - t.isCompleted } : t
+                ),
+            },
+        })),
+
+    optimisticToggleStarred: async (id) =>
+        set((state) => ({
+            task: {
+                ...state.task,
+                tasks: state.task.tasks.map((t) =>
+                    t.id === id ? { ...t, starred: 1 - t.starred } : t
                 ),
             },
         })),

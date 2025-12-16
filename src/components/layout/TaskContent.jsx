@@ -18,7 +18,7 @@ const Dropdown = lazy(() => import('../ui/Dropdown'));
 import { ThemeContext } from '../../context/Theme';
 import LoadingTaskList from '../ui/LoadingTaskList';
 
-function TaskContent({ task = {}, isLoading = true, handleChecked }) {
+function TaskContent({ task = {}, isLoading = true, handleChecked, handleStarred }) {
     const { theme } = useContext(ThemeContext);
 
     const [showCompleted, setShowCompleted] = useState(false);
@@ -153,6 +153,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                                         handleChecked={
                                                             handleChecked
                                                         }
+                                                        handleStarred={handleStarred}
                                                     >
                                                         {t.title}
                                                         {t.hasTime ? (
