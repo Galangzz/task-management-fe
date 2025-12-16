@@ -6,8 +6,8 @@ const StarCheck = ({ id = 'dummyStar', checked = false, onChange }) => {
         <StyledWrapper>
             <div onClick={(e) => e.stopPropagation()}>
                 <input
-                    onChange={onChange}
-                    defaultChecked={checked}
+                    onChange={(e) => onChange(e.target.checked)}
+                    checked={checked}
                     type="checkbox"
                     id={`stared-${id}`}
                 />

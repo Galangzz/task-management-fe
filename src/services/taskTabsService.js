@@ -74,6 +74,7 @@ export async function getTaskTabById(id) {
         withCredentials: false,
     });
     const resData = res?.data;
+    console.log({ resData });
     return resData &&
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
