@@ -1,18 +1,28 @@
-import React, { lazy, useCallback, useContext, useMemo } from 'react';
+import React, {
+    lazy,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react';
 import Field from '../ui/Field';
 import ListTask from '../specific/ListTask';
 import { formatCustomDate } from '../../utils';
 
-import { CgSpinner } from 'react-icons/cg';
 import emptyNoteLight from '../../assets/empty-note-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
 import completedTaskLight from '../../assets/completed-task-light.svg';
 const Dropdown = lazy(() => import('../ui/Dropdown'));
 import { ThemeContext } from '../../context/Theme';
+import LoadingTaskList from '../ui/LoadingTaskList';
 
 function TaskContent({ task = {}, isLoading = true, handleChecked }) {
     const { theme } = useContext(ThemeContext);
+
+    const [showCompleted, setShowCompleted] = useState(false);
+    const [showEmpty, setShowEmpty] = useState(false);
 
     const activeTask = useMemo(
         () => task?.tasks?.filter((t) => t.isCompleted === 0) || [],
@@ -24,12 +34,24 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
         [task]
     );
 
+    useEffect(() => {
+        if (completeTask.length > 0 && activeTask.length === 0) {
+            setShowCompleted(true);
+        } else {
+            setShowCompleted(false);
+        }
+
+        if (activeTask.length === 0 && completeTask.length === 0) {
+            setShowEmpty(true);
+        } else {
+            setShowEmpty(false);
+        }
+    }, [activeTask.length, completeTask.length]);
+
     const taskId = task?.id || '';
 
     const getGroupKey = useCallback((deadline) => {
         if (!deadline) return 'TANPA_TANGGAL';
-
-        // const now = new Date();
 
         const today = new Date();
 
@@ -41,7 +63,6 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
         if (d < today.toLocaleDateString()) return 'TERLEWAT';
         if (d === today.toLocaleDateString()) return 'HARI_INI';
         if (d === tomorrow.toLocaleDateString()) return 'BESOK';
-        // tanggal lain → pakai tanggal aslinya
         return d;
     }, []);
 
@@ -62,18 +83,15 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
             Object.keys(groupedData).sort((a, b) => {
                 const PRIORITY = ['TERLEWAT', 'HARI_INI', 'BESOK'];
 
-                // Prioritas utama
                 if (PRIORITY.includes(a) && PRIORITY.includes(b)) {
                     return PRIORITY.indexOf(a) - PRIORITY.indexOf(b);
                 }
                 if (PRIORITY.includes(a)) return -1;
                 if (PRIORITY.includes(b)) return 1;
 
-                // Tanpa tanggal selalu terakhir
                 if (a === 'TANPA_TANGGAL') return 1;
                 if (b === 'TANPA_TANGGAL') return -1;
 
-                // DATE:YYYY-MM-DD → sort ASC
 
                 return a.localeCompare(b);
             }),
@@ -90,6 +108,10 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
 
         return color;
     }, []);
+    if (isLoading) {
+        return <LoadingTaskList />;
+    }
+
     return (
         <div className="flex h-auto w-full flex-col items-center justify-center gap-8 p-8!">
             <div className="flex h-auto w-full items-center justify-center">
@@ -99,17 +121,14 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                             {task.name ?? 'Stared Task'}
                         </h1>
                     </div>
-                    {isLoading ? (
-                        // TODO lAZY
-                        <CgSpinner />
-                    ) : activeTask.length > 0 ? (
-                        <div className="flex flex-col gap-4">
-                            {sortedKeys.map((date) => {
+                    <div className="flex flex-col items-center gap-4">
+                        {activeTask.length > 0 &&
+                            sortedKeys.map((date) => {
                                 const label = formatCustomDate(date);
                                 return (
                                     <div
                                         key={date}
-                                        className="flex flex-col gap-4"
+                                        className="flex w-full flex-col gap-4"
                                     >
                                         <h2
                                             className={`text-lg font-bold ${colorDate(label)}`}
@@ -118,7 +137,10 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                         </h2>
 
                                         {groupedData[date].map((t) => (
-                                            <div className="overflow-hidden">
+                                            <div
+                                                key={t.id}
+                                                className="animate-fade-in overflow-hidden"
+                                            >
                                                 <ListTask
                                                     key={t.id}
                                                     checked={
@@ -138,42 +160,35 @@ function TaskContent({ task = {}, isLoading = true, handleChecked }) {
                                     </div>
                                 );
                             })}
-                        </div>
-                    ) : completeTask.length > 0 ? (
                         <div
-                            className={`flex h-fit flex-col items-center justify-center gap-12 py-6 transition-opacity! duration-500! ease-in-out! ${completeTask.length > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                            className={`flex h-fit flex-col items-center justify-center gap-12 py-6 transition-opacity! duration-500! ease-in-out! ${showCompleted || showEmpty ? 'animate-fade-in' : 'pointer-events-none absolute inset-0 translate-y-4 opacity-0'} `}
                         >
                             <img
                                 src={
                                     theme === 'dark'
-                                        ? completedTaskDark
-                                        : completedTaskLight
+                                        ? showCompleted
+                                            ? completedTaskDark
+                                            : emptyNoteDark
+                                        : showCompleted
+                                          ? completedTaskLight
+                                          : emptyNoteLight
                                 }
-                                alt="aa"
+                                alt="Task talah Selesai"
                                 className="h-auto w-60 object-contain"
                             />
                             <p className="w-full text-center text-3xl font-semibold tracking-widest">
-                                Task Telah Selesai
-                                <br />
-                                Kerja Bagus
+                                {showCompleted ? (
+                                    <>
+                                        Task Telah Selesai
+                                        <br />
+                                        Kerja Bagus
+                                    </>
+                                ) : (
+                                    'Task Kosong'
+                                )}
                             </p>
                         </div>
-                    ) : (
-                        <div className="flex h-fit flex-col items-center justify-center gap-12 py-6">
-                            <img
-                                src={
-                                    theme === 'dark'
-                                        ? emptyNoteDark
-                                        : emptyNoteLight
-                                }
-                                alt="aa"
-                                className="h-auto w-60 object-contain"
-                            />
-                            <p className="w-full text-center text-3xl font-semibold tracking-widest">
-                                Task Kosong
-                            </p>
-                        </div>
-                    )}
+                    </div>
                 </Field>
             </div>
             {completeTask.length > 0 && (

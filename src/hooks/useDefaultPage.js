@@ -11,6 +11,7 @@ export function useDefaultPage() {
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
     const [isLoadingTitle, setIsLoadingTitle] = useState(false);
     const [isLoadedTaskList, setIsLoadedTaskList] = useState(true);
+    const [isLoadedPage, setIsLoadedPage] = useState(true);
     const [errTitle, setErrTitle] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
@@ -64,6 +65,7 @@ export function useDefaultPage() {
             previousTabRef.current !== currentTab
         ) {
             // Tab changed
+            setIsLoadedTaskList(true)
             resetOnTabChange(currentTab);
         } else {
             // First load - langsung set tanpa reset
@@ -78,9 +80,6 @@ export function useDefaultPage() {
         }
 
         previousTabRef.current = currentTab;
-        setTimeout(() => {
-            setIsLoadedTaskList(false);
-        }, 1000);
     }, [
         location.pathname,
         loadTaskList,
@@ -88,6 +87,25 @@ export function useDefaultPage() {
         resetOnTabChange,
         setCurrentTabId,
     ]);
+
+    useEffect(() => {
+        if (task && tabs) {
+            setTimeout(() => {
+                setIsLoadedPage(false);
+            }, 500);
+        }
+
+        return;
+    }, [task, tabs]);
+
+    useEffect(() => {
+        if (task) {
+            setTimeout(() => {
+                
+                setIsLoadedTaskList(false);
+            }, 500);
+        }
+    }, [task]);
 
     // Handle toast completion - refresh pending tabs
     useEffect(() => {
@@ -125,7 +143,6 @@ export function useDefaultPage() {
                 // Optimistic update - UI berubah langsung
                 await optimisticToggle(id);
 
-                
                 const message =
                     isCompleted === Number(false)
                         ? 'Tugas Selesai'
@@ -175,6 +192,7 @@ export function useDefaultPage() {
         isLoadingTitle,
         setIsLoadingTitle,
         isLoadedTaskList,
+        isLoadedPage,
         setIsLoadedTaskList,
         errTitle,
         setErrTitle,
