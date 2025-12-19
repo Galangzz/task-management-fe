@@ -163,10 +163,18 @@ function TaskContent({
                                                         }
                                                     >
                                                         {t.title}
-                                                        {t.hasTime ? (
+                                                        {t.detail !== null && (
                                                             <>
                                                                 <br />
-                                                                <div className="mt-2! ml-2! flex w-fit items-center justify-center rounded-md border px-2! opacity-80">
+                                                                <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
+                                                                    {t.detail}
+                                                                </p>
+                                                            </>
+                                                        )}
+                                                        {t.hasTime === 1 && (
+                                                            <>
+                                                                {/* <br /> */}
+                                                                <div className="ml-2! flex w-fit items-center justify-center opacity-90">
                                                                     {String(
                                                                         dl.getHours()
                                                                     ).padStart(
@@ -182,8 +190,6 @@ function TaskContent({
                                                                     )}
                                                                 </div>
                                                             </>
-                                                        ) : (
-                                                            ''
                                                         )}
                                                     </ListTask>
                                                 </div>

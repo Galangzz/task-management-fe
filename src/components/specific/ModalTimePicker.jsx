@@ -30,7 +30,7 @@ function ModalTimePicker({
     return (
         <Modal setToggle={toggleTime}>
             <div
-                className="m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4 animate-fade-in"
+                className="m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4! animate-fade-in"
                 onClick={(e) => e.stopPropagation()}
             >
                 <p className="flex w-full px-4!">Pilih Waktu</p>
