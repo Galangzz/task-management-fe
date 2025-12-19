@@ -5,6 +5,7 @@ import { ToastContext } from '../context/Toast';
 import { useTaskStore } from './useTaskStore';
 import { addTaskTabTitle, getTaskTabById } from '../services/taskTabsService';
 import { updateTask } from '../services/tasksService';
+import ApiError from '../errors/ApiError';
 
 export function useDefaultPage() {
     const [titleList, setTitleList] = useState('');
@@ -138,21 +139,28 @@ export function useDefaultPage() {
 
     const handleSubmitTitleList = useCallback(async () => {
         setIsLoadingTitle(true);
-        const { id, err } = await addTaskTabTitle({ title: titleList });
-        if (err) {
-            setErrTitle(err);
-            setIsLoadingTitle(false);
-            return;
+        try {
+            const { id } = await addTaskTabTitle({ title: titleList });
+
+            setTimeout(() => {
+                setTabs();
+                setErrTitle('');
+                setTitleList('');
+                setIsLoadingTitle(false);
+                setIsOpenModalTaskTitle(false);
+                navigate(`/${id}`);
+            }, 1000);
+        } catch (err) {
+            setErrTitle(err.message);
+            if (err instanceof ApiError) {
+                setIsLoadingTitle(false);
+            } else {
+                setIsLoadingTitle(false);
+                setTitleList('');
+            }
         }
 
-        setTimeout(() => {
-            setTabs();
-            setErrTitle('');
-            setIsOpenModalTaskTitle(false);
-            setTitleList('');
-            setIsLoadingTitle(false);
-            navigate(`/${id}`);
-        }, 1000);
+        return () => clearTimeout();
     }, [navigate, titleList, setTabs]);
 
     const handleChecked = useCallback(
@@ -166,7 +174,7 @@ export function useDefaultPage() {
                 await optimisticToggleChecked(id);
 
                 const message =
-                    isCompleted === Number(false)
+                    isCompleted === true
                         ? 'Tugas Selesai'
                         : 'Tugas ditandai belum selesai';
 
