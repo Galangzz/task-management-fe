@@ -5,7 +5,7 @@ function ModalConfirmationToClose({ setToggle, onHandlerClose }) {
     return (
         <Modal setToggle={setToggle}>
             <div
-                className="ModalTaskTitle m-2! flex h-auto w-98 flex-col items-center justify-center gap-2 rounded-3xl border bg-(--background-header) p-4!"
+                className="ModalTaskTitle m-2! flex h-auto w-98 flex-col items-center justify-center gap-2 rounded-3xl border bg-(--background-header) p-4! animate-fade-in"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h1 className="flex w-full text-start text-xl font-bold">

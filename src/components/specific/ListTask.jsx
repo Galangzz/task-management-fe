@@ -41,11 +41,11 @@ function ListTask({ children, checked, stared, id, taskId, handleChecked, handle
                     // handleChecked(id, value);
                 }}
             />
-            <h3
+            <h1
                 className={`flex-1 ${checked ? 'line-through decoration-2' : ''}`}
             >
                 {children}
-            </h3>
+            </h1>
             {!checked && (
                 <StarCheck
                     id={id}

@@ -29,7 +29,7 @@ function ModalTaskTitle({
     return (
         <Modal setToggle={() => setToggleTitle(false)}>
             <div
-                className="ModalTaskTitle flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
+                className="ModalTaskTitle animate-fade-in flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
                 onClick={(e) => e.stopPropagation()}
             >
                 <h3>Masukan Nama Daftar Baru</h3>

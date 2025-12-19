@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import Calendar from './Calendar';
 import Modal from '../ui/Modal';
 import { IoMdTime } from 'react-icons/io';
-import ModalTimePicker from './ModalTimePicker';
+const ModalTimePicker = lazy(() => import('./ModalTimePicker'));
 import { RxCross2 } from 'react-icons/rx';
 
 function ModalDayPicker({
@@ -31,7 +31,7 @@ function ModalDayPicker({
         <>
             <Modal setToggle={toggleCalendar}>
                 <div
-                    className="m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4!"
+                    className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="flex h-92 w-full justify-center">

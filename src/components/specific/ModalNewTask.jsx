@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import Modal from '../ui/Modal';
 import { CgCross, CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
 import StarCheck from '../ui/StarCheck';
-import ModalDayPicker from './ModalDayPicker';
+const ModalDayPicker = lazy(() => import('./ModalDayPicker'));
 import { formatCustomDate } from '../../utils';
 import { RxCross2 } from 'react-icons/rx';
 import useTime from '../../hooks/useTime';
-import ModalConfirmationToClose from './ModalConfirmationToClose';
+const ModalConfirmationToClose = lazy(
+    () => import('./ModalConfirmationToClose')
+);
 
 function ModalNewTask({ setIsOpenModalTask }) {
     const {
@@ -47,7 +49,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                 setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}
             >
                 <div
-                    className="ModalTaskTitle m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
+                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <form
@@ -68,7 +70,6 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             maxLength={50}
                             required
                         />
-                        {/* {error !== '' && <p>{error}</p>} */}
                         {isOpenDetail && (
                             <textarea
                                 ref={textRef}
@@ -76,7 +77,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 onInput={handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
-                                className="scrollbar-custom-textarea h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
+                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
                                 rows={1}
                             />
                         )}
