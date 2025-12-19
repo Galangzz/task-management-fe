@@ -1,7 +1,6 @@
 import { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import { addNewTask, getTaskListById } from '../services/localService';
 import { useTaskStore } from './useTaskStore';
 import { addTask } from '../services/tasksService';
 import { getTaskTabById } from '../services/taskTabsService';
@@ -99,7 +98,7 @@ function useTime() {
             const newTask = {
                 title: title.trim(),
                 detail: detail,
-                deadline: isSubmitDateTime ? selected : null,
+                deadline: isSubmitDateTime ? new Date(selected) : null,
                 hasDate: isSubmitDateTime,
                 hasTime: isSubmitTime,
                 starred: starred,
