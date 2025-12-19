@@ -2,7 +2,6 @@ import { api, ensureBase } from './api';
 
 export async function getTaskTabs() {
     ensureBase();
-
     const url = '/task-tabs';
     const res = await api.get(url, {
         withCredentials: false,
@@ -14,10 +13,10 @@ export async function getTaskTabs() {
         ? resData.data
         : resData;
 }
+
 export async function addTaskTabTitle({ title }) {
     ensureBase();
 
-    try {
         if (!title || title.trim() === '') {
             return { id: null, err: 'Judul tidak boleh kosong' };
         }
@@ -43,28 +42,25 @@ export async function addTaskTabTitle({ title }) {
                 ? resData.data?.id
                 : null;
         return { id: id, err: null };
-    } catch (error) {
-        console.error(error);
-        return { id: null, err: error.message };
-    }
+    
 }
 
 export async function getTaskTabWithTasks(id = 'main-task') {
     ensureBase();
 
-    const url = `/task-tabs/${id}`;
-    const res = await api.get(url, {
-        withCredentials: false,
-    });
-    console.log('FULL RES:', res);
+        const url = `/task-tabs/${id}`;
+        const res = await api.get(url, {
+            withCredentials: false,
+        });
+        console.log('FULL RES:', res);
 
-    const resData = res?.data;
-    console.log('DATA:', resData);
-    return resData &&
-        typeof resData === 'object' &&
-        Object.prototype.hasOwnProperty.call(resData, 'data')
-        ? resData.data
-        : resData;
+        const resData = res?.data;
+        console.log('DATA:', resData);
+        return resData &&
+            typeof resData === 'object' &&
+            Object.prototype.hasOwnProperty.call(resData, 'data')
+            ? resData.data
+            : resData;
 }
 
 export async function getTaskTabById(id) {

@@ -18,7 +18,12 @@ const Dropdown = lazy(() => import('../ui/Dropdown'));
 import { ThemeContext } from '../../context/Theme';
 import LoadingTaskList from '../ui/LoadingTaskList';
 
-function TaskContent({ task = {}, isLoading = true, handleChecked, handleStarred }) {
+function TaskContent({
+    task = {},
+    isLoading = true,
+    handleChecked,
+    handleStarred,
+}) {
     const { theme } = useContext(ThemeContext);
 
     const [showCompleted, setShowCompleted] = useState(false);
@@ -153,7 +158,9 @@ function TaskContent({ task = {}, isLoading = true, handleChecked, handleStarred
                                                         handleChecked={
                                                             handleChecked
                                                         }
-                                                        handleStarred={handleStarred}
+                                                        handleStarred={
+                                                            handleStarred
+                                                        }
                                                     >
                                                         {t.title}
                                                         {t.hasTime ? (
@@ -186,7 +193,7 @@ function TaskContent({ task = {}, isLoading = true, handleChecked, handleStarred
                                 );
                             })}
                         <div
-                            className={`flex h-fit flex-col items-center justify-center gap-12 py-6 transition-opacity! duration-500! ease-in-out! ${showCompleted || showEmpty ? 'animate-fade-in' : 'pointer-events-none absolute inset-0 translate-y-4 opacity-0'} `}
+                            className={`flex h-fit flex-col items-center justify-center gap-8 transition-opacity! duration-500! ease-in-out! ${showCompleted || showEmpty ? 'animate-fade-in' : 'pointer-events-none absolute inset-0 translate-y-4 opacity-0'} mx-auto aspect-3/4 h-full w-full max-w-sm`}
                         >
                             <img
                                 src={
@@ -198,8 +205,10 @@ function TaskContent({ task = {}, isLoading = true, handleChecked, handleStarred
                                           ? completedTaskLight
                                           : emptyNoteLight
                                 }
-                                alt="Task talah Selesai"
-                                className="h-auto w-60 object-contain"
+                                alt="Task Notification Image"
+                                aria-label="Task Notification Image"
+                                className="aspect-3/4 h-full max-h-80 w-auto object-contain"
+                                fetchPriority="high"
                             />
                             <p className="w-full text-center text-3xl font-semibold tracking-widest">
                                 {showCompleted ? (

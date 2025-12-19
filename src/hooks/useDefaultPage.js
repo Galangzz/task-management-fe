@@ -37,10 +37,20 @@ export function useDefaultPage() {
         optimisticToggleChecked,
         optimisticToggleStarred,
         refreshPendingTabs,
+        error,
+        clearError,
     } = useTaskStore();
 
     console.log({ task });
-    // Initial load tabs
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error.message);
+
+            clearError();
+        }
+    }, [error, toast, clearError]);
+
     useEffect(() => {
         setTabs();
     }, [setTabs]);
@@ -72,15 +82,18 @@ export function useDefaultPage() {
                 resetOnTabChange(currentTab);
             } else {
                 // First load - langsung set tanpa reset
-                const data = await getTaskTabById(currentTab);
-                console.log({ data });
-                if (isCancelled) return;
-                if (data) {
+                try {
+                    const data = await getTaskTabById(currentTab);
+                    console.log({ data });
+                    if (isCancelled) return;
+
                     setCurrentTabId(currentTab);
                     loadTaskList(currentTab);
-                } else {
-                    navigate('/main-task', { replace: true });
-                    return;
+                } catch (error) {
+                    if (error.status == 404) {
+                        navigate('/main-task', { replace: true });
+                        return;
+                    }
                 }
             }
 

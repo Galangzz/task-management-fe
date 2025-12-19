@@ -99,11 +99,11 @@ function useTime() {
             const newTask = {
                 title: title.trim(),
                 detail: detail,
-                deadline: isSubmitDateTime ? selected : Number(null),
-                hasDate: Number(isSubmitDateTime),
-                hasTime: Number(isSubmitTime),
+                deadline: isSubmitDateTime ? selected : null,
+                hasDate: isSubmitDateTime,
+                hasTime: isSubmitTime,
                 starred: starred,
-                isCompleted: Number(false),
+                isCompleted: false,
             };
             await addTask(currentTab, newTask);
             toast.success('Catatan Berhasil ditambahkan');

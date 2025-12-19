@@ -9,31 +9,50 @@ export const useTaskStore = create((set, get) => ({
     task: null,
     pendingUpdates: new Map(),
     stackedToast: 0,
+    error: null,
+
+    setError: (error) => set({ error }),
+    clearError: () => set({ error: null }),
 
     // Set current tab ID
     setCurrentTabId: (tabId) => set({ currentTabId: tabId }),
 
     // Refresh tabs list
-    setTabs: async () => set({ tabs: await getTaskTabs() }),
+    setTabs: async () => {
+        try {
+            const tabs = await getTaskTabs();
+            set({ tabs, error: null });
+        } catch (err) {
+            get().setError(err);
+        }
+    },
 
     // Load task list for specific tab
     loadTaskList: async (tabId) => {
-        const currentState = get();
-        // Hanya update jika data benar-benar berbeda
-        if (currentState.task?.id === tabId) {
-            console.log('Task already loaded for', tabId);
-            return;
-        }
+        try {
+            const currentState = get();
+            // Hanya update jika data benar-benar berbeda
+            if (currentState.task?.id === tabId) {
+                console.log('Task already loaded for', tabId);
+                return;
+            }
 
-        const data = await getTaskTabWithTasks(tabId);
-        set({ task: data, currentTabId: tabId });
+            const data = await getTaskTabWithTasks(tabId);
+            set({ task: data, currentTabId: tabId, error: null });
+        } catch (err) {
+            get().setError(err);
+        }
     },
 
     refreshCurrentTask: async () => {
-        const { currentTabId } = get();
-        const data = await getTaskTabWithTasks(currentTabId);
-        console.log('Force refreshing task:', currentTabId);
-        set({ task: data });
+        try {
+            const { currentTabId } = get();
+            const data = await getTaskTabWithTasks(currentTabId);
+            console.log('Force refreshing task:', currentTabId);
+            set({ task: data, error: null });
+        } catch (err) {
+            get().setError(err);
+        }
     },
 
     // Toast counter management
@@ -64,8 +83,12 @@ export const useTaskStore = create((set, get) => ({
 
     // Commit changes to localStorage
     fixChecked: async (id, tabId, isCompleted) => {
-        await updateTask(id, { isCompleted });
-        get().addPending(tabId);
+        try {
+            await updateTask(id, { isCompleted });
+            get().addPending(tabId);
+        } catch (err) {
+            get().setError(err);
+        }
     },
 
     // Undo local UI changes
@@ -122,23 +145,27 @@ export const useTaskStore = create((set, get) => ({
 
     // Reset state when changing tabs with active toasts
     resetOnTabChange: async (newTabId) => {
-        const { stackedToast, currentTabId, resetToast, clearAllPending } =
-            get();
+        try {
+            const { stackedToast, currentTabId, resetToast, clearAllPending } =
+                get();
 
-        // Skip jika tab tidak berubah
-        if (currentTabId === newTabId) {
-            console.log('Same tab, skipping reset');
-            return;
+            // Skip jika tab tidak berubah
+            if (currentTabId === newTabId) {
+                console.log('Same tab, skipping reset');
+                return;
+            }
+
+            if (stackedToast > 0) {
+                console.log('Tab changed with active toasts, resetting...');
+                resetToast();
+                clearAllPending();
+            }
+
+            // Load fresh data for new tab
+            const data = await getTaskTabWithTasks(newTabId);
+            set({ task: data, currentTabId: newTabId, error: null });
+        } catch (err) {
+            get().setError(err);
         }
-
-        if (stackedToast > 0) {
-            console.log('Tab changed with active toasts, resetting...');
-            resetToast();
-            clearAllPending();
-        }
-
-        // Load fresh data for new tab
-        const data = await getTaskTabWithTasks(newTabId);
-        set({ task: data, currentTabId: newTabId });
     },
 }));

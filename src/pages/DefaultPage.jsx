@@ -1,10 +1,12 @@
 import React, { lazy } from 'react';
 import Header from '../components/layout/Header';
 import Navbar from '../components/layout/Navbar/Navbar';
-import ModalTaskTitle from '../components/specific/ModalTaskTitle';
+const ModalTaskTitle = lazy(
+    () => import('../components/specific/ModalTaskTitle')
+);
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
-import ModalNewTask from '../components/specific/ModalNewTask';
+const ModalNewTask = lazy(() => import('../components/specific/ModalNewTask'));
 const LoadingPage = lazy(() => import('../components/ui/LoadingPage'));
 import { useDefaultPage } from '../hooks/useDefaultPage';
 
@@ -25,9 +27,9 @@ function DefaultPage() {
         setErrTitle,
         handleSubmitTitleList,
         handleChecked,
-        handleStarred
+        handleStarred,
     } = useDefaultPage();
-    console.log({isLoadedTaskList})
+    console.log({ isLoadedTaskList });
     if (isLoadedPage) {
         return <LoadingPage />;
     }

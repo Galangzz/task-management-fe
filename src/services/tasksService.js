@@ -19,9 +19,6 @@ export async function addTask(
             taskTabId,
         },
         {
-            headers: {
-                'Content-Type': 'application/json',
-            },
             withCredentials: false,
         }
     );
@@ -37,9 +34,6 @@ export async function updateTask(id, { starred = null, isCompleted = null }) {
             isCompleted: isCompleted,
         },
         {
-            headers: {
-                'Content-Type': 'application/json',
-            },
             withCredentials: false,
         }
     );

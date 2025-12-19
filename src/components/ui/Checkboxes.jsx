@@ -19,7 +19,7 @@ const Checkbox = ({ id = 'dummyChecked', checked = false, onChange }) => {
                         type="checkbox"
                         id={`checked-${id}`}
                     />
-                    <label htmlFor={`checked-${id}`} />
+                    <label htmlFor={`checked-${id}`} aria-label='Checked or Unchecked Task'/>
                     <svg
                         fill="none"
                         viewBox="0 0 15 14"

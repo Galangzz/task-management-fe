@@ -16,7 +16,10 @@ function Navbar({ tabs, addList }) {
                 <li className="flex">
                     <NavbarButton
                         onClick={() => navigate('/starred-task')}
-                        active={currentTab === 'stared-task' ? 'true' : 'false'}
+                        active={
+                            currentTab === 'starred-task' ? 'true' : 'false'
+                        }
+                        aria-label={'Starred Button'}
                     >
                         <FaStar className="flex h-full w-full" />
                     </NavbarButton>
