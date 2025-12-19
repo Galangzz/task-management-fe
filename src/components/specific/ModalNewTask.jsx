@@ -49,7 +49,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                 setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}
             >
                 <div
-                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl border bg-(--background-header) p-4!"
+                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <form
@@ -66,7 +66,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
-                            className="rounded-xl border-b-2 p-2! text-xl focus:border focus:outline-none"
+                            className="rounded-xl  p-2! text-xl backdrop-invert-25 focus:outline-none"
                             maxLength={50}
                             required
                         />
@@ -77,7 +77,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 onInput={handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
-                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
+                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none "
                                 rows={1}
                             />
                         )}
