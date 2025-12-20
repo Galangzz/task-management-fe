@@ -1,6 +1,8 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import UndoNotification from '../components/ui/UndoNotification';
+import ErrorNotification from '../components/ui/ErrorNotification';
+import SuccessNotification from '../components/ui/SuccesNotification';
 
 function useToast() {
     const notify = {
@@ -17,13 +19,20 @@ function useToast() {
 
                 autoClose: 3000,
             }),
-        //TODO change text-color
         success: (msg) =>
-            toast.success(msg, {
-                autoClose: 2000,
-                className: 'bg-red-500 text-white',
+            toast.success(SuccessNotification, {
+                data: {
+                    message: msg
+                },
+                autoClose: 3000,
             }),
-        error: (msg) => toast.error(msg),
+        error: (error) =>
+            toast.error(ErrorNotification, {
+                data: {
+                    error: error,
+                },
+                autoClose: 3000,
+            }),
     };
     return [notify];
 }
