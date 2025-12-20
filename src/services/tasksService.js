@@ -6,7 +6,7 @@ export async function addTask(
 ) {
     ensureBase();
     const url = '/tasks';
-    await api.post(
+    const resData = await api.post(
         url,
         {
             title,
@@ -22,6 +22,12 @@ export async function addTask(
             withCredentials: false,
         }
     );
+
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
+        ? resData.data.message
+        : null;
 }
 
 export async function updateTask(id, { starred = null, isCompleted = null }) {

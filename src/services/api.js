@@ -22,10 +22,17 @@ api.interceptors.response.use(
             );
         }
 
+        const data = error.response.data;
+
+        const errorDetail = Array.isArray(data?.errors)
+            ? data.errors[0]?.message
+            : data?.errors || null;
+            
         return Promise.reject(
             new ApiError(
                 error.response.data?.message || 'Terjadi kesalahan',
-                error.response.status
+                error.response.status,
+                errorDetail
             )
         );
     }

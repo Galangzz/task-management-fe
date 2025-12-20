@@ -5,10 +5,16 @@ import StarCheck from '../ui/StarCheck';
 import { useNavigate } from 'react-router-dom';
 // import { updateTask } from '../../services/tasksService';
 
-function ListTask({ children, checked, stared, id, taskId, handleChecked, handleStarred }) {
+function ListTask({
+    children,
+    checked,
+    stared,
+    id,
+    taskId,
+    handleChecked,
+    handleStarred,
+}) {
     const navigate = useNavigate();
-
-    
 
     const [localChecked, setLocalChecked] = useState(checked);
     const [isTransitioning, setIsTransitioning] = useState(false);
@@ -41,11 +47,11 @@ function ListTask({ children, checked, stared, id, taskId, handleChecked, handle
                     // handleChecked(id, value);
                 }}
             />
-            <h1
-                className={`flex-1 ${checked ? 'line-through decoration-2' : ''}`}
+            <div
+                className={`flex-1 flex-col${checked ? 'line-through decoration-2' : ''}`}
             >
                 {children}
-            </h1>
+            </div>
             {!checked && (
                 <StarCheck
                     id={id}

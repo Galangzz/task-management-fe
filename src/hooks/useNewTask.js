@@ -1,4 +1,11 @@
-import { useCallback, useContext, useMemo, useRef, useState } from 'react';
+import {
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import useInput from './useInput';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTaskStore } from './useTaskStore';
@@ -6,7 +13,7 @@ import { addTask } from '../services/tasksService';
 import { getTaskTabById } from '../services/taskTabsService';
 import { ToastContext } from '../context/Toast';
 
-function useTime() {
+function useNewTask() {
     const location = useLocation();
     const navigate = useNavigate();
     const [title, setTitle, onResetTitle] = useInput('');
@@ -23,7 +30,17 @@ function useTime() {
     const [selected, setSelected] = useState(null);
     const textRef = useRef(null);
 
+    const [error, setError] = useState(null);
+
     const { toast } = useContext(ToastContext);
+
+    useEffect(() => {
+        if (error) {
+            toast.error(error);
+
+            setError(null);
+        }
+    }, [error, toast]);
 
     useMemo(() => {
         let date = new Date().setHours(0, 0, 0, 0);
@@ -90,31 +107,36 @@ function useTime() {
         async (e, setIsOpenModaltask) => {
             e.preventDefault();
             console.log('handleSubmitNewTask');
-            const currentTab =
-                (await getTaskTabById(
-                    location.pathname.split('/')[1] || 'main-task'
-                )) ?? 'main-task';
+            try {
+                const currentTab =
+                    (await getTaskTabById(
+                        location.pathname.split('/')[1] || 'main-task'
+                    )) ?? 'main-task';
 
-            const newTask = {
-                title: title.trim(),
-                detail: detail,
-                deadline: isSubmitDateTime ? new Date(selected) : null,
-                hasDate: isSubmitDateTime,
-                hasTime: isSubmitTime,
-                starred: starred,
-                isCompleted: false,
-            };
-            await addTask(currentTab, newTask);
-            toast.success('Catatan Berhasil ditambahkan');
+                const newTask = {
+                    title: title.trim(),
+                    detail: detail,
+                    deadline: isSubmitDateTime ? new Date(selected) : null,
+                    hasDate: isSubmitDateTime,
+                    hasTime: isSubmitTime,
+                    starred: starred,
+                    isCompleted: false,
+                };
+                const msg = await addTask(currentTab, newTask);
+                toast.success(msg);
 
-            currentTab === 'main-task'
-                ? navigate('/', { replace: true })
-                : navigate(`/${currentTab}`);
+                currentTab === 'main-task'
+                    ? navigate('/', { replace: true })
+                    : navigate(`/${currentTab}`);
 
-            useTaskStore.getState().refreshCurrentTask();
-            onResetTitle();
-            onResetDetail();
-            setIsOpenModaltask(false);
+                useTaskStore.getState().refreshCurrentTask();
+                onResetTitle();
+                onResetDetail();
+                setIsOpenModaltask(false);
+            } catch (err) {
+                console.log({ err });
+                setError(err);
+            }
         },
         [
             isSubmitDateTime,
@@ -128,6 +150,7 @@ function useTime() {
             onResetDetail,
             onResetTitle,
             toast,
+            setError,
         ]
     );
 
@@ -164,4 +187,4 @@ function useTime() {
     };
 }
 
-export default useTime;
+export default useNewTask;

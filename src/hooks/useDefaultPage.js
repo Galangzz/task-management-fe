@@ -92,7 +92,7 @@ export function useDefaultPage() {
                     loadTaskList(currentTab);
                 } catch (error) {
                     if (error.status == 404) {
-                        navigate('/main-task', { replace: true });
+                        navigate('/', { replace: true });
                         return;
                     }
                 }
@@ -151,7 +151,7 @@ export function useDefaultPage() {
                 navigate(`/${id}`);
             }, 1000);
         } catch (err) {
-            setErrTitle(err.message);
+            setErrTitle(err);
             if (err instanceof ApiError) {
                 setIsLoadingTitle(false);
             } else {
