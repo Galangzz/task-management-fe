@@ -163,18 +163,13 @@ function TaskContent({
                                                             handleStarred
                                                         }
                                                     >
-                                                        {t.title}
+                                                        <p className='font-semibold'>{t.title}</p>
                                                         {t.detail !== null && (
-                                                            <>
-                                                                <br />
                                                                 <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
                                                                     {t.detail}
                                                                 </p>
-                                                            </>
                                                         )}
                                                         {t.hasTime === 1 && (
-                                                            <>
-                                                                {/* <br /> */}
                                                                 <div className="ml-2! flex w-fit items-center justify-center opacity-90">
                                                                     {String(
                                                                         dl.getHours()
@@ -190,7 +185,6 @@ function TaskContent({
                                                                         '0'
                                                                     )}
                                                                 </div>
-                                                            </>
                                                         )}
                                                     </ListTask>
                                                 </div>
