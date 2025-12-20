@@ -1,6 +1,6 @@
 import React, { lazy, useEffect, useState } from 'react';
-import Calendar from './Calendar';
-import Modal from '../ui/Modal';
+import Calendar from '../DateTime/Calendar';
+import Modal from './Modal';
 import { IoMdTime } from 'react-icons/io';
 const ModalTimePicker = lazy(() => import('./ModalTimePicker'));
 import { RxCross2 } from 'react-icons/rx';

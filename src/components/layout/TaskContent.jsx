@@ -14,9 +14,10 @@ import emptyNoteLight from '../../assets/empty-note-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
 import completedTaskLight from '../../assets/completed-task-light.svg';
+
 const Dropdown = lazy(() => import('../ui/Dropdown'));
 import { ThemeContext } from '../../context/Theme';
-import LoadingTaskList from '../ui/LoadingTaskList';
+import LoadingTaskList from '../ui/Loading/LoadingTaskList';
 
 function TaskContent({
     task = {},

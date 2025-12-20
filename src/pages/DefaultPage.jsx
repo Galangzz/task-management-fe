@@ -2,12 +2,12 @@ import React, { lazy } from 'react';
 import Header from '../components/layout/Header';
 import Navbar from '../components/layout/Navbar/Navbar';
 const ModalTaskTitle = lazy(
-    () => import('../components/specific/ModalTaskTitle')
+    () => import('../components/ui/Modal/ModalTaskTitle')
 );
 import TaskContent from '../components/layout/TaskContent';
 import AddButton from '../components/ui/AddButton';
-const ModalNewTask = lazy(() => import('../components/specific/ModalNewTask'));
-const LoadingPage = lazy(() => import('../components/ui/LoadingPage'));
+const ModalNewTask = lazy(() => import('../components/ui/Modal/ModalNewTask'));
+const LoadingPage = lazy(() => import('../components/ui/Loading/LoadingPage'));
 import { useDefaultPage } from '../hooks/useDefaultPage';
 
 function DefaultPage() {

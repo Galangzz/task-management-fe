@@ -1,6 +1,6 @@
 import { CgSpinnerTwo } from 'react-icons/cg';
-import { getTaskListByTitle } from '../../services/localService';
-import Modal from '../ui/Modal';
+import { getTaskListByTitle } from '../../../services/localService';
+import Modal from './Modal';
 
 function ModalTaskTitle({
     titleList,
@@ -32,7 +32,7 @@ function ModalTaskTitle({
                 className="ModalTaskTitle animate-fade-in flex h-auto w-sm flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-6!"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h1 className="text-md relative w-full text-center tracking-widest after:absolute after:h-0.5 after:w-full after:rounded-full after:-bottom-2 after:left-0 after:bg-(--background-color) after:content-['']">
+                <h1 className="text-md relative w-full text-center tracking-widest after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-(--background-color) after:content-['']">
                     Masukan Nama Daftar Baru
                 </h1>
                 <form

@@ -1,12 +1,12 @@
 import React, { lazy } from 'react';
-import Modal from '../ui/Modal';
+import Modal from './Modal';
 import { CgCross, CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
-import StarCheck from '../ui/StarCheck';
+import StarCheck from '../StarCheck';
 const ModalDayPicker = lazy(() => import('./ModalDayPicker'));
-import { formatCustomDate } from '../../utils';
+import { formatCustomDate } from '../../../utils';
 import { RxCross2 } from 'react-icons/rx';
-import useTime from '../../hooks/useTime';
+import useTime from '../../../hooks/useTime';
 const ModalConfirmationToClose = lazy(
     () => import('./ModalConfirmationToClose')
 );
@@ -66,7 +66,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
-                            className="rounded-xl  p-2! text-xl backdrop-invert-25 focus:outline-none"
+                            className="rounded-xl p-2! text-xl backdrop-invert-25 focus:outline-none"
                             maxLength={50}
                             required
                         />
@@ -77,7 +77,7 @@ function ModalNewTask({ setIsOpenModalTask }) {
                                 onInput={handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
-                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none "
+                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
                                 rows={1}
                             />
                         )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import Modal from '../ui/Modal';
-import CustomTimeField from '../ui/CustomTimeField';
-import CustomClockField from '../ui/CustomClockField';
+import Modal from './Modal';
+import CustomTimeField from '../DateTime/CustomTimeField';
+import CustomClockField from '../DateTime/CustomClockField';
 import { IoMdTime } from 'react-icons/io';
 import { FaKeyboard } from 'react-icons/fa';
 
