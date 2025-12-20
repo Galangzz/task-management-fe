@@ -23,8 +23,8 @@ function ModalDayPicker({
 
     useEffect(() => {
         if (!isSubmitTime) return;
-        setHours(selected.getHours());
-        setMinutes(selected.getMinutes());
+        setHours(new Date(selected).getHours());
+        setMinutes(new Date(selected).getMinutes());
     }, [isSubmitTime, selected]);
 
     return (

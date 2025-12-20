@@ -47,13 +47,14 @@ function DefaultPage() {
                     setTitleList={setTitleList}
                     setToggleTitle={() => {
                         setIsOpenModalTaskTitle(false);
-                        setErrTitle('');
+                        setErrTitle(null);
                         setTitleList('');
                     }}
                     handleSubmitTitleList={handleSubmitTitleList}
                     err={errTitle}
                     setErr={setErrTitle}
                     isLoading={isLoadingTitle}
+                    tabs={tabs.map((t) => t.name)}
                 />
             )}
 
