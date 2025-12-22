@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { type Dispatch, type SetStateAction } from 'react';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 
 type CalendarProps = {
-    selected: Date;
-    setSelected: () => void;
+    selected: Date | null;
+    setSelected: React.Dispatch<React.SetStateAction<Date | null>>;
 };
 
 function Calendar({ selected, setSelected }: CalendarProps) {
@@ -13,7 +13,7 @@ function Calendar({ selected, setSelected }: CalendarProps) {
             animate
             mode="single"
             navLayout="around"
-            selected={selected}
+            selected={selected!}
             onSelect={setSelected}
             required
             // footer={selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'}

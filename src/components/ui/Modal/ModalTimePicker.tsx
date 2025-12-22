@@ -4,11 +4,12 @@ import CustomTimeField from '../DateTime/CustomTimeField.js';
 import CustomClockField from '../DateTime/CustomClockField.js';
 import { IoMdTime } from 'react-icons/io';
 import { FaKeyboard } from 'react-icons/fa';
+import type { TimeView } from '@mui/x-date-pickers/models';
 
 type ModalTimePickerProps = {
     toggleTime: (e: any) => void;
-    selectedTime: Date;
-    setSelectedTime: () => void;
+    selectedTime: Date| null;
+    setSelectedTime: React.Dispatch<React.SetStateAction<Date | null>>;
     onSubmitTime: () => void;
 };
 
@@ -19,7 +20,7 @@ function ModalTimePicker({
     onSubmitTime,
 }: ModalTimePickerProps) {
     const [inputTimeField, setInputTimeField] = useState(false);
-    const [viewClock, setViewClock] = useState<any>('hours');
+    const [viewClock, setViewClock] = useState<TimeView>('hours');
     const [clickCount, setClickCount] = useState(0);
     const [errTimeField, setErrTimeField] = useState(false);
 
@@ -44,7 +45,7 @@ function ModalTimePicker({
                 <div className="flex w-full items-center justify-center gap-2 p-2! text-4xl font-bold">
                     <CustomTimeField
                         id={'hours'}
-                        time={selectedTime}
+                        time={selectedTime!}
                         format={'HH'}
                         view={viewClock}
                         onClick={() => {
@@ -60,7 +61,7 @@ function ModalTimePicker({
                     :
                     <CustomTimeField
                         id={'minutes'}
-                        time={selectedTime}
+                        time={selectedTime!}
                         format={'mm'}
                         view={viewClock}
                         onClick={() => {
@@ -78,7 +79,7 @@ function ModalTimePicker({
                     <div className="flex w-full">
                         <CustomClockField
                             onChange={setSelectedTime}
-                            time={selectedTime}
+                            time={selectedTime!}
                             view={viewClock}
                             setView={setViewClock}
                         />

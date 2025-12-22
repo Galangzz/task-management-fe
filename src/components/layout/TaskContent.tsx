@@ -18,31 +18,14 @@ import completedTaskLight from '../../assets/completed-task-light.svg';
 const Dropdown = lazy(() => import('../ui/Dropdown.js'));
 import { ThemeContext } from '../../context/Theme.js';
 import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
+import type { ITasks, ITabWithTasks, } from '../../types/index.js';
 
-interface TasksItem {
-    id: string;
-    title: string;
-    detail: string | null;
-    createdAt: Date;
-    deadline: Date;
-    hasDate: boolean;
-    hasTime: boolean;
-    starred: boolean;
-    isCompleted: boolean;
-}
 
-interface TaskItem {
-    id: string;
-    name: string;
-    createdAt: Date;
-    deletePermission: boolean;
-    tasks: TasksItem[];
-}
 
-type GroupedTasks = Record<string, TasksItem[]>;
+type GroupedTasks = Record<string, ITasks[]>;
 
 type TaskContentProps = {
-    task?: TaskItem | null;
+    task?: ITabWithTasks | null;
     isLoading?: boolean;
     handleChecked: (id: string, value: boolean) => void;
     handleStarred: (id: string, value: boolean) => void;
@@ -60,12 +43,12 @@ function TaskContent({
     const [showEmpty, setShowEmpty] = useState(false);
 
     const activeTask = useMemo(
-        () => task?.tasks?.filter((t) => t.isCompleted ==false) || [],
+        () => task?.tasks?.filter((t) => t.isCompleted === false) || [],
         [task]
     );
 
     const completeTask = useMemo(
-        () => task?.tasks?.filter((t) => t.isCompleted == false) || [],
+        () => task?.tasks?.filter((t) => t.isCompleted === true) || [],
         [task]
     );
 
@@ -85,7 +68,7 @@ function TaskContent({
 
     const taskId = task?.id || '';
 
-    const getGroupKey = useCallback((deadline: Date) => {
+    const getGroupKey = useCallback((deadline: Date | null) => {
         if (!deadline) return 'TANPA_TANGGAL';
 
         const today = new Date();
@@ -171,7 +154,7 @@ function TaskContent({
                                         </h2>
 
                                         {groupedData[date]?.map((t) => {
-                                            const dl = new Date(t?.deadline);
+                                            const dl = t?.deadline && new Date(t?.deadline);
                                             return (
                                                 <div
                                                     key={t.id}
@@ -204,14 +187,14 @@ function TaskContent({
                                                         {t.hasTime == true && (
                                                             <div className="ml-2! flex w-fit items-center justify-center opacity-90">
                                                                 {String(
-                                                                    dl.getHours()
+                                                                    dl?.getHours()
                                                                 ).padStart(
                                                                     2,
                                                                     '0'
                                                                 )}
                                                                 :
                                                                 {String(
-                                                                    dl.getMinutes()
+                                                                    dl?.getMinutes()
                                                                 ).padStart(
                                                                     2,
                                                                     '0'

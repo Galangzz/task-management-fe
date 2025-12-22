@@ -2,21 +2,12 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Field from './Field.js';
 import ListTask from '../specific/ListTask.js';
+import type { Tasks } from '../../types/index.js';
 
-interface TaskItem {
-    id: string;
-    title: string;
-    detail: string | null;
-    createdAt: Date;
-    deadline: Date;
-    hasDate: boolean;
-    hasTime: boolean;
-    starred: boolean;
-    isCompleted: boolean;
-}
+
 
 type DropdownProps = {
-    tasks: TaskItem[];
+    tasks: Tasks[];
     taskId: string;
     handleChecked: (id: string, value: boolean) => void;
 };

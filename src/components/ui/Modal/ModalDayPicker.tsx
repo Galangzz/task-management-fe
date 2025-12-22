@@ -8,9 +8,9 @@ import { RxCross2 } from 'react-icons/rx';
 type ModalDayPickerProps = {
     toggleCalendar: (e: any) => void;
     onHandleSubmit: () => void;
-    selected: Date;
-    setSelected: () => void;
-    selectedTime: Date;
+    selected: Date | null;
+    setSelected: React.Dispatch<React.SetStateAction<Date | null>>;
+    selectedTime: Date | null;
     setSelectedTime: (e: any) => void;
     isOpenTime: boolean;
     setIsOpenTime: (p: boolean) => void;
@@ -37,8 +37,10 @@ function ModalDayPicker({
 
     useEffect(() => {
         if (!isSubmitTime) return;
-        setHours(new Date(selected).getHours());
-        setMinutes(new Date(selected).getMinutes());
+        if (selected) {
+            setHours(new Date(selected).getHours());
+            setMinutes(new Date(selected).getMinutes());
+        }
     }, [isSubmitTime, selected]);
 
     return (
@@ -106,7 +108,7 @@ function ModalDayPicker({
                         setIsOpenTime(false);
                     }}
                     selectedTime={selectedTime}
-                    setSelectedTime={() => setSelectedTime}
+                    setSelectedTime={setSelectedTime}
                     onSubmitTime={onHandleSubmitTime}
                 />
             )}

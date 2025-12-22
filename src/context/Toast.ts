@@ -1,4 +1,5 @@
 import { createContext } from 'react';
+import type ApiError from '../errors/ApiError.js';
 
 interface Toast {
     undo: (
@@ -8,7 +9,7 @@ interface Toast {
         setStacked: () => void
     ) => void;
     success: (message: string) => void;
-    error: (message: string) => void;
+    error: (message: Error | ApiError) => void;
 }
 
 type ToastContextType = {

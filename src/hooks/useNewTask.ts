@@ -7,12 +7,18 @@ import {
     useState,
 } from 'react';
 import useInput from './useInput.js';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    useLinkClickHandler,
+    useLocation,
+    useNavigate,
+} from 'react-router-dom';
 import { useTaskStore } from './useTaskStore.js';
 import { addTask } from '../services/tasksService.js';
 import { getTaskTabById } from '../services/taskTabsService.js';
 import { ToastContext } from '../context/Toast.js';
 import type { ApiErrorType } from '../errors/ApiError.js';
+import type { ITasks } from '../types/index.js';
+import ApiError from '../errors/ApiError.js';
 
 function useNewTask() {
     const location = useLocation();
@@ -31,15 +37,17 @@ function useNewTask() {
     const [selected, setSelected] = useState<Date | null>(null);
     const textRef = useRef<HTMLTextAreaElement>(null);
 
-    const [error, setError] = useState<ApiErrorType | null>(null as unknown as ApiErrorType);
+    const [error, setError] = useState<Error | ApiError | null>(null);
 
     const { toast } = useContext(ToastContext);
-
+    console.log({ selected });
     useEffect(() => {
         if (error) {
-            toast.error(error.message);
-
-            setError(null);
+            console.log({ error });
+            if (error instanceof ApiError) {
+                toast.error(error);
+                setError(null);
+            }
         }
     }, [error, toast]);
 
@@ -123,7 +131,10 @@ function useNewTask() {
                 const newTask = {
                     title: title.trim(),
                     detail: detail,
-                    deadline: isSubmitDateTime && selected ? new Date(selected) : null,
+                    deadline:
+                        isSubmitDateTime && selected
+                            ? new Date(selected)
+                            : null,
                     hasDate: isSubmitDateTime,
                     hasTime: isSubmitTime,
                     starred: starred,
@@ -140,9 +151,20 @@ function useNewTask() {
                 onResetTitle();
                 onResetDetail();
                 setIsOpenModaltask(false);
-            } catch (err: any) {
+            } catch (err) {
                 console.log({ err });
-                setError(err);
+                if (err) {
+                    if (
+                        err instanceof ApiError &&
+                        Object.prototype.hasOwnProperty.call(err, 'errors')
+                    ) {
+                        setError(err);
+                    } else if (err instanceof Error) {
+                        setError(err);
+                    } else {
+                        setError(new Error('Terjadi Kesalahan'));
+                    }
+                }
             }
         },
         [

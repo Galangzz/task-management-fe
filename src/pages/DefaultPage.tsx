@@ -77,7 +77,12 @@ function DefaultPage() {
                 }
             />
 
-            <AddButton onClick={() => setIsOpenModalTask(true)} />
+            <AddButton
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setIsOpenModalTask(true);
+                }}
+            />
         </div>
     );
 }

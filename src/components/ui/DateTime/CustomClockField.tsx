@@ -6,12 +6,17 @@ import type { TimeView } from '@mui/x-date-pickers/models';
 
 type CustomClockFieldProps = {
     time: Date;
-    onChange: () => void;
-    view: 'hours' | 'minutes';
+    onChange: React.Dispatch<React.SetStateAction<Date | null>>;
+    view: TimeView;
     setView: (p: TimeView) => void;
 };
 
-function CustomClockField({ time, onChange, view, setView }: CustomClockFieldProps) {
+function CustomClockField({
+    time,
+    onChange,
+    view,
+    setView,
+}: CustomClockFieldProps) {
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <TimeClock
@@ -23,12 +28,10 @@ function CustomClockField({ time, onChange, view, setView }: CustomClockFieldPro
                     },
                     '& .MuiClock-clock': {
                         boxShadow: 8,
-
-                        // bgcolor: 'var(--background-color)'
                         backdropFilter: 'brightness(80%)',
                     },
                 }}
-                onChange={onChange}
+                onChange={(newValue) => onChange(newValue)}
                 view={view}
                 onViewChange={(newView) => setView(newView)}
             />

@@ -2,14 +2,15 @@ import React, { type ReactEventHandler } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
+import type { TimeView } from '@mui/x-date-pickers/models';
 
 type CustomTimeFieldProps = {
     id: 'hours' | 'minutes';
-    view: 'hours' | 'minutes';
+    view: TimeView;
     format: string;
-    time: Date;
+    time: Date ;
     readOnly: boolean;
-    onChange: () => void;
+    onChange: (newDate: Date) => void;
     onClick: () => void;
     onError: (error: any) => void;
 };
@@ -42,7 +43,10 @@ function CustomTimeField({
             <TimeField
                 id={id}
                 value={time}
-                onChange={onChange}
+                onChange={(newValue) => {
+                    if (newValue){
+                        onChange(newValue)
+                    }}}
                 format={format}
                 sx={{
                     boxShadow: 4,

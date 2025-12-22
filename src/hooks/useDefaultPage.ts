@@ -1,6 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import { getTaskListById } from '../services/localService';
 import { ToastContext } from '../context/Toast.js';
 import { useTaskStore } from './useTaskStore.js';
 import {
@@ -123,15 +122,17 @@ export function useDefaultPage() {
                 setIsLoadedPage(false);
             }, 500);
         }
-        return () => clearTimeout(timer); // Penting untuk mencegah memory leak
+        return () => clearTimeout(timer);
     }, [task, tabs]);
 
     useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
         if (task) {
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 setIsLoadedTaskList(false);
             }, 500);
         }
+        return () => clearTimeout(timer);
     }, [task]);
 
     // Handle toast completion - refresh pending tabs
@@ -178,10 +179,9 @@ export function useDefaultPage() {
             console.log({ handleCheckId: id, currentTabId });
 
             increaseToast();
-
+            
             setTimeout(async () => {
-                // Optimistic update - UI berubah langsung
-                await optimisticToggleChecked(id);
+                optimisticToggleChecked(id);
 
                 const message =
                     isCompleted === true

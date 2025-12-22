@@ -88,7 +88,7 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
                         {isSubmitDateTime && (
                             <div className="mt-2! flex w-fit items-center gap-2 border-2 p-2! text-[14px] font-bold">
                                 <p>
-                                    {formatCustomDate(
+                                    {selected && formatCustomDate(
                                         new Date(selected).toLocaleDateString()
                                     )}
                                 </p>

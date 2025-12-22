@@ -1,32 +1,13 @@
 import { create } from 'zustand';
 import { getTaskTabs, getTaskTabWithTasks } from '../services/taskTabsService.js';
 import { updateTask } from '../services/tasksService.js';
+import type { ITabWithTasks } from '../types/index.js';
 
-
-interface TasksItemStore {
-    id: string;
-    title: string;
-    detail: string | null;
-    createdAt: Date;
-    deadline: Date;
-    hasDate: boolean;
-    hasTime: boolean;
-    starred: boolean;
-    isCompleted: boolean;
-}
-
-export interface TaskTabItem {
-    id: string;
-    name: string;
-    createdAt: Date;
-    deletePermission: boolean;
-    tasks: TasksItemStore[];
-}
 
 export interface TaskState {
     tabs: any[] | null;
     currentTabId: string;
-    task: TaskTabItem | null;
+    task: ITabWithTasks | null;
     pendingUpdates: Map<string, number>;
     stackedToast: number;
     error: any;
@@ -44,7 +25,7 @@ export interface TaskState {
     addPending: (tabId: string) => void;
     clearPending: (tabId: string) => void;
     clearAllPending: () => void;
-    fixChecked: (id: string, tabId: string, isCompleted: any) => Promise<void>;
+    fixChecked: (id: string, tabId: string, isCompleted: boolean) => Promise<void>;
     undoLocalStatus: (id: string) => void;
     optimisticToggleChecked: (id: string) => void;
     optimisticToggleStarred: (id: string) => void;
