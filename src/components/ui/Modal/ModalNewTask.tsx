@@ -16,38 +16,8 @@ type ModalNewTaskProps = {
 };
 
 function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
-    // const {
-    //     title,
-    //     detail,
-    //     isOpenDetail,
-    //     isOpenCalendar,
-    //     isOpenTime,
-    //     isSubmitDateTime,
-    //     isSubmitTime,
-    //     selected,
-    //     textRef,
-    //     starred,
-    //     isOpenConfirmationToClose,
-    //     // error,
-    //     setStarred,
-    //     setTitle,
-    //     setIsSubmitDateTime,
-    //     setIsSubmitTime,
-    //     handleSubmitTime,
-    //     handleInputDetail,
-    //     handleAddDetail,
-    //     handleOpenCalendar,
-    //     setIsOpenCalendar,
-    //     setIsOpenTime,
-    //     handleSubmitDateTime,
-    //     setSelected,
-    //     handleSubmitNewTask,
-    //     handleCloseModalNewTask,
-    //     setIsOpenConfirmationToClose,
-    //     handleConfirmationToClose,
-    // } = useNewTask();
-
     const { form, dateTime, submit, confirm } = useNewTask();
+
     return (
         <>
             <Modal setToggle={() => confirm.requestClose(setIsOpenModalTask)}>
@@ -153,7 +123,9 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
             {confirm.isOpenConfirm && (
                 <ModalConfirmationToClose
                     setToggle={confirm.closeConfirm}
-                    onHandlerClose={() => confirm.confirmClose(setIsOpenModalTask)}
+                    onHandlerClose={() =>
+                        confirm.confirmClose(setIsOpenModalTask)
+                    }
                 />
             )}
         </>

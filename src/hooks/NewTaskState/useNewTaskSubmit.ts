@@ -33,6 +33,10 @@ function useNewTaskSubmit(
                         location.pathname.split('/')[1] || 'main-task'
                     )) ?? 'main-task';
 
+                if (buildPayload().title.length >= 50) {
+                    throw new Error('Judul terlalu panjang, max = 50');
+                }
+
                 const msg = await addTask(currentTab, buildPayload());
                 toast.success(msg);
 
@@ -44,7 +48,7 @@ function useNewTaskSubmit(
                 resetForm();
                 closeModal(false);
             } catch (error) {
-                handleError(error, toast)
+                handleError(error, toast);
             }
         },
         [buildPayload, location.pathname, navigate, toast, resetForm]
