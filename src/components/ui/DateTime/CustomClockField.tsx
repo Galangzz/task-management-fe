@@ -24,11 +24,27 @@ function CustomClockField({
                 ampm={false}
                 sx={{
                     '& *': {
-                        color: 'var(--border-color) !important',
+                        color: 'var(--border-color)',
                     },
                     '& .MuiClock-clock': {
                         boxShadow: 8,
                         backdropFilter: 'brightness(80%)',
+                    },
+                    '& .MuiClock-pin': {
+                        backgroundColor: 'var(--button-text)',
+                    },
+                    '& .MuiClockPointer-root': {
+                        backgroundColor: 'var(--button-text)',
+                    },
+                    '& .MuiClockPointer-thumb': {
+                        backgroundColor: 'var(--button-text)',
+                        borderColor: 'var(--button-text)'
+                    },
+                    '& .MuiClockNumber-root': {
+                        color: 'var(--border-color)'
+                    },
+                    '& .MuiPickersSectionList-sectionContent-MuiPickersInputBase-sectionContent': {
+                        userSelect: 'none'
                     },
                 }}
                 onChange={(newValue) => onChange(newValue)}

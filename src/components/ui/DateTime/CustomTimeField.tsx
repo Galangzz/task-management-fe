@@ -84,6 +84,9 @@ function CustomTimeField({
                         {
                             borderRadius: 2,
                         },
+                    '& .css-vycme6-MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline': {
+                        borderColor: 'var(--button-text)'
+                    }
                 }}
                 slotProps={{
                     textField: {

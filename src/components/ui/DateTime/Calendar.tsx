@@ -1,5 +1,5 @@
-import React, { type Dispatch, type SetStateAction } from 'react';
-import { DayPicker } from 'react-day-picker';
+import React from 'react';
+import { DayPicker, getDefaultClassNames } from 'react-day-picker';
 import 'react-day-picker/style.css';
 
 type CalendarProps = {
@@ -8,6 +8,7 @@ type CalendarProps = {
 };
 
 function Calendar({ selected, setSelected }: CalendarProps) {
+    const defaultClassNames = getDefaultClassNames();
     return (
         <DayPicker
             animate
@@ -16,7 +17,11 @@ function Calendar({ selected, setSelected }: CalendarProps) {
             selected={selected!}
             onSelect={setSelected}
             required
-            // footer={selected ? `Selected: ${selected.toLocaleDateString()}` : 'Pick a day.'}
+            classNames={{
+                selected: `border-(--button-text) border-2 font-bold! text-xl`,
+                today: 'text-(--button-text)! underline',
+                chevron: 'fill-(--button-text)'
+            }}
         />
     );
 }
