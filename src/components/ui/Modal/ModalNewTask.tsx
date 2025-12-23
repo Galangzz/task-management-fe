@@ -6,7 +6,7 @@ import StarCheck from '../StarCheck.js';
 const ModalDayPicker = lazy(() => import('./ModalDayPicker.js'));
 import { formatCustomDate } from '../../../utils/index.js';
 import { RxCross2 } from 'react-icons/rx';
-import useNewTask from '../../../hooks/NewTaskState/useNewTask.js';
+import useNewTask from '../../../hooks/useNewTask.js';
 const ModalConfirmationToClose = lazy(
     () => import('./ModalConfirmationToClose.js')
 );

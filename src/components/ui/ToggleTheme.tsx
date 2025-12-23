@@ -15,7 +15,8 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
             enterDelay={1000}
             arrow
         >
-            <div
+            <button
+                type="button"
                 className={`${className}`}
                 onClick={(e) => e.stopPropagation()}
             >
@@ -26,6 +27,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                         id="toggle-theme"
                         className="sr-only"
                         onChange={onChange}
+                        aria-label="Toggle Mode"
                     />
                     <label
                         htmlFor="toggle-theme"
@@ -50,7 +52,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                         />
                     </label>
                 </div>
-            </div>
+            </button>
         </Tooltip>
     );
 }

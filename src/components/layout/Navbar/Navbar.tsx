@@ -3,15 +3,11 @@ import { FaStar } from 'react-icons/fa';
 import { GoPlus } from 'react-icons/go';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarButton from './NavbarButton.js';
+import type { ITabs } from '../../../types/index.js';
 
-interface TabItem {
-    id: string;
-    name: string;
-    created_at: Date;
-    delete_permission: boolean;
-}
+
 type NavbarProps = {
-    tabs: TabItem[] | null;
+    tabs: ITabs[] | null;
     addList: () => void;
 };
 

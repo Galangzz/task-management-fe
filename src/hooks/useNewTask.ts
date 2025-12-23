@@ -1,8 +1,8 @@
-import useCloseConfirmation from './useCloseConfirmation.js';
-import useNewTaskPayload from './useNewTaskPayload.js';
-import useNewTaskSubmit from './useNewTaskSubmit.js';
-import useTaskDateTime from './useTaskDateTime.js';
-import useTaskForm from './useTaskForm.js';
+import useCloseConfirmation from './NewTaskState/useCloseConfirmation.js';
+import useNewTaskPayload from './NewTaskState/useNewTaskPayload.js';
+import useNewTaskSubmit from './NewTaskState/useNewTaskSubmit.js';
+import useTaskDateTime from './NewTaskState/useTaskDateTime.js';
+import useTaskForm from './NewTaskState/useTaskForm.js';
 
 function useNewTask() {
     const form = useTaskForm();

@@ -1,16 +1,19 @@
 import { CgSpinnerTwo } from 'react-icons/cg';
 // import { getTaskListByTitle } from '../../../services/localService';
 import Modal from './Modal.js';
+import type ApiError from '../../../errors/ApiError.js';
 
 type ModalTaskTitleProps = {
     titleList: string;
-    setTitleList: (p: string) => void;
-    setToggleTitle: (p: boolean) => void;
+    setTitleList: (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => void;
+    setToggleTitle: () => void;
     handleSubmitTitleList: () => void;
-    err: Error| null;
-    setErr: (p: any) => void;
+    err: Error| ApiError | null;
+    setErr: React.Dispatch<React.SetStateAction<Error | ApiError | null>> ;
     isLoading: boolean;
-    tabs: any[] | undefined;
+    tabs: string[] ;
 };
 
 function ModalTaskTitle({
@@ -26,12 +29,12 @@ function ModalTaskTitle({
     console.log({ err });
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setTitleList(value);
+        setTitleList(e);
         if (value.trim() !== '') {
             const tabSet = new Set(tabs);
             const check = tabSet.has(value.trim());
             if (check) {
-                setErr({ message: 'Judul task List tidak boleh duplikat' });
+                setErr(new Error('Judul task List tidak boleh duplikat' ));
             } else {
                 setErr(null);
             }
@@ -41,7 +44,7 @@ function ModalTaskTitle({
     };
 
     return (
-        <Modal setToggle={() => setToggleTitle(false)}>
+        <Modal setToggle={setToggleTitle}>
             <div
                 className="ModalTaskTitle animate-fade-in mx-2! flex h-auto w-sm flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-6!"
                 onClick={(e) => e.stopPropagation()}
@@ -52,7 +55,6 @@ function ModalTaskTitle({
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
-                        if (err) setErr('');
                         handleSubmitTitleList();
                     }}
                     className="flex w-full flex-col gap-6"

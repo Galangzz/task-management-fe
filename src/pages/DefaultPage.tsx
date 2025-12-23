@@ -12,28 +12,38 @@ const ModalNewTask = lazy(
 const LoadingPage = lazy(
     () => import('../components/ui/Loading/LoadingPage.js')
 );
-import { useDefaultPage } from '../hooks/useDefaultPage.js';
+import useDefaultPage from '../hooks/useDefaultPage.js';
 
 function DefaultPage() {
     const {
         tabs,
         task,
+
+        //newTabModal
         titleList,
         setTitleList,
-        isOpenModalTaskTitle,
-        setIsOpenModalTaskTitle,
+        isOpen,
+        setIsOpen,
+        isLoading,
+        error,
+        setError,
+        submit,
+        clearTitleModal,
+
+        //new task modal
         isOpenModalTask,
         setIsOpenModalTask,
-        isLoadingTitle,
-        isLoadedTaskList,
+
+        //loading page and task
         isLoadedPage,
-        errTitle,
-        setErrTitle,
-        handleSubmitTitleList,
+        isLoadedTaskList,
+
+        //action
         handleChecked,
         handleStarred,
     } = useDefaultPage();
-    console.log({ isLoadedTaskList });
+
+    // console.log({ isLoadedTaskList });
     if (isLoadedPage) {
         return <LoadingPage />;
     }
@@ -42,23 +52,20 @@ function DefaultPage() {
             <Header />
             <Navbar
                 tabs={tabs}
-                addList={() => setIsOpenModalTaskTitle(true)}
+                addList={() => setIsOpen(true)}
             />
 
-            {isOpenModalTaskTitle && (
+            {isOpen && (
                 <ModalTaskTitle
                     titleList={titleList}
+                    //Check
                     setTitleList={setTitleList}
-                    setToggleTitle={() => {
-                        setIsOpenModalTaskTitle(false);
-                        setErrTitle(null);
-                        setTitleList('');
-                    }}
-                    handleSubmitTitleList={handleSubmitTitleList}
-                    err={errTitle}
-                    setErr={setErrTitle}
-                    isLoading={isLoadingTitle}
-                    tabs={tabs?.map((t) => t.name)}
+                    setToggleTitle={() => clearTitleModal(false)}
+                    handleSubmitTitleList={submit}
+                    err={error}
+                    setErr={setError}
+                    isLoading={isLoading}
+                    tabs={tabs?.map((t) => t.name) ?? []}
                 />
             )}
 

@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { getTaskTabs, getTaskTabWithTasks } from '../services/taskTabsService.js';
 import { updateTask } from '../services/tasksService.js';
-import type { ITabWithTasks } from '../types/index.js';
+import type { ITabs, ITabWithTasks } from '../types/index.js';
 
 
 export interface TaskState {
-    tabs: any[] | null;
+    tabs: ITabs[] | null;
     currentTabId: string;
     task: ITabWithTasks | null;
     pendingUpdates: Map<string, number>;
