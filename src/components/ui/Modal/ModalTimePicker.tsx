@@ -7,7 +7,7 @@ import { FaKeyboard } from 'react-icons/fa';
 import type { TimeView } from '@mui/x-date-pickers/models';
 
 type ModalTimePickerProps = {
-    toggleTime: (e: any) => void;
+    toggleTime: () => void;
     selectedTime: Date| null;
     setSelectedTime: React.Dispatch<React.SetStateAction<Date | null>>;
     onSubmitTime: () => void;

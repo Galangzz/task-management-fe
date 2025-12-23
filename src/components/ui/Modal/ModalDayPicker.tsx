@@ -6,16 +6,16 @@ const ModalTimePicker = lazy(() => import('./ModalTimePicker.js'));
 import { RxCross2 } from 'react-icons/rx';
 
 type ModalDayPickerProps = {
-    toggleCalendar: (e: any) => void;
+    toggleCalendar: () => void;
     onHandleSubmit: () => void;
     selected: Date | null;
     setSelected: React.Dispatch<React.SetStateAction<Date | null>>;
     selectedTime: Date | null;
-    setSelectedTime: (e: any) => void;
+    setSelectedTime: React.Dispatch<React.SetStateAction<Date | null>>;
     isOpenTime: boolean;
     setIsOpenTime: (p: boolean) => void;
     isSubmitTime: boolean;
-    setIsSubmitTime: (p: boolean) => void;
+    setIsSubmitTime: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onHandleSubmitTime: () => void;
 };
 
@@ -71,10 +71,7 @@ function ModalDayPicker({
                                 ).padStart(2, '0')}`}</p>
                                 <div
                                     className="flex h-full cursor-pointer items-center justify-center text-[22px] transition! duration-300 ease-in-out hover:scale-125"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsSubmitTime(false);
-                                    }}
+                                    onClick={setIsSubmitTime}
                                 >
                                     <RxCross2 />
                                 </div>
@@ -103,10 +100,7 @@ function ModalDayPicker({
             </Modal>
             {isOpenTime && (
                 <ModalTimePicker
-                    toggleTime={(e) => {
-                        e.stopPropagation();
-                        setIsOpenTime(false);
-                    }}
+                    toggleTime={() => setIsOpenTime(false)}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     onSubmitTime={onHandleSubmitTime}

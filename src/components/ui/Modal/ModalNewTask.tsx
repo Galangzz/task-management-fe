@@ -6,7 +6,7 @@ import StarCheck from '../StarCheck.js';
 const ModalDayPicker = lazy(() => import('./ModalDayPicker.js'));
 import { formatCustomDate } from '../../../utils/index.js';
 import { RxCross2 } from 'react-icons/rx';
-import useNewTask from '../../../hooks/useNewTask.js';
+import useNewTask from '../../../hooks/NewTaskState/useNewTask.js';
 const ModalConfirmationToClose = lazy(
     () => import('./ModalConfirmationToClose.js')
 );
@@ -16,42 +16,41 @@ type ModalNewTaskProps = {
 };
 
 function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
-    const {
-        title,
-        detail,
-        isOpenDetail,
-        isOpenCalendar,
-        isOpenTime,
-        isSubmitDateTime,
-        isSubmitTime,
-        selected,
-        textRef,
-        starred,
-        isOpenConfirmationToClose,
-        // error,
-        setStarred,
-        setTitle,
-        setIsSubmitDateTime,
-        setIsSubmitTime,
-        handleSubmitTime,
-        handleInputDetail,
-        handleAddDetail,
-        handleOpenCalendar,
-        setIsOpenCalendar,
-        setIsOpenTime,
-        handleSubmitDateTime,
-        setSelected,
-        handleSubmitNewTask,
-        handleCloseModalNewTask,
-        setIsOpenConfirmationToClose,
-        handleConfirmationToClose,
-    } = useNewTask();
+    // const {
+    //     title,
+    //     detail,
+    //     isOpenDetail,
+    //     isOpenCalendar,
+    //     isOpenTime,
+    //     isSubmitDateTime,
+    //     isSubmitTime,
+    //     selected,
+    //     textRef,
+    //     starred,
+    //     isOpenConfirmationToClose,
+    //     // error,
+    //     setStarred,
+    //     setTitle,
+    //     setIsSubmitDateTime,
+    //     setIsSubmitTime,
+    //     handleSubmitTime,
+    //     handleInputDetail,
+    //     handleAddDetail,
+    //     handleOpenCalendar,
+    //     setIsOpenCalendar,
+    //     setIsOpenTime,
+    //     handleSubmitDateTime,
+    //     setSelected,
+    //     handleSubmitNewTask,
+    //     handleCloseModalNewTask,
+    //     setIsOpenConfirmationToClose,
+    //     handleConfirmationToClose,
+    // } = useNewTask();
 
+    const { form, dateTime, submit, confirm } = useNewTask();
     return (
         <>
-            <Modal
-                setToggle={() => handleCloseModalNewTask(setIsOpenModalTask)}
-            >
+            <Modal setToggle={() => confirm.requestClose(setIsOpenModalTask)}>
                 <div
                     className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-4!"
                     onClick={(e) => e.stopPropagation()}
@@ -60,13 +59,11 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
                         id="newTaskForm"
                         action="submit"
                         className="flex w-full flex-col gap-2"
-                        onSubmit={(e) => {
-                            handleSubmitNewTask(e, setIsOpenModalTask);
-                        }}
+                        onSubmit={(e) => submit(e, setIsOpenModalTask)}
                     >
                         <input
-                            value={title}
-                            onChange={setTitle}
+                            value={form.title}
+                            onChange={form.setTitle}
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
@@ -74,32 +71,35 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
                             maxLength={50}
                             required
                         />
-                        {isOpenDetail && (
+                        {form.isOpenDetail && (
                             <textarea
-                                ref={textRef}
-                                value={detail}
-                                onInput={handleInputDetail}
+                                ref={form.textRef}
+                                value={form.detail}
+                                onInput={form.handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
                                 className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
                                 rows={1}
                             />
                         )}
-                        {isSubmitDateTime && (
+                        {dateTime.hasDate && (
                             <div className="mt-2! flex w-fit items-center gap-2 border-2 p-2! text-[14px] font-bold">
                                 <p>
-                                    {selected && formatCustomDate(
-                                        new Date(selected).toLocaleDateString()
-                                    )}
+                                    {dateTime.selected &&
+                                        formatCustomDate(
+                                            new Date(
+                                                dateTime.selected
+                                            ).toLocaleDateString()
+                                        )}
                                 </p>
-                                {isSubmitTime && (
-                                    <p className="m-0">{`${String(selected?.getHours()).padStart(2, '0')}:${String(
-                                        selected?.getMinutes()
+                                {dateTime.hasTime && (
+                                    <p className="m-0">{`${String(dateTime.selected?.getHours()).padStart(2, '0')}:${String(
+                                        dateTime.selected?.getMinutes()
                                     ).padStart(2, '0')}`}</p>
                                 )}
                                 <div
                                     className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
-                                    onClick={() => setIsSubmitDateTime(false)}
+                                    onClick={() => dateTime.submitDate}
                                 >
                                     <RxCross2 size={18} />
                                 </div>
@@ -109,18 +109,18 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
                             <div className="mt-2 flex flex-1 items-center gap-2 text-2xl">
                                 <div
                                     className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110"
-                                    onClick={handleAddDetail}
+                                    onClick={form.openDetail}
                                 >
                                     <CgDetailsMore />
                                 </div>
                                 <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
-                                    <IoMdTime onClick={handleOpenCalendar} />
+                                    <IoMdTime onClick={dateTime.openCalendar} />
                                 </div>
                                 <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
                                     <StarCheck
                                         id="newTask"
-                                        checked={starred}
-                                        onChange={() => setStarred(!starred)}
+                                        checked={form.starred}
+                                        onChange={form.setStarred}
                                     />
                                 </div>
                             </div>
@@ -135,31 +135,25 @@ function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
                     </form>
                 </div>
             </Modal>
-            {isOpenCalendar && (
+            {dateTime.isOpenCalendar && (
                 <ModalDayPicker
-                    toggleCalendar={(e) => {
-                        e.stopPropagation();
-                        setIsOpenCalendar(false);
-                    }}
-                    selected={selected}
-                    setSelected={setSelected}
-                    selectedTime={selected}
-                    setSelectedTime={(newTime) => setSelected(newTime)}
-                    isOpenTime={isOpenTime}
-                    isSubmitTime={isSubmitTime}
-                    setIsOpenTime={setIsOpenTime}
-                    onHandleSubmit={handleSubmitDateTime}
-                    onHandleSubmitTime={handleSubmitTime}
-                    setIsSubmitTime={setIsSubmitTime}
+                    toggleCalendar={dateTime.closeCalendar}
+                    selected={dateTime.selected}
+                    setSelected={dateTime.setSelected}
+                    selectedTime={dateTime.selected}
+                    setSelectedTime={(newTime) => dateTime.setSelected(newTime)}
+                    isOpenTime={dateTime.isOpenTime}
+                    isSubmitTime={dateTime.hasTime}
+                    setIsOpenTime={dateTime.setIsOpenTime}
+                    onHandleSubmit={dateTime.submitDate}
+                    onHandleSubmitTime={dateTime.submitTime}
+                    setIsSubmitTime={dateTime.unSubmitTime}
                 />
             )}
-            {isOpenConfirmationToClose && (
+            {confirm.isOpenConfirm && (
                 <ModalConfirmationToClose
-                    setToggle={() => setIsOpenConfirmationToClose(false)}
-                    onHandlerClose={() => {
-                        handleConfirmationToClose();
-                        setIsOpenModalTask(false);
-                    }}
+                    setToggle={confirm.closeConfirm}
+                    onHandlerClose={() => confirm.confirmClose(setIsOpenModalTask)}
                 />
             )}
         </>
