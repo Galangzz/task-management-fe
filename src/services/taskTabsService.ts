@@ -3,9 +3,7 @@ import { api, ensureBase } from './api.js';
 export async function getTaskTabs() {
     ensureBase();
     const url = '/task-tabs';
-    const res = await api.get(url, {
-        withCredentials: false,
-    });
+    const res = await api.get(url);
     const resData = res?.data;
     return resData &&
         typeof resData === 'object' &&
@@ -26,12 +24,6 @@ export async function addTaskTabTitle({ title }: { title: string }) {
         {
             name: title,
         },
-        {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: false,
-        }
     );
 
     const resData = res?.data;
@@ -48,9 +40,7 @@ export async function getTaskTabWithTasks(id = 'main-task') {
     ensureBase();
 
     const url = `/task-tabs/${id}`;
-    const res = await api.get(url, {
-        withCredentials: false,
-    });
+    const res = await api.get(url);
     console.log('FULL RES:', res);
 
     const resData = res?.data;
@@ -65,9 +55,7 @@ export async function getTaskTabWithTasks(id = 'main-task') {
 export async function getTaskTabById(id: string) {
     ensureBase();
     const url = `/task-tabs/tab/${id}`;
-    const res = await api.get(url, {
-        withCredentials: false,
-    });
+    const res = await api.get(url);
     const resData = res?.data;
     console.log({ resData });
     return resData &&

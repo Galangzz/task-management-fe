@@ -51,6 +51,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     setTabs: async () => {
         try {
             const tabs = await getTaskTabs();
+            console.log({tabs})
             set({ tabs, error: null });
         } catch (err) {
             get().setError(err);

@@ -3,7 +3,7 @@
     --border-color: #171717;
     --background-header: #d9cfc7;
     --button-color: #ff9f9f;
-    --button-color-hover: #da0037;
+    --button-color-hover: hsl(345, 100%, 43%);
     --add-button: #d7c097;
     --star-fill: #504b38;
     --stroke-check: #fff;

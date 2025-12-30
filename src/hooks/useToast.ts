@@ -35,7 +35,7 @@ function useToast() {
                 autoClose: 3000,
             }),
     };
-    return [notify];
+    return notify;
 }
 
 export default useToast;

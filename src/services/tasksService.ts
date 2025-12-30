@@ -41,9 +41,6 @@ export async function addTask(
             isCompleted,
             taskTabId,
         },
-        {
-            withCredentials: false,
-        }
     );
 
     return resData &&
@@ -65,8 +62,6 @@ export async function updateTask(
             starred: starred,
             isCompleted: isCompleted,
         },
-        {
-            withCredentials: false,
-        }
+
     );
 }
