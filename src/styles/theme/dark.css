@@ -1,0 +1,13 @@
+[data-theme='dark'] {
+    --background-color: #222831;
+    --border-color: #ecf4e8;
+    --background-header: #393e46;
+    --button-color: #da0037;
+    --button-color-hover: #ff9f9f;
+    --add-button: #647fbc;
+    --star-fill: #bbe1fa;
+    --stroke-check: #4a4a4a;
+    --button-text: oklch(70.7% 0.165 254.624);
+    --toast-bg: #0f4c75;
+    --underline-navbar: #dfd0b8;
+}
