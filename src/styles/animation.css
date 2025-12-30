@@ -3,6 +3,8 @@
 @theme {
     --animate-fade-in: fade-in 0.3s ease-out forwards;
     --animate-fade-out: fade-out 0.3s ease-in forwards;
+    --animate-register: register 1s ease-in-out forwards;
+    --animate-login: login 1s ease-in-out forwards;
 
     @keyframes fade-in {
         from {
@@ -23,6 +25,20 @@
         to {
             opacity: 0;
             transform: translateY(-8px);
+        }
+    }
+    @keyframes register {
+        to {
+            transform: translateX(100%);
+        }
+    }
+    @keyframes login {
+        from {
+            transform: translateX(100%);
+        }
+
+        to {
+            transform: translateX(0);
         }
     }
 }
