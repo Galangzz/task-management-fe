@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthPage from '../pages/AuthPage.js';
-import OtpPage from '../pages/OtpPage.js';
+import VerifyOTPPage from '../pages/VerifyOTPPage.js';
 
 function AuthRoutes({ loginSuccess }: { loginSuccess: () => void }) {
     return (
@@ -12,7 +12,7 @@ function AuthRoutes({ loginSuccess }: { loginSuccess: () => void }) {
             />
             <Route
                 path="/otp"
-                element={<OtpPage />}
+                element={<VerifyOTPPage />}
             />
             <Route
                 path="*"

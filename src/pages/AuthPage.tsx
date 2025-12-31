@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import LoginForm from '../components/Login/LoginForm.js';
-import LoginInfo from '../components/Login/LoginInfo.js';
-import SignUpInfo from '../components/SignUp/SignUpInfo.js';
-import SignUpForm from '../components/SignUp/SignUpForm.js';
+import LoginForm from '../components/Auth/Login/LoginForm.js';
+import LoginInfo from '../components/Auth/Login/LoginInfo.js';
+import SignUpInfo from '../components/Auth/SignUp/SignUpInfo.js';
+import SignUpForm from '../components/Auth/SignUp/SignUpForm.js';
 import useLogin from '../hooks/AuthState/useLogin.js';
 import { getLoggedUser } from '../services/authService.js';
 import { useNavigate } from 'react-router-dom';
