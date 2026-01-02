@@ -21,7 +21,7 @@ function App() {
         const checkUserLogged = async () => {
             try {
                 const { id } = await getLoggedUser();
-                if (id ) {
+                if (id && isMounted) {
                     setUser(id as string);
                 } else {
                     setUser(null);

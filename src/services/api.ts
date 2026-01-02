@@ -74,6 +74,33 @@ api.interceptors.response.use(
     }
 );
 
+export const publicApi = axios.create({
+    baseURL: API_BASE,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+    },
+});
+
+publicApi.interceptors.response.use(
+    (res) => res,
+    (error) => {
+        console.error(error);
+        const data = error.response?.data;
+        const errorDetail = Array.isArray(data?.errors)
+            ? data.errors[0]?.message
+            : data?.errors || null;
+        return Promise.reject(
+            new ApiError(
+                error.response?.data?.message || 'Terjadi kesalahan',
+                error.response?.status,
+                errorDetail
+            )
+        );
+    }
+)
+
+
 export function ensureBase() {
     if (!API_BASE) {
         throw new Error('VITE_API_BASE belum dikonfigurasi. Set di .env');

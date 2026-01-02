@@ -13,13 +13,16 @@ type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
 function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
     const [active, setActive] = useState<active>('NULL');
-    const { email, password, handleSubmitLogin } = useLogin(loginSuccess);
+    const { email, password, handleSubmitLogin, isLoadingLogin } =
+        useLogin(loginSuccess);
+
     const {
         username,
         email: emailSignUp,
         password: passwordSignUp,
         repeatPassword,
         handleRegeister,
+        isLoadingRegister,
     } = useRegister();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -61,10 +64,12 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                     setActive={setActive}
                     resetEmail={email.reset}
                     resetPassword={password.reset}
+                    isLoadingLogin={isLoadingLogin}
                 />
                 <SignUpInfo
                     active={active}
                     setActive={setActive}
+                    isLoadingRegister={isLoadingRegister}
                 />
                 <div
                     className={`form absolute right-0 flex h-full w-1/2 transition-all! delay-600! duration-300! ease-in-out! max-md:bottom-0 max-md:h-3/4 max-md:w-full ${active === 'REGISTER' && 'max-md:-translate-y-1/3! md:-translate-x-full!'} `}
@@ -77,6 +82,7 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                             password={password.value}
                             setPassword={password.setPassword}
                             submit={handleSubmitLogin}
+                            isLoadingLogin={isLoadingLogin}
                         />
                         <SignUpForm
                             active={active}
@@ -89,6 +95,7 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                             repeatPassword={repeatPassword.value}
                             setRepeatPassword={repeatPassword.set}
                             submit={handleRegeister}
+                            isLoadingRegister={isLoadingRegister}
                         />
                     </div>
                 </div>
