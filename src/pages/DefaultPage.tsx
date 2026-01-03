@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy } from 'react';
 import Header from '../components/layout/Header.js';
 import Navbar from '../components/layout/Navbar/Navbar.js';
 const ModalTaskTitle = lazy(
@@ -13,8 +13,6 @@ const LoadingPage = lazy(
     () => import('../components/ui/Loading/LoadingPage.js')
 );
 import useDefaultPage from '../hooks/useDefaultPage.js';
-import { getLoggedUser } from '../services/authService.js';
-import { Navigate, useNavigate } from 'react-router-dom';
 
 function DefaultPage() {
     const {

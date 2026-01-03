@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import NavbarButton from './NavbarButton.js';
 import type { ITabs } from '../../../types/index.js';
 
-
 type NavbarProps = {
     tabs: ITabs[] | null;
     addList: () => void;

@@ -20,7 +20,6 @@ function useRegister() {
     const toast = useToast();
 
     const handleRegeister = useCallback(async () => {
-        setIsLoadingRegister(true);
         if (!username || !email || !password || !repeatPassword) {
             toast.error(new Error('Mohon lengkapi semua data'));
             return;
@@ -49,6 +48,7 @@ function useRegister() {
         }
 
         try {
+            setIsLoadingRegister(true);
             const result = await signUpUser({
                 username,
                 email,

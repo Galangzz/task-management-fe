@@ -95,10 +95,11 @@ function useOTP(email: string) {
             try {
                 await verifyOTPUser({ email, otp: newOTP });
                 toast.success('Regristrasi Success, silahkan login kembali');
+                localStorage.removeItem('otp_resend');
                 navigate('/', { replace: true });
             } catch (error) {
                 if (error instanceof ApiError || error instanceof Error) {
-                    toast.error(error);
+                    toast.error(new Error('OTP tidak valid'));
                 } else {
                     toast.error(new Error('Terjadi kesalahan regristrasi'));
                 }
@@ -111,12 +112,15 @@ function useOTP(email: string) {
         try {
             await resendOTP(email);
             toast.success('OTP baru berhasil dikirim');
-        } catch (error) {
-            if (error instanceof ApiError || error instanceof Error) {
-                toast.error(error);
-            }
-        } finally {
             startTimer(59);
+        } catch (error) {
+            if (error instanceof ApiError) {
+                toast.error(error);
+                if (error.status === 429) {
+                    navigate('/', { replace: true });
+                    localStorage.removeItem('otp_resend');
+                }
+            }
         }
     }, [isRunning, email]);
 
@@ -172,7 +176,7 @@ function useOTP(email: string) {
         handleClick,
         seconds,
         isRunning,
-        handleResendOTP
+        handleResendOTP,
     };
 }
 
