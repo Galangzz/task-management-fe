@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy } from 'react';
 import Header from '../components/layout/Header.js';
 import Navbar from '../components/layout/Navbar/Navbar.js';
 const ModalTaskTitle = lazy(
@@ -13,10 +13,10 @@ const LoadingPage = lazy(
     () => import('../components/ui/Loading/LoadingPage.js')
 );
 import useDefaultPage from '../hooks/useDefaultPage.js';
-import { getLoggedUser } from '../services/authService.js';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function DefaultPage() {
+    const { id } = useParams();
     const {
         tabs,
         task,
@@ -43,7 +43,7 @@ function DefaultPage() {
         //action
         handleChecked,
         handleStarred,
-    } = useDefaultPage();
+    } = useDefaultPage(id);
 
     if (isLoadedPage) {
         return <LoadingPage />;
@@ -55,6 +55,7 @@ function DefaultPage() {
             <Navbar
                 tabs={tabs}
                 addList={() => setIsOpen(true)}
+                tabId={id!}
             />
 
             {isOpen && (
@@ -72,26 +73,27 @@ function DefaultPage() {
             )}
 
             {isOpenModalTask && (
-                <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />
+                <ModalNewTask
+                    setIsOpenModalTask={setIsOpenModalTask}
+                    tabId={id!}
+                />
             )}
 
             <TaskContent
                 task={task}
                 isLoading={isLoadedTaskList}
-                handleChecked={(id: string, value: boolean) =>
-                    handleChecked(id, value)
-                }
-                handleStarred={(id: string, value: boolean) =>
-                    handleStarred(id, value)
-                }
+                handleChecked={handleChecked}
+                handleStarred={handleStarred}
             />
 
-            <AddButton
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setIsOpenModalTask(true);
-                }}
-            />
+            {id !== 'starred-task' && (
+                <AddButton
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpenModalTask(true);
+                    }}
+                />
+            )}
         </div>
     );
 }

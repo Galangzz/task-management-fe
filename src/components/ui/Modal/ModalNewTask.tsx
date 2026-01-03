@@ -12,11 +12,12 @@ const ModalConfirmationToClose = lazy(
 );
 
 type ModalNewTaskProps = {
+    tabId: string;
     setIsOpenModalTask: (p: boolean) => void;
 };
 
-function ModalNewTask({ setIsOpenModalTask }: ModalNewTaskProps) {
-    const { form, dateTime, submit, confirm } = useNewTask();
+function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
+    const { form, dateTime, submit, confirm } = useNewTask(tabId);
 
     return (
         <>

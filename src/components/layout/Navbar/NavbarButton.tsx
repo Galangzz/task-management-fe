@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 interface NavbarButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     active?: boolean; // Gunakan boolean, berikan '?' agar opsional

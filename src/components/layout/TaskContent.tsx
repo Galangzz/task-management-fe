@@ -18,9 +18,9 @@ import completedTaskLight from '../../assets/completed-task-light.svg';
 const Dropdown = lazy(() => import('../ui/Dropdown.js'));
 import { ThemeContext } from '../../context/Theme.js';
 import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
-import type { ITasks, ITabWithTasks, } from '../../types/index.js';
+import type { ITasks, ITabWithTasks } from '../../types/index.js';
 
-
+import { AnimatePresence } from 'framer-motion';
 
 type GroupedTasks = Record<string, ITasks[]>;
 
@@ -152,59 +152,64 @@ function TaskContent({
                                         >
                                             {label}
                                         </h2>
-
-                                        {groupedData[date]?.map((t) => {
-                                            const dl = t?.deadline && new Date(t?.deadline);
-                                            return (
-                                                <div
-                                                    key={t.id}
-                                                    className="animate-fade-in overflow-hidden"
-                                                >
-                                                    <ListTask
+                                        <AnimatePresence>
+                                            {groupedData[date]?.map((t) => {
+                                                const dl =
+                                                    t?.deadline &&
+                                                    new Date(t?.deadline);
+                                                return (
+                                                    <div
                                                         key={t.id}
-                                                        checked={
-                                                            t?.isCompleted ==
-                                                            true
-                                                        }
-                                                        stared={t?.starred}
-                                                        id={t?.id}
-                                                        taskId={taskId}
-                                                        handleChecked={
-                                                            handleChecked
-                                                        }
-                                                        handleStarred={
-                                                            handleStarred
-                                                        }
+                                                        className="overflow-hidden"
                                                     >
-                                                        <p className="font-semibold">
-                                                            {t.title}
-                                                        </p>
-                                                        {t.detail !== null && (
-                                                            <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
-                                                                {t.detail}
+                                                        <ListTask
+                                                            key={t.id}
+                                                            checked={
+                                                                t?.isCompleted ==
+                                                                true
+                                                            }
+                                                            stared={t?.starred}
+                                                            id={t?.id}
+                                                            taskId={taskId}
+                                                            handleChecked={
+                                                                handleChecked
+                                                            }
+                                                            handleStarred={
+                                                                handleStarred
+                                                            }
+                                                        >
+                                                            <p className="font-semibold">
+                                                                {t.title}
                                                             </p>
-                                                        )}
-                                                        {t.hasTime == true && (
-                                                            <div className="ml-2! flex w-fit items-center justify-center opacity-90">
-                                                                {String(
-                                                                    dl?.getHours()
-                                                                ).padStart(
-                                                                    2,
-                                                                    '0'
-                                                                )}
-                                                                :
-                                                                {String(
-                                                                    dl?.getMinutes()
-                                                                ).padStart(
-                                                                    2,
-                                                                    '0'
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </ListTask>
-                                                </div>
-                                            );
-                                        })}
+                                                            {t.detail !==
+                                                                null && (
+                                                                <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
+                                                                    {t.detail}
+                                                                </p>
+                                                            )}
+                                                            {t.hasTime ==
+                                                                true && (
+                                                                <div className="ml-2! flex w-fit items-center justify-center opacity-90">
+                                                                    {String(
+                                                                        dl?.getHours()
+                                                                    ).padStart(
+                                                                        2,
+                                                                        '0'
+                                                                    )}
+                                                                    :
+                                                                    {String(
+                                                                        dl?.getMinutes()
+                                                                    ).padStart(
+                                                                        2,
+                                                                        '0'
+                                                                    )}
+                                                                </div>
+                                                            )}
+                                                        </ListTask>
+                                                    </div>
+                                                );
+                                            })}
+                                        </AnimatePresence>
                                     </div>
                                 );
                             })}
@@ -246,9 +251,7 @@ function TaskContent({
                     <Dropdown
                         tasks={completeTask}
                         taskId={taskId}
-                        handleChecked={(id: string, value: boolean) =>
-                            handleChecked(id, value)
-                        }
+                        handleChecked={handleChecked}
                     />
                 </div>
             )}

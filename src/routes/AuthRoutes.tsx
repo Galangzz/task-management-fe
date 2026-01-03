@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import AuthPage from '../pages/AuthPage.js';
-import VerifyOTPPage from '../pages/VerifyOTPPage.js';
+const AuthPage = lazy(() => import('../pages/AuthPage.js')); ;
+const VerifyOTPPage = lazy(() => import('../pages/VerifyOTPPage.js'));
 
 function AuthRoutes({ loginSuccess }: { loginSuccess: () => void }) {
     return (

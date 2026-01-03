@@ -26,7 +26,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (res) => res,
     async (error) => {
-        console.error(error);
+        console.error({api: error});
 
         if (!error.response) {
             return Promise.reject(
@@ -73,6 +73,33 @@ api.interceptors.response.use(
         );
     }
 );
+
+export const publicApi = axios.create({
+    baseURL: API_BASE,
+    headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+    },
+});
+
+publicApi.interceptors.response.use(
+    (res) => res,
+    (error) => {
+        console.error({publicApi: error});
+        const data = error.response?.data;
+        const errorDetail = Array.isArray(data?.errors)
+            ? data.errors[0]?.message
+            : data?.errors || null;
+        return Promise.reject(
+            new ApiError(
+                error.response?.data?.message || 'Terjadi kesalahan',
+                error.response?.status,
+                errorDetail
+            )
+        );
+    }
+)
+
 
 export function ensureBase() {
     if (!API_BASE) {

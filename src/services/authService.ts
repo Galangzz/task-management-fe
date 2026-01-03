@@ -1,4 +1,4 @@
-import { api, ensureBase } from './api.js';
+import { api, ensureBase, publicApi } from './api.js';
 
 export async function putAccessToken(token: string) {
     return localStorage.setItem('accessToken', token);
@@ -70,14 +70,14 @@ export async function signUpUser({
     repeatPassword: string;
 }) {
     const url = '/users/signup';
-    const res = await api.post(
+    const res = await publicApi.post(
         url,
         {
             username,
             email,
             password,
             repeatPassword,
-        },
+        }
         // { withCredentials: false }
     );
 
@@ -94,7 +94,16 @@ export async function verifyOTPUser({
     otp: string;
 }) {
     const url = '/users/verify-signup';
-    const res = await api.post(url, { email, otp });
+    const res = await publicApi.post(url, { email, otp });
+
+    const resData = res?.data;
+
+    return resData && resData === 'object' ? resData : null;
+}
+
+export async function resendOTP(email: string) {
+    const url = '/users/resend-otp';
+    const res = await publicApi.post(url, { email });
 
     const resData = res?.data;
 

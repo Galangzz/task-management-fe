@@ -4,18 +4,29 @@ import { useTaskStore } from '../useTaskStore.js';
 import { getTaskTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
 
-function useTabNavigation(setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void) {
+function useTabNavigation(
+    setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void,
+    id: string | undefined
+) {
     const navigate = useNavigate();
     const location = useLocation();
     const previousTabRef = useRef('');
     const isInitialMount = useRef(true);
 
-    const { setTabs, setCurrentTabId, loadTaskList, resetOnTabChange } =
+    const { tabs, setCurrentTabId, loadTaskList, resetOnTabChange } =
         useTaskStore();
 
     useEffect(() => {
         let isCancelled = false;
-        const currentTab = location.pathname.split('/')[1] || 'main-task';
+        if (id === undefined) {
+            const tabId = tabs
+                ?.map((t) => (t.deletePermission == false ? t.id : null))
+                .filter((t) => t !== null)[0];
+            navigate(`/${tabId}`, { replace: true });
+            return;
+        }
+
+        const currentTab = id;
 
         if (previousTabRef.current === currentTab && !isInitialMount.current) {
             return;
@@ -43,7 +54,7 @@ function useTabNavigation(setIsLoadedTaskList: (value: React.SetStateAction<bool
                     setCurrentTabId(currentTab);
                     loadTaskList(currentTab);
                 } catch (error) {
-                    if(error instanceof ApiError){
+                    if (error instanceof ApiError) {
                         if (error.status == 404) {
                             navigate('/', { replace: true });
                             return;
@@ -58,8 +69,8 @@ function useTabNavigation(setIsLoadedTaskList: (value: React.SetStateAction<bool
         return () => {
             isCancelled = true;
         };
-    }, [location.pathname]);
+    }, [location.pathname, id]);
 
-    return null
+    return null;
 }
 export default useTabNavigation;
