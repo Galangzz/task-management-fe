@@ -4,11 +4,11 @@ import useNewTaskSubmit from './NewTaskState/useNewTaskSubmit.js';
 import useTaskDateTime from './NewTaskState/useTaskDateTime.js';
 import useTaskForm from './NewTaskState/useTaskForm.js';
 
-function useNewTask() {
+function useNewTask(tabId: string) {
     const form = useTaskForm();
     const dateTime = useTaskDateTime();
     const buildPayload = useNewTaskPayload(form, dateTime);
-    const submit = useNewTaskSubmit(buildPayload, form.resetForm);
+    const submit = useNewTaskSubmit(buildPayload, form.resetForm, tabId);
     const confirm = useCloseConfirmation(form.title, dateTime.hasDate);
 
     return {

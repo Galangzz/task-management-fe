@@ -18,7 +18,8 @@ type BuildPayloadProps = {
 
 function useNewTaskSubmit(
     buildPayload: () => BuildPayloadProps,
-    resetForm: () => void
+    resetForm: () => void,
+    tabId: string
 ) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -28,10 +29,9 @@ function useNewTaskSubmit(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
             e.preventDefault();
             try {
-                const currentTab =
-                    (await getTaskTabById(
-                        location.pathname.split('/')[1] || 'main-task'
-                    )) ?? 'main-task';
+                const currentTab = await getTaskTabById(tabId);
+
+                console.log({ useNewTaskSubmit: currentTab });
 
                 if (buildPayload().title.length >= 50) {
                     throw new Error('Judul terlalu panjang, max = 50');
@@ -40,7 +40,7 @@ function useNewTaskSubmit(
                 const msg = await addTask(currentTab, buildPayload());
                 toast.success(msg);
 
-                navigate(currentTab === 'main-task' ? '/' : `/${currentTab}`, {
+                navigate(`/${tabId}`, {
                     replace: true,
                 });
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Checkbox from '../ui/Checkboxes.js';
 import StarCheck from '../ui/StarCheck.js';
 import { useNavigate } from 'react-router-dom';
-// import { updateTask } from '../../services/tasksService';
+import { motion } from 'framer-motion';
 
 type LisTaskProps = {
     children: React.ReactNode;
@@ -26,31 +26,29 @@ function ListTask({
     const navigate = useNavigate();
 
     const [localChecked, setLocalChecked] = useState(checked);
-    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const handleChange = (value: boolean) => {
-        setIsTransitioning(true);
-        setLocalChecked(value);
-    };
-
-    const handleTransitionEnd = () => {
-        if (isTransitioning) {
-            handleChecked(id, localChecked);
-            setIsTransitioning(false);
-        }
+        setLocalChecked(() => value);
+        handleChecked(id, value);
     };
 
     return (
-        <div
-            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! transition-all! duration-300! ease-in-out! hover:bg-(--background-color)/40 ${localChecked != checked ? '-translate-y-full opacity-0 delay-300' : 'opacity-100'}`}
+        <motion.div
+            initial={{ opacity: 0, x: 30, y: 0 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0, x: 0, y: -30 }}
+            transition={{
+                ease: 'easeInOut',
+                duration: 0.3,
+            }}
+            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
             onClick={() => {
                 navigate(`/details/${taskId}/${id}`);
             }}
-            onTransitionEnd={handleTransitionEnd}
         >
             <Checkbox
                 id={id}
-                checked={localChecked == true}
+                checked={localChecked}
                 onChange={handleChange}
             />
             <div
@@ -65,7 +63,7 @@ function ListTask({
                     onChange={(value: boolean) => handleStarred(id, value)}
                 />
             )}
-        </div>
+        </motion.div>
     );
 }
 

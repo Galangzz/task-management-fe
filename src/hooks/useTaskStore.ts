@@ -35,7 +35,7 @@ export interface TaskState {
 
 export const useTaskStore = create<TaskState>((set, get) => ({
     tabs: null,
-    currentTabId: 'main-task',
+    currentTabId: '',
     task: null,
     pendingUpdates: new Map(),
     stackedToast: 0,

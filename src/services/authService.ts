@@ -13,7 +13,7 @@ export async function loginUser({
 }) {
     ensureBase();
     const url = '/auth/login';
-    const res = await publicApi.post(
+    const res = await api.post(
         url,
         { email, password }
         // { withCredentials: false }

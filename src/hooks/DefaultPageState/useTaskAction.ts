@@ -53,7 +53,7 @@ function useTaskAction() {
 
     const handleStarred = useCallback(
         async (id: string, starred: boolean) => {
-            optimisticToggleStarred;
+            optimisticToggleStarred(id);
             await updateTask(id, { starred });
         },
         [task, tabs]

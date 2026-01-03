@@ -26,7 +26,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (res) => res,
     async (error) => {
-        console.error(error);
+        console.error({api: error});
 
         if (!error.response) {
             return Promise.reject(
@@ -85,7 +85,7 @@ export const publicApi = axios.create({
 publicApi.interceptors.response.use(
     (res) => res,
     (error) => {
-        console.error(error);
+        console.error({publicApi: error});
         const data = error.response?.data;
         const errorDetail = Array.isArray(data?.errors)
             ? data.errors[0]?.message
