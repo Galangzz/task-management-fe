@@ -69,8 +69,8 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                                     ).padStart(2, '0')}`}</p>
                                 )}
                                 <div
-                                    className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
-                                    onClick={() => dateTime.submitDate}
+                                    className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125 "
+                                    onClick={() => dateTime.unsubimtDate()}
                                 >
                                     <RxCross2 size={18} />
                                 </div>

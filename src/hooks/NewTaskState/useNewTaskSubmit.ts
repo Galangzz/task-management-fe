@@ -5,6 +5,7 @@ import { getTaskTabById } from '../../services/taskTabsService.js';
 import { addTask } from '../../services/tasksService.js';
 import { useTaskStore } from '../useTaskStore.js';
 import { handleError } from '../../errors/handleError.js';
+import useToast from '../useToast.js';
 
 type BuildPayloadProps = {
     title: string;
@@ -23,7 +24,7 @@ function useNewTaskSubmit(
 ) {
     const navigate = useNavigate();
     const location = useLocation();
-    const { toast } = useContext(ToastContext);
+    const toast = useToast();
 
     const submit = useCallback(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {

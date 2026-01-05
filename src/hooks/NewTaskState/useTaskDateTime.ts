@@ -31,6 +31,12 @@ function useTaskDateTime() {
             setIsOpenTime(false);
             setHasTime(true);
         },
+        unsubimtDate: () => {
+            setSelected(null);
+            setHasDate(false);
+            setHasTime(false);
+        },
+
         unSubmitTime: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             e.stopPropagation();
             setHasTime(false);
