@@ -1,48 +1,58 @@
 import { useEffect, useState } from 'react';
 
 function useTaskDateTime() {
-    const [selected, setSelected] = useState<Date | null>(null);
+    const [deadline, setDeadline] = useState<Date | null>(null);
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
     const [isOpenTime, setIsOpenTime] = useState(false);
     const [hasDate, setHasDate] = useState(false);
     const [hasTime, setHasTime] = useState(false);
 
+    //Coba hapus
     useEffect(() => {
-        if (!selected || isNaN(selected.getTime())) {
+        if (!deadline || isNaN(deadline.getTime())) {
             const date = new Date();
             date.setHours(0, 0, 0, 0);
-            setSelected(date);
+            setDeadline(date);
         }
-    }, [selected]);
+    }, [deadline]);
 
     return {
-        selected,
-        isOpenCalendar,
-        isOpenTime,
+        deadline: {
+            value: deadline,
+            setValue: setDeadline,
+        },
+        toggleCalendar: {
+            isOpen: isOpenCalendar,
+            open: () => setIsOpenCalendar(true),
+            close: () => setIsOpenCalendar(false),
+        },
+        toggleTime: {
+            isOpen: isOpenTime,
+            open: () => setIsOpenTime(true),
+            close: () => setIsOpenTime(false),
+        },
         hasDate,
         hasTime,
-        openCalendar: () => setIsOpenCalendar(true),
-        closeCalendar: () => setIsOpenCalendar(false),
-        submitDate: () => {
-            setIsOpenCalendar(false);
-            setHasDate(true);
+        date: {
+            submit: () => {
+                setIsOpenCalendar(false);
+                setHasDate(true);
+            },
+            unSubmit: () => {
+                setDeadline(null);
+                setHasDate(false);
+                setHasTime(false);
+            },
         },
-        submitTime: () => {
-            setIsOpenTime(false);
-            setHasTime(true);
+        time: {
+            submit: () => {
+                setIsOpenTime(false);
+                setHasTime(true);
+            },
+            unSubmit: () => {
+                setHasTime(false);
+            },
         },
-        unsubimtDate: () => {
-            setSelected(null);
-            setHasDate(false);
-            setHasTime(false);
-        },
-
-        unSubmitTime: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            e.stopPropagation();
-            setHasTime(false);
-        },
-        setSelected,
-        setIsOpenTime,
     };
 }
 
