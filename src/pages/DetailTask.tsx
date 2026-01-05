@@ -14,6 +14,7 @@ import { RxCross2 } from 'react-icons/rx';
 import LoadingPage from '../components/ui/Loading/LoadingPage.js';
 import { motion } from 'framer-motion';
 import { useDetailTask } from '../hooks/useDetailTask.js';
+import ModalDayPicker from '../components/ui/Modal/ModalDayPicker.js';
 
 function DetailTask() {
     const { taskId } = useParams();
@@ -23,12 +24,20 @@ function DetailTask() {
         title,
         detail,
         starred,
-        deadline,
-        hasDate,
-        hasTime,
+        dateTime,
         isCompleted,
         taskTabId,
     } = useDetailTask(taskId);
+
+    const {
+        deadline,
+        date,
+        hasDate,
+        hasTime,
+        time,
+        toggleCalendar,
+        toggleTime,
+    } = dateTime;
 
     const dl = deadline.value ? new Date(deadline.value) : null;
 
@@ -105,12 +114,10 @@ function DetailTask() {
                 </div>
                 <div
                     className="flex w-full items-center gap-4 px-4! py-2! hover:backdrop-brightness-90"
-                    onClick={() => {
-                        /**TODO */
-                    }}
+                    onClick={toggleCalendar.open}
                 >
                     <IoMdTime size={20} />
-                    {hasDate.value ? (
+                    {hasDate ? (
                         <motion.div
                             className="flex w-fit items-center gap-2 border-2 p-2! text-[14px] font-bold"
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -125,7 +132,7 @@ function DetailTask() {
                                 {dl &&
                                     formatCustomDate(dl.toLocaleDateString())}
                             </p>
-                            {hasTime.value && (
+                            {hasTime && (
                                 <p className="m-0">{`${String(dl?.getHours()).padStart(2, '0')}:${String(
                                     dl?.getMinutes()
                                 ).padStart(2, '0')}`}</p>
@@ -134,9 +141,7 @@ function DetailTask() {
                                 className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    hasDate.set(false);
-                                    hasTime.set(false);
-                                    deadline.set(null);
+                                    date.unSubmit();
                                 }}
                             >
                                 <RxCross2 size={18} />
@@ -156,6 +161,22 @@ function DetailTask() {
                     {isCompleted ? 'Tandai belum selesai' : 'Tandai Selesai'}
                 </button>
             </Field>
+            {toggleCalendar.isOpen && (
+                <ModalDayPicker
+                    toggleCalendar={toggleCalendar.close}
+                    selected={deadline.value}
+                    setSelected={deadline.setValue}
+                    selectedTime={deadline.value}
+                    setSelectedTime={deadline.setValue}
+                    isOpenTime={toggleTime.isOpen}
+                    isSubmitTime={hasTime}
+                    openTime={toggleTime.open}
+                    closeTime={toggleTime.close}
+                    onHandleSubmit={date.submit}
+                    onHandleSubmitTime={time.submit}
+                    unSubmitTime={time.unSubmit}
+                />
+            )}
         </motion.div>
     );
 }

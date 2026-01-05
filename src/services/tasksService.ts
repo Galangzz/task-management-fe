@@ -15,6 +15,17 @@ type updateTaskProps = {
     isCompleted?: boolean | null;
 };
 
+type updateTaskDetail = {
+    title: string;
+    detail: string | null;
+    deadline: Date | null;
+    hasDate: boolean;
+    hasTime: boolean;
+    starred: boolean;
+    isCompleted: boolean;
+    taskTabId: string;
+};
+
 export async function addTask(
     taskTabId: string,
     {
@@ -69,4 +80,21 @@ export async function getTaskById(id: string) {
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
         : resData;
+}
+
+export async function updateDetailTask(id: string, task: updateTaskDetail) {
+    ensureBase();
+    console.log('Updating...')
+    const url = `/tasks/${id}`;
+    await api.put(url, {
+        title: task.title,
+        detail: task.detail,
+        deadline: task.deadline,
+        hasDate: task.hasDate,
+        hasTime: task.hasTime,
+        starred: task.starred,
+        isCompleted: task.isCompleted,
+        taskTabId: task.taskTabId,
+    });
+    console.log('Finish...')
 }

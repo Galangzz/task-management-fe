@@ -45,6 +45,14 @@ function ModalDayPicker({
         }
     }, [isSubmitTime, selected]);
 
+    useEffect(() => {
+        if (!selected) {
+            const date = new Date();
+            date.setHours(0, 0, 0, 0);
+            setSelected(date);
+        }
+    }, [selected]);
+
     return (
         <>
             <Modal setToggle={toggleCalendar}>

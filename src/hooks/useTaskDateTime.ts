@@ -1,20 +1,37 @@
 import { useEffect, useState } from 'react';
 
-function useTaskDateTime() {
+type defaultDeadlineProps = {
+    defaultDate: Date | null;
+    hasDate: boolean;
+    hasTime: boolean;
+};
+
+function useTaskDateTime(defaultValue: defaultDeadlineProps | null) {
     const [deadline, setDeadline] = useState<Date | null>(null);
     const [isOpenCalendar, setIsOpenCalendar] = useState(false);
     const [isOpenTime, setIsOpenTime] = useState(false);
     const [hasDate, setHasDate] = useState(false);
     const [hasTime, setHasTime] = useState(false);
-
-    //Coba hapus
     useEffect(() => {
-        if (!deadline || isNaN(deadline.getTime())) {
+        if (defaultValue) {
+            const { defaultDate, hasDate, hasTime } = defaultValue;
+            setDeadline(defaultDate);
+            setHasDate(hasDate);
+            setHasTime(hasTime);
+        }
+        if (!defaultValue) {
             const date = new Date();
             date.setHours(0, 0, 0, 0);
             setDeadline(date);
+            setHasDate(false);
+            setHasTime(false);
         }
-    }, [deadline]);
+        // if (!deadline ) {
+        //     const date = new Date();
+        //     date.setHours(0, 0, 0, 0);
+        //     setDeadline(date);
+        // }
+    }, [defaultValue?.defaultDate]);
 
     return {
         deadline: {
