@@ -18,7 +18,6 @@ const AppRoutes = lazy(() => import('./routes/AppRoutes.js'));
 
 function App() {
     const [theme, toggleTheme] = useTheme();
-    const toast = useToast();
 
     const [user, setUser] = useState<string | null>(null);
     const [initialize, setInitialize] = useState(true);
@@ -87,7 +86,6 @@ function App() {
     if (!user) {
         return (
             <ThemeProvider value={{ theme, toggleTheme }}>
-                <ToastProvider value={{ toast }}>
                     <div className="App min-h-screen w-screen">
                         <AuthRoutes loginSuccess={onLoginSuccess} />
                         <ToastContainer
@@ -101,14 +99,12 @@ function App() {
                             draggable={false}
                         />
                     </div>
-                </ToastProvider>
             </ThemeProvider>
         );
     }
 
     return (
         <ThemeProvider value={{ theme, toggleTheme }}>
-            <ToastProvider value={{ toast }}>
                 <div className="App min-h-screen w-screen">
                     <AppRoutes tabId={tabId!} />
                     <ToastContainer
@@ -122,7 +118,6 @@ function App() {
                         draggable={false}
                     />
                 </div>
-            </ToastProvider>
         </ThemeProvider>
     );
 }

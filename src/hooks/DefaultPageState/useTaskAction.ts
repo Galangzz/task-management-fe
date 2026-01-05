@@ -2,9 +2,10 @@ import { useCallback, useContext } from 'react';
 import { useTaskStore } from '../useTaskStore.js';
 import { ToastContext } from '../../context/Toast.js';
 import { updateTask } from '../../services/tasksService.js';
+import useToast from '../useToast.js';
 
 function useTaskAction() {
-    const { toast } = useContext(ToastContext);
+    const toast = useToast();
     const {
         tabs,
         task,

@@ -1,9 +1,11 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
 type FormProps = {
     title: string;
-    detail: string;
+    detail: string | null;
     starred: boolean;
+    isCompleted: boolean;
+    taskTabId: string;
 };
 
 type DateTimeProps = {
@@ -11,28 +13,30 @@ type DateTimeProps = {
     hasDate: boolean;
     hasTime: boolean;
 };
-function useNewTaskPayload(form: FormProps, dateTime: DateTimeProps) {
+
+export function useUpdateTaskPayload(task: FormProps, dateTime: DateTimeProps) {
     return useCallback(() => {
         return {
-            title: form.title.trim(),
-            detail: form.detail,
+            title: task.title ? task.title.trim() : '',
+            detail: task.detail ? task.detail.trim() : '',
             deadline:
                 dateTime.hasDate && dateTime.deadline
                     ? new Date(dateTime.deadline)
                     : null,
             hasDate: dateTime.hasDate,
             hasTime: dateTime.hasTime,
-            starred: form.starred,
-            isCompleted: false,
+            starred: task.starred,
+            isCompleted: task.isCompleted,
+            taskTabId: task.taskTabId,
         };
     }, [
-        form.title,
-        form.detail,
-        form.starred,
+        task.title,
+        task.detail,
+        task.starred,
+        task.isCompleted,
         dateTime.hasDate,
         dateTime.hasTime,
         dateTime.deadline,
+        task.taskTabId,
     ]);
 }
-
-export default useNewTaskPayload;

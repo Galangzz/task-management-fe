@@ -76,12 +76,11 @@ function TaskContent({
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        const d = new Date(deadline).toLocaleDateString();
-
-        if (d < today.toLocaleDateString()) return 'TERLEWAT';
-        if (d === today.toLocaleDateString()) return 'HARI_INI';
-        if (d === tomorrow.toLocaleDateString()) return 'BESOK';
-        return d;
+        const d = new Date(deadline);
+        if (d < today) return 'TERLEWAT';
+        if (d === today) return 'HARI_INI';
+        if (d === tomorrow) return 'BESOK';
+        return d.toLocaleDateString();
     }, []);
 
     const groupedData = useMemo(
@@ -170,7 +169,6 @@ function TaskContent({
                                                             }
                                                             stared={t?.starred}
                                                             id={t?.id}
-                                                            taskId={taskId}
                                                             handleChecked={
                                                                 handleChecked
                                                             }

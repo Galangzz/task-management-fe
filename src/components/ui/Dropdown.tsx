@@ -43,7 +43,6 @@ const Dropdown = ({ tasks, taskId, handleChecked }: DropdownProps) => {
                                         checked={t.isCompleted}
                                         stared={t.starred}
                                         id={t.id}
-                                        taskId={taskId}
                                         handleChecked={handleChecked}
                                         handleStarred={() => {}}
                                     >

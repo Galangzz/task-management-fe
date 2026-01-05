@@ -8,6 +8,7 @@ export interface ITasks {
     hasTime: boolean;
     starred: boolean;
     isCompleted: boolean;
+    taskTabId: string;
 }
 
 export interface ITabs {

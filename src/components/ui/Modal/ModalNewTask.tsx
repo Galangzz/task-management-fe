@@ -56,21 +56,21 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                         {dateTime.hasDate && (
                             <div className="mt-2! flex w-fit items-center gap-2 border-2 p-2! text-[14px] font-bold">
                                 <p>
-                                    {dateTime.selected &&
+                                    {dateTime.deadline.value &&
                                         formatCustomDate(
                                             new Date(
-                                                dateTime.selected
+                                                dateTime.deadline.value
                                             ).toLocaleDateString()
                                         )}
                                 </p>
                                 {dateTime.hasTime && (
-                                    <p className="m-0">{`${String(dateTime.selected?.getHours()).padStart(2, '0')}:${String(
-                                        dateTime.selected?.getMinutes()
+                                    <p className="m-0">{`${String(dateTime.deadline.value?.getHours()).padStart(2, '0')}:${String(
+                                        dateTime.deadline.value?.getMinutes()
                                     ).padStart(2, '0')}`}</p>
                                 )}
                                 <div
                                     className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
-                                    onClick={() => dateTime.submitDate}
+                                    onClick={dateTime.date.unSubmit}
                                 >
                                     <RxCross2 size={18} />
                                 </div>
@@ -85,7 +85,9 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                                     <CgDetailsMore />
                                 </div>
                                 <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
-                                    <IoMdTime onClick={dateTime.openCalendar} />
+                                    <IoMdTime
+                                        onClick={dateTime.toggleCalendar.open}
+                                    />
                                 </div>
                                 <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
                                     <StarCheck
@@ -106,19 +108,22 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                     </form>
                 </div>
             </Modal>
-            {dateTime.isOpenCalendar && (
+            {dateTime.toggleCalendar.isOpen && (
                 <ModalDayPicker
-                    toggleCalendar={dateTime.closeCalendar}
-                    selected={dateTime.selected}
-                    setSelected={dateTime.setSelected}
-                    selectedTime={dateTime.selected}
-                    setSelectedTime={(newTime) => dateTime.setSelected(newTime)}
-                    isOpenTime={dateTime.isOpenTime}
+                    toggleCalendar={dateTime.toggleCalendar.close}
+                    selected={dateTime.deadline.value}
+                    setSelected={dateTime.deadline.setValue}
+                    selectedTime={dateTime.deadline.value}
+                    setSelectedTime={dateTime.deadline.setValue}
+
+                    isOpenTime={dateTime.toggleTime.isOpen}
                     isSubmitTime={dateTime.hasTime}
-                    setIsOpenTime={dateTime.setIsOpenTime}
-                    onHandleSubmit={dateTime.submitDate}
-                    onHandleSubmitTime={dateTime.submitTime}
-                    setIsSubmitTime={dateTime.unSubmitTime}
+                    openTime={dateTime.toggleTime.open}
+                    closeTime={dateTime.toggleTime.close}
+
+                    onHandleSubmit={dateTime.date.submit}
+                    onHandleSubmitTime={dateTime.time.submit}
+                    unSubmitTime={dateTime.time.unSubmit}
                 />
             )}
             {confirm.isOpenConfirm && (

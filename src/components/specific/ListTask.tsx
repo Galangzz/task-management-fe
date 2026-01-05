@@ -9,7 +9,6 @@ type LisTaskProps = {
     checked: boolean;
     stared: boolean;
     id: string;
-    taskId: string;
     handleChecked: (id: string, checked: boolean) => void;
     handleStarred: (id: string, checked: boolean) => void;
 };
@@ -19,7 +18,6 @@ function ListTask({
     checked,
     stared,
     id,
-    taskId,
     handleChecked,
     handleStarred,
 }: LisTaskProps) {
@@ -43,7 +41,7 @@ function ListTask({
             }}
             className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
             onClick={() => {
-                navigate(`/details/${taskId}/${id}`);
+                navigate(`/details/${id}`);
             }}
         >
             <Checkbox

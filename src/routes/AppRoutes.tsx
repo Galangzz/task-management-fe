@@ -12,7 +12,7 @@ function AppRoutes({ tabId }: { tabId: string }) {
                 element={<Navigate to={`/${tabId}`} />}
             />
             <Route
-                path="/details/:id/:taskId"
+                path="/details/:taskId"
                 element={<DetailTask />}
             />
             <Route
