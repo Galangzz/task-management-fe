@@ -1,6 +1,6 @@
 export interface ITasks {
     id: string;
-    title: string;
+    title: string | null;
     detail: string | null;
     createdAt: Date;
     deadline: Date | null;

@@ -6,7 +6,8 @@ import { useUpdateTaskSubmit } from './DetailTaskState/useUpdateTaskSubmit.js';
 import useTaskDateTime from './useTaskDateTime.js';
 
 export function useDetailTask(taskId: string | undefined) {
-    const { tab, task } = useInitialTask(taskId);
+    const [isOpenModalTab, setIsOpenModalTab] = useState(false);
+    const { tab, task, setTask } = useInitialTask(taskId);
     const [initialize, setInitialize] = useState(true);
 
     const { title, detail, starred, isCompleted, taskTabId } =
@@ -33,7 +34,7 @@ export function useDetailTask(taskId: string | undefined) {
         }
     );
 
-    useUpdateTaskSubmit(buildPayload, taskId as string, initialize);
+    useUpdateTaskSubmit(buildPayload, task!, setTask, taskId as string, initialize);
 
     return {
         tab,
@@ -44,5 +45,10 @@ export function useDetailTask(taskId: string | undefined) {
         isCompleted,
         taskTabId,
         dateTime,
+        modalTab: {
+            isOpen: isOpenModalTab,
+            open: () => setIsOpenModalTab(true),
+            close: () => setIsOpenModalTab(false),
+        },
     };
 }

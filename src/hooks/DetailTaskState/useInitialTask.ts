@@ -38,5 +38,6 @@ export function useInitialTask(taskId: string | undefined) {
     return {
         tab,
         task,
+        setTask,
     };
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Field from '../components/ui/Field.js';
 import { CgDetailsMore } from 'react-icons/cg';
@@ -6,15 +6,15 @@ import { IoMdTime } from 'react-icons/io';
 import { FaArrowLeft } from 'react-icons/fa';
 import StarCheck from '../components/ui/StarCheck.js';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { type ITabs, type ITasks } from '../types/index.js';
-import { getTaskTabs } from '../services/taskTabsService.js';
-import { getTaskById } from '../services/tasksService.js';
 import { formatCustomDate } from '../utils/index.js';
 import { RxCross2 } from 'react-icons/rx';
 import LoadingPage from '../components/ui/Loading/LoadingPage.js';
 import { motion } from 'framer-motion';
 import { useDetailTask } from '../hooks/useDetailTask.js';
 import ModalDayPicker from '../components/ui/Modal/ModalDayPicker.js';
+import ModalTabMove from '../components/ui/Modal/ModalTabMove.js';
+
+import { AnimatePresence } from 'framer-motion';
 
 function DetailTask() {
     const { taskId } = useParams();
@@ -27,6 +27,7 @@ function DetailTask() {
         dateTime,
         isCompleted,
         taskTabId,
+        modalTab,
     } = useDetailTask(taskId);
 
     const {
@@ -67,14 +68,18 @@ function DetailTask() {
                     <div className="flex items-center justify-center gap-4">
                         <StarCheck
                             checked={starred.value}
-                            onChange={() => starred.set}
+                            onChange={(v) => starred.set(v)}
                         />
                         <BsThreeDotsVertical size={20} />
                     </div>
                 </div>
                 <div
                     id="tab-select"
-                    className="flex w-fit cursor-pointer items-center justify-center gap-2 bg-transparent px-4! text-xl font-bold text-blue-400! select-none focus:outline-none"
+                    className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-full bg-transparent px-4! text-xl font-bold text-blue-400! select-none hover:backdrop-invert-10 focus:outline-none"
+                    onClick={() => {
+                        //TODO
+                        modalTab.open();
+                    }}
                 >
                     {tab?.map(
                         (tab) =>
@@ -97,6 +102,7 @@ function DetailTask() {
                     value={title.value}
                     onChange={title.set}
                     className="px-4! py-6! text-2xl focus:underline focus:outline-none"
+                    maxLength={50}
                 />
 
                 <div className="flex w-full gap-4 px-4! py-2! hover:backdrop-brightness-90">
@@ -177,6 +183,15 @@ function DetailTask() {
                     unSubmitTime={time.unSubmit}
                 />
             )}
+            <AnimatePresence>
+                {modalTab.isOpen && (
+                    <ModalTabMove
+                        tab={tab}
+                        id={taskTabId.value}
+                        close={modalTab.close}
+                    />
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }
