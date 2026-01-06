@@ -1,6 +1,5 @@
 import { useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ToastContext } from '../../context/Toast.js';
 import { getTaskTabById } from '../../services/taskTabsService.js';
 import { addTask } from '../../services/tasksService.js';
 import { useTaskStore } from '../useTaskStore.js';
@@ -8,7 +7,7 @@ import { handleError } from '../../errors/handleError.js';
 import useToast from '../useToast.js';
 
 type BuildPayloadProps = {
-    title: string;
+    title: string | null;
     detail: string;
     starred: boolean;
     deadline: Date | null;
@@ -26,6 +25,9 @@ function useNewTaskSubmit(
     const location = useLocation();
     const toast = useToast();
 
+    const { title, detail, starred, deadline, hasDate, hasTime, isCompleted } =
+        buildPayload();
+
     const submit = useCallback(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
             e.preventDefault();
@@ -33,8 +35,9 @@ function useNewTaskSubmit(
                 const currentTab = await getTaskTabById(tabId);
 
                 console.log({ useNewTaskSubmit: currentTab });
+                if (!title && !deadline && !detail) return;
 
-                if (buildPayload().title.length >= 50) {
+                if (title?.length && title.length >= 50) {
                     throw new Error('Judul terlalu panjang, max = 50');
                 }
 

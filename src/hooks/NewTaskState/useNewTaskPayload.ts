@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 type FormProps = {
-    title: string;
+    title: string | null;
     detail: string;
     starred: boolean;
 };
@@ -14,7 +14,7 @@ type DateTimeProps = {
 function useNewTaskPayload(form: FormProps, dateTime: DateTimeProps) {
     return useCallback(() => {
         return {
-            title: form.title.trim(),
+            title: form.title?.trim() || '',
             detail: form.detail,
             deadline:
                 dateTime.hasDate && dateTime.deadline

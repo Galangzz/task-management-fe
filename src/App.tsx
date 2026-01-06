@@ -79,7 +79,7 @@ function App() {
         return <LoadingPage />;
     }
 
-    if (tabId === '') {
+    if (user && tabId === '') {
         return <LoadingPage />;
     }
 

@@ -1,7 +1,7 @@
 import { api, ensureBase } from './api.js';
 
 type addTaskProps = {
-    title: string;
+    title: string | null;
     detail: string;
     deadline: Date | null;
     hasDate: boolean;
@@ -16,7 +16,7 @@ type updateTaskProps = {
 };
 
 type updateTaskDetail = {
-    title: string;
+    title: string | null;
     detail: string | null;
     deadline: Date | null;
     hasDate: boolean;
@@ -97,4 +97,5 @@ export async function updateDetailTask(id: string, task: updateTaskDetail) {
         taskTabId: task.taskTabId,
     });
     console.log('Finish...')
+    return true
 }

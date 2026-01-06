@@ -26,7 +26,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (res) => res,
     async (error) => {
-        console.error({api: error});
+        console.error({ api: error });
 
         if (!error.response) {
             return Promise.reject(
@@ -53,6 +53,7 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshError) {
                 localStorage.removeItem('accessToken');
+                cookieStore.delete('jwt');
                 // window.location.href = '/';
                 return Promise.reject(refreshError);
             }
@@ -85,7 +86,7 @@ export const publicApi = axios.create({
 publicApi.interceptors.response.use(
     (res) => res,
     (error) => {
-        console.error({publicApi: error});
+        console.error({ publicApi: error });
         const data = error.response?.data;
         const errorDetail = Array.isArray(data?.errors)
             ? data.errors[0]?.message
@@ -98,8 +99,7 @@ publicApi.interceptors.response.use(
             )
         );
     }
-)
-
+);
 
 export function ensureBase() {
     if (!API_BASE) {

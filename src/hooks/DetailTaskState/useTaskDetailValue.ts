@@ -16,7 +16,7 @@ export function useTaskDetailValue(
 
     useEffect(() => {
         if (task) {
-            setTitle(task.title);
+            setTitle(task.title as string);
             setDetail(task.detail);
             setStarred(task.starred);
             setIsCompleted(task.isCompleted);
@@ -59,8 +59,7 @@ export function useTaskDetailValue(
         },
         starred: {
             value: starred,
-            set: (e: React.ChangeEvent<HTMLInputElement>) =>
-                setStarred(e.target.checked),
+            set: (v: boolean) => setStarred(v),
         },
         isCompleted: {
             value: isCompleted,

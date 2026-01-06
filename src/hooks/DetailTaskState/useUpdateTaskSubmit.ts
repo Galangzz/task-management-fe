@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { updateDetailTask } from '../../services/tasksService.js';
+import { isTaskDirty } from '../../utils/taskHelper.js';
+import type { ITasks } from '../../types/index.js';
 
 type BuildPayloadProps = {
     title: string;
@@ -14,6 +16,8 @@ type BuildPayloadProps = {
 
 export function useUpdateTaskSubmit(
     buildPayload: () => BuildPayloadProps,
+    task: ITasks,
+    setTask: (task: ITasks) => void,
     id: string,
     initialize: boolean
 ) {
@@ -31,6 +35,32 @@ export function useUpdateTaskSubmit(
     useEffect(() => {
         let t: number;
         if (initialize) return;
+        if (
+            !isTaskDirty(
+                {
+                    title: task.title,
+                    detail: task.detail,
+                    starred: task.starred,
+                    deadline: task.deadline,
+                    hasDate: task.hasDate,
+                    hasTime: task.hasTime,
+                    isCompleted: task.isCompleted,
+                    taskTabId: task.taskTabId,
+                },
+                {
+                    title,
+                    detail,
+                    starred,
+                    deadline,
+                    hasDate,
+                    hasTime,
+                    isCompleted,
+                    taskTabId,
+                }
+            )
+        )
+            return;
+
         if (!title && !detail && !deadline) {
             //TODO Delete task
             alert('Delete task');
@@ -45,8 +75,24 @@ export function useUpdateTaskSubmit(
                     starred,
                     isCompleted,
                     taskTabId,
-                });
-            }, 1000);
+                })
+                    .then((res) => {
+                        if (res) {
+                            setTask({
+                                ...task,
+                                title,
+                                detail,
+                                deadline,
+                                hasDate,
+                                hasTime,
+                                starred,
+                                isCompleted,
+                                taskTabId,
+                            });
+                        }
+                    })
+                    .catch((err) => console.log(err));
+            }, 2000);
         }
 
         return () => {
