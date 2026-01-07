@@ -18,21 +18,23 @@ import completedTaskLight from '../../assets/completed-task-light.svg';
 const Dropdown = lazy(() => import('../ui/Dropdown.js'));
 import { ThemeContext } from '../../context/Theme.js';
 import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
-import type { ITasks, ITabWithTasks } from '../../types/index.js';
+import type { ITasks, ITabWithTasks, ITabs } from '../../types/index.js';
 
 import { AnimatePresence } from 'framer-motion';
 
 type GroupedTasks = Record<string, ITasks[]>;
 
 type TaskContentProps = {
-    task?: ITabWithTasks | null;
+    tasks?: ITasks[] | null;
+    tab?: ITabs | null;
     isLoading?: boolean;
     handleChecked: (id: string, value: boolean) => void;
     handleStarred: (id: string, value: boolean) => void;
 };
 
 function TaskContent({
-    task,
+    tasks,
+    tab,
     isLoading = true,
     handleChecked,
     handleStarred,
@@ -43,13 +45,13 @@ function TaskContent({
     const [showEmpty, setShowEmpty] = useState(false);
 
     const activeTask = useMemo(
-        () => task?.tasks?.filter((t) => t.isCompleted === false) || [],
-        [task]
+        () => tasks?.filter((t) => t.isCompleted == false) || [],
+        [tasks, tab]
     );
 
     const completeTask = useMemo(
-        () => task?.tasks?.filter((t) => t.isCompleted === true) || [],
-        [task]
+        () => tasks?.filter((t) => t.isCompleted == true) || [],
+        [tasks,tab]
     );
 
     useEffect(() => {
@@ -66,7 +68,7 @@ function TaskContent({
         }
     }, [activeTask.length, completeTask.length]);
 
-    const taskId = task?.id || '';
+    const tabId = tab?.id || '';
 
     const getGroupKey = useCallback((deadline: Date | null) => {
         if (!deadline) return 'TANPA_TANGGAL';
@@ -134,7 +136,7 @@ function TaskContent({
                 <Field>
                     <div className="flex">
                         <h1 className="mb-6 text-xl font-bold tracking-wide">
-                            {task?.name ?? 'Stared Task'}
+                            {tab?.name ?? 'Stared Task'}
                         </h1>
                     </div>
                     <div className="flex flex-col items-center gap-4">
@@ -248,7 +250,7 @@ function TaskContent({
                 <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                     <Dropdown
                         tasks={completeTask}
-                        taskId={taskId}
+                        taskId={tabId}
                         handleChecked={handleChecked}
                     />
                 </div>

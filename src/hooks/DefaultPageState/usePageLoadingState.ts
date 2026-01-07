@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { ITabs, ITabWithTasks } from '../../types/index.js';
+import type { ITabs, ITasks } from '../../types/index.js';
 
-function usePageLoadingState(task: ITabWithTasks | null, tabs: ITabs[] | null) {
+function usePageLoadingState(task: ITasks[] | null, tabs: ITabs[] | null) {
     const [isLoadedPage, setIsLoadedPage] = useState(true);
     const [isLoadedTaskList, setIsLoadedTaskList] = useState(true);
 

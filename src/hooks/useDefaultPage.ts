@@ -1,29 +1,39 @@
 import { useEffect, useState } from 'react';
-import { useTaskStore } from './useTaskStore.js';
+import { useTaskStore } from '../stores/useTaskStore.js';
 import usePageLoadingState from './DefaultPageState/usePageLoadingState.js';
 import useTabNavigation from './DefaultPageState/useTabNavigation.js';
 import useTaskAction from './DefaultPageState/useTaskAction.js';
 import useTaskTitleModal from './DefaultPageState/useTaskTitleModal.js';
+import { useTabsStore } from '../stores/useTabStore.js';
 
 function useDefaultPage(id: string | undefined) {
+    console.log({ id });
+
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
-    const { task, tabs, setTabs } = useTaskStore();
+    const { tasks } = useTaskStore();
+    const {tabs, tab, setTabs, setTab} = useTabsStore();
 
     const { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList } =
-        usePageLoadingState(task, tabs);
+        usePageLoadingState(tasks, tabs);
 
     const titleModal = useTaskTitleModal();
     const action = useTaskAction();
 
     useEffect(() => {
-        setTabs();
-    }, [titleModal.submit]);
+        let mounted = true;
+        if (!mounted) return;
+        setTabs()
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     useTabNavigation(setIsLoadedTaskList, id);
 
     return {
         tabs,
-        task,
+        tab,
+        tasks,
         isLoadedPage,
         isLoadedTaskList,
         isOpenModalTask,

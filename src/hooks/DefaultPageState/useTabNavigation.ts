@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTaskStore } from '../useTaskStore.js';
+import { useTaskStore } from '../../stores/useTaskStore.js';
 import { getTaskTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
+import { useTabsStore } from '../../stores/useTabStore.js';
 
 function useTabNavigation(
     setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void,
@@ -13,8 +14,10 @@ function useTabNavigation(
     const previousTabRef = useRef('');
     const isInitialMount = useRef(true);
 
-    const { tabs, setCurrentTabId, loadTaskList, resetOnTabChange } =
-        useTaskStore();
+    const { loadTask, setTaks } = useTaskStore();
+
+    const { tabs, setTab, currentTabId, setCurrentTabId, pendingUpdates } =
+        useTabsStore();
 
     useEffect(() => {
         let isCancelled = false;
@@ -25,8 +28,10 @@ function useTabNavigation(
             navigate(`/${tabId}`, { replace: true });
             return;
         }
+        setTab(id);
 
         const currentTab = id;
+        console.log({ PreviousTab: previousTabRef.current, currentTab });
 
         if (previousTabRef.current === currentTab && !isInitialMount.current) {
             return;
@@ -38,21 +43,37 @@ function useTabNavigation(
         console.log(
             `Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`
         );
+        console.log({ currentTab, currentTabId });
+        if (isCancelled) return;
+
         const run = async () => {
             if (
                 previousTabRef.current !== '' &&
                 previousTabRef.current !== currentTab
             ) {
                 setIsLoadedTaskList(true);
-                resetOnTabChange(currentTab);
+                // resetOnTabChange(currentTab);
+                // if (currentTab === currentTabId) return;
+                if (isCancelled) return;
+
+                await loadTask(currentTab);
+                console.log({ pendingUpdates });
+                if (pendingUpdates.has(currentTab)) {
+                    setTaks(pendingUpdates.get(currentTab)!);
+                }
             } else {
                 try {
-                    const data = await getTaskTabById(currentTab);
-                    console.log({ data });
+                    // const data = await getTaskTabById(currentTab);
+                    // console.log({ data });
                     if (isCancelled) return;
 
                     setCurrentTabId(currentTab);
-                    loadTaskList(currentTab);
+                    await loadTask(currentTab);
+                    console.log({ pendingUpdates });
+
+                    if (pendingUpdates.has(currentTab)) {
+                        setTaks(pendingUpdates.get(currentTab)!);
+                    }
                 } catch (error) {
                     if (error instanceof ApiError) {
                         if (error.status == 404) {

@@ -6,9 +6,10 @@ import { ToastProvider } from './context/Toast.js';
 
 import { getLoggedUser } from './services/authService.js';
 
-import { useTaskStore } from './hooks/useTaskStore.js';
+import { useTaskStore } from './stores/useTaskStore.js';
 import useToast from './hooks/useToast.js';
 import useTheme from './hooks/useTheme.js';
+import { useTabsStore } from './stores/useTabStore.js';
 
 const LoadingPage = lazy(
     () => import('./components/ui/Loading/LoadingPage.js')
@@ -23,7 +24,7 @@ function App() {
     const [initialize, setInitialize] = useState(true);
     const [tabId, setTabId] = useState('');
 
-    const { tabs, setTabs } = useTaskStore();
+    const { tabs, setTabs } = useTabsStore();
 
     useEffect(() => {
         let isMounted = true;
@@ -86,27 +87,8 @@ function App() {
     if (!user) {
         return (
             <ThemeProvider value={{ theme, toggleTheme }}>
-                    <div className="App min-h-screen w-screen">
-                        <AuthRoutes loginSuccess={onLoginSuccess} />
-                        <ToastContainer
-                            autoClose={3000}
-                            toastClassName={'bg-(--toast-bg)!'}
-                            position="bottom-left"
-                            pauseOnFocusLoss={false}
-                            pauseOnHover={false}
-                            closeButton={false}
-                            stacked
-                            draggable={false}
-                        />
-                    </div>
-            </ThemeProvider>
-        );
-    }
-
-    return (
-        <ThemeProvider value={{ theme, toggleTheme }}>
                 <div className="App min-h-screen w-screen">
-                    <AppRoutes tabId={tabId!} />
+                    <AuthRoutes loginSuccess={onLoginSuccess} />
                     <ToastContainer
                         autoClose={3000}
                         toastClassName={'bg-(--toast-bg)!'}
@@ -118,6 +100,25 @@ function App() {
                         draggable={false}
                     />
                 </div>
+            </ThemeProvider>
+        );
+    }
+
+    return (
+        <ThemeProvider value={{ theme, toggleTheme }}>
+            <div className="App min-h-screen w-screen">
+                <AppRoutes tabId={tabId!} />
+                <ToastContainer
+                    autoClose={3000}
+                    toastClassName={'bg-(--toast-bg)!'}
+                    position="bottom-left"
+                    pauseOnFocusLoss={false}
+                    pauseOnHover={false}
+                    closeButton={false}
+                    stacked
+                    draggable={false}
+                />
+            </div>
         </ThemeProvider>
     );
 }
