@@ -2,7 +2,7 @@ import { useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getTaskTabById } from '../../services/taskTabsService.js';
 import { addTask } from '../../services/tasksService.js';
-import { useTaskStore } from '../useTaskStore.js';
+import { useTaskStore } from '../../stores/useTaskStore.js';
 import { handleError } from '../../errors/handleError.js';
 import useToast from '../useToast.js';
 
@@ -28,6 +28,8 @@ function useNewTaskSubmit(
     const { title, detail, starred, deadline, hasDate, hasTime, isCompleted } =
         buildPayload();
 
+    const { setTaks } = useTaskStore();
+
     const submit = useCallback(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
             e.preventDefault();
@@ -41,18 +43,18 @@ function useNewTaskSubmit(
                     throw new Error('Judul terlalu panjang, max = 50');
                 }
 
-                const msg = await addTask(currentTab, buildPayload());
-                toast.success(msg);
+                const res = await addTask(currentTab, buildPayload());
+                toast.success(res.message);
+                setTaks([res.data]);
 
                 navigate(`/${tabId}`, {
                     replace: true,
                 });
 
-                useTaskStore.getState().refreshCurrentTask();
                 resetForm();
                 closeModal(false);
             } catch (error) {
-                handleError(error, toast);
+                handleError(error);
             }
         },
         [buildPayload, location.pathname, navigate, toast, resetForm]

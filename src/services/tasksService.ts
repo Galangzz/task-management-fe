@@ -54,7 +54,7 @@ export async function addTask(
     return resData &&
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
-        ? resData.data.message
+        ? resData.data
         : null;
 }
 
@@ -84,7 +84,7 @@ export async function getTaskById(id: string) {
 
 export async function updateDetailTask(id: string, task: updateTaskDetail) {
     ensureBase();
-    console.log('Updating...')
+    console.log('Updating...');
     const url = `/tasks/${id}`;
     await api.put(url, {
         title: task.title,
@@ -96,6 +96,22 @@ export async function updateDetailTask(id: string, task: updateTaskDetail) {
         isCompleted: task.isCompleted,
         taskTabId: task.taskTabId,
     });
-    console.log('Finish...')
-    return true
+    console.log('Finish...');
+    return true;
+}
+
+export async function getTasksByTabId(id: string) {
+    ensureBase();
+    const url = `/tasks`;
+    const res = await api.get(url, {
+        params: {
+            tabId: id,
+        },
+    });
+    const resData = res?.data;
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
+        ? resData.data
+        : resData;
 }

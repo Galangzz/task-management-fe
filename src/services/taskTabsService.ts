@@ -19,21 +19,20 @@ export async function addTaskTabTitle({ title }: { title: string }) {
         throw new Error('Judul tidak boleh kosong');
     }
     const url = '/task-tabs';
-    const res = await api.post(
-        url,
-        {
-            name: title,
-        },
-    );
+    const res = await api.post(url, {
+        name: title,
+    });
 
     const resData = res?.data;
-    const id =
+    const { id, name, createdAt, deletePermission } =
         resData &&
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
-            ? resData.data?.id
+            ? resData.data
             : null;
-    return { id: id };
+
+    console.log({ AddTab: resData.data });
+    return { id, name, createdAt, deletePermission };
 }
 
 export async function getTaskTabWithTasks(id = 'main-task') {

@@ -19,7 +19,8 @@ function DefaultPage() {
     const { id } = useParams();
     const {
         tabs,
-        task,
+        tab,
+        tasks,
 
         //newTabModal
         titleList,
@@ -80,7 +81,8 @@ function DefaultPage() {
             )}
 
             <TaskContent
-                task={task}
+                tasks={tasks}
+                tab={tab}
                 isLoading={isLoadedTaskList}
                 handleChecked={handleChecked}
                 handleStarred={handleStarred}
