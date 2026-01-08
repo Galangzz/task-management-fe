@@ -13,9 +13,10 @@ export function useTaskDetailValue(
     const [taskTabId, setTaskTabId] = useState<string | null>(null);
 
     const detailRef = useRef<HTMLTextAreaElement>(null);
+    console.log({taskdetail: task})
 
     useEffect(() => {
-        if (task) {
+        if (task && Object.keys(task).length === 10) {
             setTitle(task.title as string);
             setDetail(task.detail);
             setStarred(task.starred);

@@ -15,10 +15,14 @@ import ModalDayPicker from '../components/ui/Modal/ModalDayPicker.js';
 import ModalTabMove from '../components/ui/Modal/ModalTabMove.js';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTaskStore } from '../stores/useTaskStore.js';
+import { useTabsStore } from '../stores/useTabStore.js';
 
 function DetailTask() {
     const { taskId } = useParams();
+   
     const {
+        tabs,
         tab,
         task,
         title,
@@ -63,7 +67,7 @@ function DetailTask() {
                     <FaArrowLeft
                         size={20}
                         className="cursor-pointer hover:scale-110"
-                        onClick={() => navigate(`/${tab?.[0]?.id}`)}
+                        onClick={() => navigate(`/${tab?.id}`)}
                     />
                     <div className="flex items-center justify-center gap-4">
                         <StarCheck
@@ -81,7 +85,7 @@ function DetailTask() {
                         modalTab.open();
                     }}
                 >
-                    {tab?.map(
+                    {tabs?.map(
                         (tab) =>
                             tab.id === taskTabId.value && (
                                 <p
@@ -186,7 +190,7 @@ function DetailTask() {
             <AnimatePresence>
                 {modalTab.isOpen && (
                     <ModalTabMove
-                        tab={tab}
+                        tab={tabs}
                         id={taskTabId.value}
                         close={modalTab.close}
                     />

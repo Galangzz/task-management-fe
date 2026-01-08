@@ -3,6 +3,8 @@ import Checkbox from '../ui/Checkboxes.js';
 import StarCheck from '../ui/StarCheck.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTaskStore } from '../../stores/useTaskStore.js';
+import type { ITasks } from '../../types/index.js';
 
 type LisTaskProps = {
     children: React.ReactNode;
@@ -24,6 +26,7 @@ function ListTask({
     const navigate = useNavigate();
 
     const [localChecked, setLocalChecked] = useState(checked);
+    const { setTask, getTask } = useTaskStore();
 
     const handleChange = (value: boolean) => {
         setLocalChecked(() => value);
@@ -41,6 +44,8 @@ function ListTask({
             }}
             className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
             onClick={() => {
+                const task = getTask(id);
+                setTask((task as ITasks) || null);
                 navigate(`/details/${id}`);
             }}
         >

@@ -1,23 +1,20 @@
 import { create } from 'zustand';
-import {
-    getTaskTabs,
-    getTaskTabWithTasks,
-} from '../services/taskTabsService.js';
+
 import { getTasksByTabId, updateTask } from '../services/tasksService.js';
-import type { ITabs, ITabWithTasks, ITasks } from '../types/index.js';
+import type { ITasks } from '../types/index.js';
 import { handleError } from '../errors/handleError.js';
 
 export interface TaskState {
     tasks: ITasks[] | null;
     task: ITasks | null;
 
-    getTask: (id: string) => Promise<ITasks | null>;
+    getTask: (id: string) => ITasks | null;
     setTask: (task: ITasks) => void;
-    setTaks: (tasks: ITasks[]) => void;
+    setTasks: (tasks: ITasks[]) => void;
 
     // Actions
 
-    loadTask: (tabId: string) => Promise<void>;
+    loadTask: (tabId: string, signal?: AbortSignal) => Promise<void>;
     refreshCurrentTask: (tabId: string) => Promise<void>;
 
     fixChecked: (
@@ -35,7 +32,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     tasks: null,
     task: null,
 
-    getTask: async (id: string) => {
+    getTask:  (id: string) => {
         const { tasks } = get();
         return tasks?.find((task) => task.id === id) || null;
     },
@@ -44,7 +41,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         set({ task });
     },
 
-    setTaks: (v) => {
+    setTasks: (v) => {
         const { tasks } = get();
         const map = new Map<string, ITasks>();
 
@@ -55,11 +52,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     },
 
     // Load task list for specific tab
-    loadTask: async (tabId) => {
+    loadTask: async (tabId, signal) => {
         // try {
         // const currentState = get();
 
-        const data = await getTasksByTabId(tabId);
+        const data = await getTasksByTabId(tabId, signal);
         console.log({ Tasks: data });
         set({ tasks: data });
         // } catch (err) {

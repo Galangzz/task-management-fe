@@ -7,11 +7,11 @@ import useTaskDateTime from './useTaskDateTime.js';
 
 export function useDetailTask(taskId: string | undefined) {
     const [isOpenModalTab, setIsOpenModalTab] = useState(false);
-    const { tab, task, setTask } = useInitialTask(taskId);
+    const { tabs, tab, task, setTask, setTasks } = useInitialTask(taskId);
     const [initialize, setInitialize] = useState(true);
 
     const { title, detail, starred, isCompleted, taskTabId } =
-        useTaskDetailValue(tab, task, setInitialize);
+        useTaskDetailValue(tabs, task, setInitialize);
 
     const dateTime = useTaskDateTime({
         defaultDate: task?.deadline as Date | null,
@@ -34,9 +34,10 @@ export function useDetailTask(taskId: string | undefined) {
         }
     );
 
-    useUpdateTaskSubmit(buildPayload, task!, setTask, taskId as string, initialize);
+    useUpdateTaskSubmit(buildPayload, task!, setTask, setTasks, taskId as string, initialize);
 
     return {
+        tabs,
         tab,
         task,
         title,

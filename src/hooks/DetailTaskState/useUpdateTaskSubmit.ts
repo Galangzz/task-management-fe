@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { updateDetailTask } from '../../services/tasksService.js';
 import { isTaskDirty } from '../../utils/taskHelper.js';
 import type { ITasks } from '../../types/index.js';
@@ -18,6 +18,7 @@ export function useUpdateTaskSubmit(
     buildPayload: () => BuildPayloadProps,
     task: ITasks,
     setTask: (task: ITasks) => void,
+    setTasks: (tasks: ITasks[]) => void,
     id: string,
     initialize: boolean
 ) {
@@ -32,8 +33,9 @@ export function useUpdateTaskSubmit(
         taskTabId,
     } = buildPayload();
 
+    const abortRef = useRef<AbortController | null>(null);
+
     useEffect(() => {
-        let t: number;
         if (initialize) return;
         if (
             !isTaskDirty(
@@ -64,21 +66,39 @@ export function useUpdateTaskSubmit(
         if (!title && !detail && !deadline) {
             //TODO Delete task
             alert('Delete task');
-        } else {
-            t = setTimeout(() => {
-                updateDetailTask(id, {
-                    title,
-                    detail,
-                    deadline,
-                    hasDate,
-                    hasTime,
-                    starred,
-                    isCompleted,
-                    taskTabId,
-                })
-                    .then((res) => {
-                        if (res) {
-                            setTask({
+        }
+
+        const t = setTimeout(() => {
+            abortRef.current?.abort();
+
+            const controller = new AbortController();
+            abortRef.current = controller;
+
+            updateDetailTask(id, {
+                title,
+                detail,
+                deadline,
+                hasDate,
+                hasTime,
+                starred,
+                isCompleted,
+                taskTabId,
+            }, controller.signal)
+                .then((res) => {
+                    if (res) {
+                        setTask({
+                            ...task,
+                            title,
+                            detail,
+                            deadline,
+                            hasDate,
+                            hasTime,
+                            starred,
+                            isCompleted,
+                            taskTabId,
+                        });
+                        setTasks([
+                            {
                                 ...task,
                                 title,
                                 detail,
@@ -88,15 +108,16 @@ export function useUpdateTaskSubmit(
                                 starred,
                                 isCompleted,
                                 taskTabId,
-                            });
-                        }
-                    })
-                    .catch((err) => console.log(err));
-            }, 2000);
-        }
+                            },
+                        ]);
+                    }
+                })
+                .catch((err) => console.log(err));
+        }, 2000);
 
         return () => {
             clearTimeout(t);
+            abortRef.current?.abort();
         };
     }, [title, detail, starred, deadline, hasDate, hasTime, taskTabId]);
 }

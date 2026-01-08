@@ -1,3 +1,4 @@
+import type { ITasks } from '../types/index.js';
 import { api, ensureBase } from './api.js';
 
 type addTaskProps = {
@@ -70,7 +71,7 @@ export async function updateTask(
     });
 }
 
-export async function getTaskById(id: string) {
+export async function getTaskById(id: string): Promise<ITasks | null> {
     ensureBase();
     const url = `/tasks/${id}`;
     const res = await api.get(url);
@@ -79,34 +80,43 @@ export async function getTaskById(id: string) {
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
-        : resData;
+        : null;
 }
 
-export async function updateDetailTask(id: string, task: updateTaskDetail) {
+export async function updateDetailTask(
+    id: string,
+    task: updateTaskDetail,
+    signal?: AbortSignal
+) {
     ensureBase();
     console.log('Updating...');
     const url = `/tasks/${id}`;
-    await api.put(url, {
-        title: task.title,
-        detail: task.detail,
-        deadline: task.deadline,
-        hasDate: task.hasDate,
-        hasTime: task.hasTime,
-        starred: task.starred,
-        isCompleted: task.isCompleted,
-        taskTabId: task.taskTabId,
-    });
+    await api.put(
+        url,
+        {
+            title: task.title,
+            detail: task.detail,
+            deadline: task.deadline,
+            hasDate: task.hasDate,
+            hasTime: task.hasTime,
+            starred: task.starred,
+            isCompleted: task.isCompleted,
+            taskTabId: task.taskTabId,
+        },
+        { signal: signal as AbortSignal }
+    );
     console.log('Finish...');
     return true;
 }
 
-export async function getTasksByTabId(id: string) {
+export async function getTasksByTabId(id: string, signal?: AbortSignal) {
     ensureBase();
     const url = `/tasks`;
     const res = await api.get(url, {
         params: {
             tabId: id,
         },
+        signal: signal as AbortSignal,
     });
     const resData = res?.data;
     return resData &&
