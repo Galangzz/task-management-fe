@@ -7,10 +7,12 @@ export default function ModalTabMove({
     tab,
     id,
     close,
+    handleChange,
 }: {
     tab: ITabs[] | null;
     id: string | null;
     close: () => void;
+    handleChange: (id: string) => void;
 }) {
     return (
         <div
@@ -24,7 +26,7 @@ export default function ModalTabMove({
                 initial={{ y: 200 }}
                 animate={{ y: 0 }}
                 exit={{ y: 200 }}
-                className="w-full flex items-center justify-center bg-(--background-header)"
+                className="flex w-full items-center justify-center bg-(--background-header)"
                 transition={{
                     duration: 0.3,
                     ease: 'easeInOut',
@@ -32,19 +34,34 @@ export default function ModalTabMove({
                 }}
             >
                 <Field className="bg-transparent">
-                    <h1 className="w-full">Pindahkan task ke tab</h1>
+                    <h1 className="w-full text-xl font-bold">
+                        Pindahkan task ke tab
+                    </h1>
+                    <hr className="w-full mb-2!" />
                     {tab?.map((tab) => (
                         <div
                             key={tab.id}
-                            className="flex items-center gap-2"
+                            className={`flex items-center gap-2! px-2! hover:backdrop-invert-10 ${
+                                tab.id === id ? 'border backdrop-invert-10' : ''
+                            } text-lg tracking-wider`}
                         >
                             <input
                                 type="checkbox"
                                 id={tab.id}
                                 name={tab.id}
                                 checked={tab.id === id}
+                                onChange={() => {
+                                    handleChange(tab.id);
+                                    close();
+                                }}
+                                className="sr-only"
                             />
-                            <label htmlFor={tab.id}>{tab.name}</label>
+                            <label
+                                htmlFor={tab.id}
+                                className="flex-1"
+                            >
+                                {tab.name}
+                            </label>
                         </div>
                     ))}
                 </Field>

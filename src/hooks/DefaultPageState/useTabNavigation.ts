@@ -5,22 +5,22 @@ import { getTaskTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
 
-function useTabNavigation(
-    setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void,
-    id: string | undefined
-) {
+function useTabNavigation(id: string | undefined) {
     const navigate = useNavigate();
     const location = useLocation();
-    const previousTabRef = useRef('');
-    const isInitialMount = useRef(true);
 
-    const { loadTask, setTaks } = useTaskStore();
+    const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
-    const { tabs, setTab, currentTabId, setCurrentTabId, pendingUpdates } =
-        useTabsStore();
+    const {
+        tabs,
+        setTab,
+        setTabs,
+        currentTabId,
+        setCurrentTabId,
+        pendingUpdates,
+    } = useTabsStore();
 
     useEffect(() => {
-        let isCancelled = false;
         if (id === undefined) {
             const tabId = tabs
                 ?.map((t) => (t.deletePermission == false ? t.id : null))
@@ -29,66 +29,54 @@ function useTabNavigation(
             return;
         }
         setTab(id);
-
-        const currentTab = id;
-        console.log({ PreviousTab: previousTabRef.current, currentTab });
-
-        if (previousTabRef.current === currentTab && !isInitialMount.current) {
-            return;
+        if (currentTabId !== id) {
+            refreshTasks();
+        }
+        if (id !== 'starred-task') {
+            setCurrentTabId(id);
         }
 
-        const isFirstLoad = isInitialMount.current;
-        isInitialMount.current = false;
-
-        console.log(
-            `Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`
-        );
-        console.log({ currentTab, currentTabId });
-        if (isCancelled) return;
+        const controller = new AbortController();
+        const signal = controller.signal;
 
         const run = async () => {
-            if (
-                previousTabRef.current !== '' &&
-                previousTabRef.current !== currentTab
-            ) {
-                setIsLoadedTaskList(true);
-                // resetOnTabChange(currentTab);
-                // if (currentTab === currentTabId) return;
-                if (isCancelled) return;
-
-                await loadTask(currentTab);
-                console.log({ pendingUpdates });
-                if (pendingUpdates.has(currentTab)) {
-                    setTaks(pendingUpdates.get(currentTab)!);
+            try {
+                console.log({ currentTabId });
+                if (!tabs) {
+                    await setTabs();
                 }
-            } else {
-                try {
-                    // const data = await getTaskTabById(currentTab);
-                    // console.log({ data });
-                    if (isCancelled) return;
+                console.log({ tasks });
 
-                    setCurrentTabId(currentTab);
-                    await loadTask(currentTab);
-                    console.log({ pendingUpdates });
+                if (
+                    (!tasks && currentTabId !== id) ||
+                    (tasks && tasks?.length === 0) ||
+                    (tasks &&
+                        tasks?.length > 0 &&
+                        tasks?.some((t) => t.taskTabId !== id))
+                ) {
+                    await loadTask(id, signal);
+                }
 
-                    if (pendingUpdates.has(currentTab)) {
-                        setTaks(pendingUpdates.get(currentTab)!);
-                    }
-                } catch (error) {
-                    if (error instanceof ApiError) {
-                        if (error.status == 404) {
-                            navigate('/', { replace: true });
-                            return;
-                        }
+                console.log({ pendingUpdates });
+                if (pendingUpdates.has(id)) {
+                    console.log({ TabId: id, pendingUpdates });
+                    setTasks(pendingUpdates.get(id)!);
+                }
+
+                console.log({ currentTabId });
+            } catch (error) {
+                if (error instanceof ApiError) {
+                    if (error.status == 404) {
+                        navigate('/', { replace: true });
+                        return;
                     }
                 }
             }
-
-            previousTabRef.current = currentTab;
         };
         run();
+
         return () => {
-            isCancelled = true;
+            controller.abort();
         };
     }, [location.pathname, id]);
 

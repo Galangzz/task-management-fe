@@ -11,10 +11,10 @@ function useDefaultPage(id: string | undefined) {
 
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
     const { tasks } = useTaskStore();
-    const {tabs, tab, setTabs, setTab} = useTabsStore();
+    const { tabs, tab, setTabs, currentTabId } = useTabsStore();
 
-    const { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList } =
-        usePageLoadingState(tasks, tabs);
+    const { isLoadedPage, isLoadedTaskList } =
+        usePageLoadingState(tasks, tabs, id, currentTabId);
 
     const titleModal = useTaskTitleModal();
     const action = useTaskAction();
@@ -22,13 +22,15 @@ function useDefaultPage(id: string | undefined) {
     useEffect(() => {
         let mounted = true;
         if (!mounted) return;
-        setTabs()
+        if (!tabs) {
+            setTabs();
+        }
         return () => {
             mounted = false;
         };
     }, []);
 
-    useTabNavigation(setIsLoadedTaskList, id);
+    useTabNavigation(id);
 
     return {
         tabs,

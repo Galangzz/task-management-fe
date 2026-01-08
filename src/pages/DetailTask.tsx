@@ -15,10 +15,16 @@ import ModalDayPicker from '../components/ui/Modal/ModalDayPicker.js';
 import ModalTabMove from '../components/ui/Modal/ModalTabMove.js';
 
 import { AnimatePresence } from 'framer-motion';
+import { useTaskStore } from '../stores/useTaskStore.js';
+import { deleteTaskById } from '../services/tasksService.js';
+import useToast from '../hooks/useToast.js';
+import useTaskAction from '../hooks/DefaultPageState/useTaskAction.js';
 
 function DetailTask() {
     const { taskId } = useParams();
+
     const {
+        tabs,
         tab,
         task,
         title,
@@ -28,7 +34,10 @@ function DetailTask() {
         isCompleted,
         taskTabId,
         modalTab,
+        handleBackDetail,
     } = useDetailTask(taskId);
+
+    const { handleChecked } = useTaskAction();
 
     const {
         deadline,
@@ -39,10 +48,14 @@ function DetailTask() {
         toggleCalendar,
         toggleTime,
     } = dateTime;
+    console.log({ tab });
 
     const dl = deadline.value ? new Date(deadline.value) : null;
 
     const navigate = useNavigate();
+    const toast = useToast();
+
+    const { optimisticDeleteTasks, loadTask } = useTaskStore();
 
     if (!task) {
         return <LoadingPage />;
@@ -60,28 +73,66 @@ function DetailTask() {
         >
             <Field className="container m-4! bg-transparent">
                 <div className="mx-2! mt-2! mb-6! flex w-full items-center justify-between">
-                    <FaArrowLeft
-                        size={20}
-                        className="cursor-pointer hover:scale-110"
-                        onClick={() => navigate(`/${tab?.[0]?.id}`)}
-                    />
+                    <div
+                        className="flex cursor-pointer items-center justify-center rounded-full p-2! hover:scale-110 hover:backdrop-invert-10"
+                        onClick={() => {
+                            const result = handleBackDetail();
+                            if (result) navigate(`/${tab?.id}`);
+                        }}
+                    >
+                        <FaArrowLeft size={20} />
+                    </div>
                     <div className="flex items-center justify-center gap-4">
-                        <StarCheck
-                            checked={starred.value}
-                            onChange={(v) => starred.set(v)}
-                        />
-                        <BsThreeDotsVertical size={20} />
+                        <div className="rounded-full p-2! hover:cursor-pointer hover:backdrop-invert-10">
+                            <StarCheck
+                                checked={starred.value}
+                                onChange={(v) => starred.set(v)}
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            className="group/button-delete relative rounded-full p-2! hover:cursor-pointer hover:backdrop-invert-10 focus:bg-(--background-header)"
+                        >
+                            <BsThreeDotsVertical size={20} />
+                            <div className="absolute left-0 hidden w-5/1 -translate-x-42 translate-y-1/6 rounded-xl bg-(--background-header) py-1! text-lg font-semibold shadow-lg shadow-black/50 group-focus/button-delete:flex">
+                                <p
+                                    className="my-2! w-full p-2! hover:backdrop-invert-25"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        optimisticDeleteTasks(taskId as string);
+                                        navigate(`/${taskTabId.value}`);
+                                        deleteTaskById(taskId as string)
+                                            .then(() => {
+                                                toast.success(
+                                                    'Catatan berhasil dihapus'
+                                                );
+                                            })
+                                            .catch(() => {
+                                                toast.error(
+                                                    new Error(
+                                                        'Catatan gagal dihapus'
+                                                    )
+                                                );
+                                                loadTask(
+                                                    taskTabId.value as string
+                                                );
+                                            });
+                                    }}
+                                >
+                                    Hapus catatan
+                                </p>
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <div
                     id="tab-select"
                     className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-full bg-transparent px-4! text-xl font-bold text-blue-400! select-none hover:backdrop-invert-10 focus:outline-none"
                     onClick={() => {
-                        //TODO
                         modalTab.open();
                     }}
                 >
-                    {tab?.map(
+                    {tabs?.map(
                         (tab) =>
                             tab.id === taskTabId.value && (
                                 <p
@@ -162,9 +213,15 @@ function DetailTask() {
                 <button
                     type="button"
                     className="cursor-pointer rounded-full p-2! tracking-wider text-blue-400! text-shadow-2xs hover:backdrop-invert-10"
-                    onClick={() => {}}
+                    onClick={() => {
+                        handleChecked(task.id, !isCompleted.value).then(() => {
+                            navigate(`/${taskTabId.value}`);
+                        });
+                    }}
                 >
-                    {isCompleted ? 'Tandai belum selesai' : 'Tandai Selesai'}
+                    {isCompleted.value
+                        ? 'Tandai belum selesai'
+                        : 'Tandai Selesai'}
                 </button>
             </Field>
             {toggleCalendar.isOpen && (
@@ -186,9 +243,10 @@ function DetailTask() {
             <AnimatePresence>
                 {modalTab.isOpen && (
                     <ModalTabMove
-                        tab={tab}
+                        tab={tabs}
                         id={taskTabId.value}
                         close={modalTab.close}
+                        handleChange={taskTabId.set}
                     />
                 )}
             </AnimatePresence>

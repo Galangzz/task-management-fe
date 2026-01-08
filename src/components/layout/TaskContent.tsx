@@ -6,8 +6,6 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import Field from '../ui/Field.js';
-import ListTask from '../specific/ListTask.js';
 import { formatCustomDate } from '../../utils/index.js';
 
 import emptyNoteLight from '../../assets/empty-note-light.svg';
@@ -15,10 +13,14 @@ import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
 import completedTaskLight from '../../assets/completed-task-light.svg';
 
-const Dropdown = lazy(() => import('../ui/Dropdown.js'));
 import { ThemeContext } from '../../context/Theme.js';
+
+import ListTask from '../specific/ListTask.js';
 import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
-import type { ITasks, ITabWithTasks, ITabs } from '../../types/index.js';
+const Dropdown = lazy(() => import('../ui/Dropdown.js'));
+import Field from '../ui/Field.js';
+
+import type { ITasks, ITabs } from '../../types/index.js';
 
 import { AnimatePresence } from 'framer-motion';
 

@@ -1,7 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { updateDetailTask } from '../../services/tasksService.js';
 import { isTaskDirty } from '../../utils/taskHelper.js';
 import type { ITasks } from '../../types/index.js';
+import { useTabsStore } from '../../stores/useTabStore.js';
+import { useTaskStore } from '../../stores/useTaskStore.js';
 
 type BuildPayloadProps = {
     title: string;
@@ -18,6 +20,7 @@ export function useUpdateTaskSubmit(
     buildPayload: () => BuildPayloadProps,
     task: ITasks,
     setTask: (task: ITasks) => void,
+    setTasks: (tasks: ITasks[]) => void,
     id: string,
     initialize: boolean
 ) {
@@ -31,42 +34,66 @@ export function useUpdateTaskSubmit(
         isCompleted,
         taskTabId,
     } = buildPayload();
+    console.log({ taskTabId });
+
+    const { currentTabId } = useTabsStore();
+    const { optimisticDeleteTasks } = useTaskStore();
+    const abortRef = useRef<AbortController | null>(null);
+
+    const isDirty = useCallback(() => {
+        return isTaskDirty(
+            {
+                title: task.title,
+                detail: task.detail,
+                starred: task.starred,
+                deadline: task.deadline,
+                hasDate: task.hasDate,
+                hasTime: task.hasTime,
+                isCompleted: task.isCompleted,
+                taskTabId: task.taskTabId,
+            },
+            {
+                title,
+                detail,
+                starred,
+                deadline,
+                hasDate,
+                hasTime,
+                isCompleted,
+                taskTabId,
+            }
+        );
+    }, [
+        task,
+        title,
+        detail,
+        starred,
+        deadline,
+        hasDate,
+        hasTime,
+        isCompleted,
+        taskTabId,
+
+    ]);
 
     useEffect(() => {
-        let t: number;
         if (initialize) return;
-        if (
-            !isTaskDirty(
-                {
-                    title: task.title,
-                    detail: task.detail,
-                    starred: task.starred,
-                    deadline: task.deadline,
-                    hasDate: task.hasDate,
-                    hasTime: task.hasTime,
-                    isCompleted: task.isCompleted,
-                    taskTabId: task.taskTabId,
-                },
-                {
-                    title,
-                    detail,
-                    starred,
-                    deadline,
-                    hasDate,
-                    hasTime,
-                    isCompleted,
-                    taskTabId,
-                }
-            )
-        )
-            return;
+        if (!isDirty()) return;
 
-        if (!title && !detail && !deadline) {
-            //TODO Delete task
-            alert('Delete task');
-        } else {
-            t = setTimeout(() => {
-                updateDetailTask(id, {
+        // if (!title && !detail && !deadline) {
+        //     //TODO Delete task
+        //     alert('Delete task');
+        // }
+
+        const t = setTimeout(() => {
+            abortRef.current?.abort();
+
+            const controller = new AbortController();
+            abortRef.current = controller;
+
+            updateDetailTask(
+                id,
+                {
                     title,
                     detail,
                     deadline,
@@ -75,28 +102,49 @@ export function useUpdateTaskSubmit(
                     starred,
                     isCompleted,
                     taskTabId,
-                })
-                    .then((res) => {
-                        if (res) {
-                            setTask({
-                                ...task,
-                                title,
-                                detail,
-                                deadline,
-                                hasDate,
-                                hasTime,
-                                starred,
-                                isCompleted,
-                                taskTabId,
-                            });
+                },
+                controller.signal
+            )
+                .then((res) => {
+                    if (res) {
+                        setTask({
+                            ...task,
+                            title,
+                            detail,
+                            deadline,
+                            hasDate,
+                            hasTime,
+                            starred,
+                            isCompleted,
+                            taskTabId,
+                        });
+                        if (currentTabId === taskTabId) {
+                            setTasks([
+                                {
+                                    ...task,
+                                    title,
+                                    detail,
+                                    deadline,
+                                    hasDate,
+                                    hasTime,
+                                    starred,
+                                    isCompleted,
+                                    taskTabId,
+                                },
+                            ]);
+                        } else {
+                            optimisticDeleteTasks(id);
                         }
-                    })
-                    .catch((err) => console.log(err));
-            }, 2000);
-        }
+                    }
+                })
+                .catch((err) => console.log(err));
+        }, 1000);
 
         return () => {
             clearTimeout(t);
+            abortRef.current?.abort();
         };
     }, [title, detail, starred, deadline, hasDate, hasTime, taskTabId]);
+
+    return { isDirty };
 }

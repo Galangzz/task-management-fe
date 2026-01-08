@@ -4,14 +4,17 @@ import { useTaskDetailValue } from './DetailTaskState/useTaskDetailValue.js';
 import { useUpdateTaskPayload } from './DetailTaskState/useUpdateTaskPayload.js';
 import { useUpdateTaskSubmit } from './DetailTaskState/useUpdateTaskSubmit.js';
 import useTaskDateTime from './useTaskDateTime.js';
+import { useTaskStore } from '../stores/useTaskStore.js';
+import { useHandleBackDetail } from './DetailTaskState/useHandleBackDetail.js';
 
 export function useDetailTask(taskId: string | undefined) {
     const [isOpenModalTab, setIsOpenModalTab] = useState(false);
-    const { tab, task, setTask } = useInitialTask(taskId);
+    const { tabs, tab, task, setTask, setTasks } = useInitialTask(taskId);
     const [initialize, setInitialize] = useState(true);
+    const { optimisticDeleteTasks } = useTaskStore();
 
     const { title, detail, starred, isCompleted, taskTabId } =
-        useTaskDetailValue(tab, task, setInitialize);
+        useTaskDetailValue(tabs, task, setInitialize);
 
     const dateTime = useTaskDateTime({
         defaultDate: task?.deadline as Date | null,
@@ -25,7 +28,7 @@ export function useDetailTask(taskId: string | undefined) {
             detail: detail.value,
             starred: starred.value,
             isCompleted: isCompleted.value,
-            taskTabId: task?.taskTabId as string,
+            taskTabId: taskTabId.value as string,
         },
         {
             deadline: dateTime.deadline.value,
@@ -34,9 +37,19 @@ export function useDetailTask(taskId: string | undefined) {
         }
     );
 
-    useUpdateTaskSubmit(buildPayload, task!, setTask, taskId as string, initialize);
+    const { isDirty } = useUpdateTaskSubmit(
+        buildPayload,
+        task!,
+        setTask,
+        setTasks,
+        taskId as string,
+        initialize
+    );
+
+    const { handleBackDetail } = useHandleBackDetail(isDirty);
 
     return {
+        tabs,
         tab,
         task,
         title,
@@ -50,5 +63,6 @@ export function useDetailTask(taskId: string | undefined) {
             open: () => setIsOpenModalTab(true),
             close: () => setIsOpenModalTab(false),
         },
+        handleBackDetail,
     };
 }

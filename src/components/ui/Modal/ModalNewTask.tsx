@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
 import Modal from './Modal.js';
-import { CgCross, CgDetailsMore } from 'react-icons/cg';
+import { CgDetailsMore } from 'react-icons/cg';
 import { IoMdTime } from 'react-icons/io';
 import StarCheck from '../StarCheck.js';
 const ModalDayPicker = lazy(() => import('./ModalDayPicker.js'));
