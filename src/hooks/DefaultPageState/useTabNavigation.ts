@@ -5,16 +5,11 @@ import { getTaskTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
 
-function useTabNavigation(
-    setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void,
-    id: string | undefined
-) {
+function useTabNavigation(id: string | undefined) {
     const navigate = useNavigate();
     const location = useLocation();
-    const previousTabRef = useRef('');
-    const isInitialMount = useRef(true);
 
-    const { tasks, loadTask, setTasks } = useTaskStore();
+    const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
     const {
         tabs,
@@ -26,7 +21,6 @@ function useTabNavigation(
     } = useTabsStore();
 
     useEffect(() => {
-        let isCancelled = false;
         if (id === undefined) {
             const tabId = tabs
                 ?.map((t) => (t.deletePermission == false ? t.id : null))
@@ -35,6 +29,12 @@ function useTabNavigation(
             return;
         }
         setTab(id);
+        if (currentTabId !== id) {
+            refreshTasks();
+        }
+        if (id !== 'starred-task') {
+            setCurrentTabId(id);
+        }
 
         const controller = new AbortController();
         const signal = controller.signal;
@@ -45,20 +45,24 @@ function useTabNavigation(
                 if (!tabs) {
                     await setTabs();
                 }
+                console.log({ tasks });
 
-                if (!tasks) {
-                    await loadTask(id, signal);
-                }
-
-                if (tasks && tasks[0]?.taskTabId !== id) {
+                if (
+                    (!tasks && currentTabId !== id) ||
+                    (tasks && tasks?.length === 0) ||
+                    (tasks &&
+                        tasks?.length > 0 &&
+                        tasks?.some((t) => t.taskTabId !== id))
+                ) {
                     await loadTask(id, signal);
                 }
 
                 console.log({ pendingUpdates });
                 if (pendingUpdates.has(id)) {
+                    console.log({ TabId: id, pendingUpdates });
                     setTasks(pendingUpdates.get(id)!);
                 }
-                setCurrentTabId(id);
+
                 console.log({ currentTabId });
             } catch (error) {
                 if (error instanceof ApiError) {
@@ -70,6 +74,7 @@ function useTabNavigation(
             }
         };
         run();
+
         return () => {
             controller.abort();
         };

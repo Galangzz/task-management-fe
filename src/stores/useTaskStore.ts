@@ -16,6 +16,7 @@ export interface TaskState {
 
     loadTask: (tabId: string, signal?: AbortSignal) => Promise<void>;
     refreshCurrentTask: (tabId: string) => Promise<void>;
+    refreshTasks: () => void;
 
     fixChecked: (
         id: string,
@@ -25,6 +26,7 @@ export interface TaskState {
     undoLocalStatus: (id: string) => void;
     optimisticToggleChecked: (id: string) => void;
     optimisticToggleStarred: (id: string) => void;
+    optimisticDeleteTasks: (id: string) => void;
     // resetOnTabChange: (newTabId: string) => Promise<void>;
 }
 
@@ -32,7 +34,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     tasks: null,
     task: null,
 
-    getTask:  (id: string) => {
+    getTask: (id: string) => {
         const { tasks } = get();
         return tasks?.find((task) => task.id === id) || null;
     },
@@ -74,6 +76,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         }
     },
 
+    refreshTasks: () => {
+        set({ tasks: null });
+    },
+
     // Commit changes to localStorage
     fixChecked: async (id, tabId, isCompleted) => {
         try {
@@ -113,6 +119,14 @@ export const useTaskStore = create<TaskState>((set, get) => ({
                 tasks?.map((t: any) =>
                     t.id === id ? { ...t, starred: !t.starred } : t
                 ) || null,
+        });
+    },
+
+    optimisticDeleteTasks: (id) => {
+        const { tasks } = get();
+        console.log('Optimistic Delete called...');
+        set({
+            tasks: tasks?.filter((t: any) => t.id !== id) || tasks,
         });
     },
 

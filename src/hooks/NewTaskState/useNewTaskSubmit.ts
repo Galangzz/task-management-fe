@@ -28,7 +28,7 @@ function useNewTaskSubmit(
     const { title, detail, starred, deadline, hasDate, hasTime, isCompleted } =
         buildPayload();
 
-    const { setTaks } = useTaskStore();
+    const { setTasks } = useTaskStore();
 
     const submit = useCallback(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
@@ -45,7 +45,7 @@ function useNewTaskSubmit(
 
                 const res = await addTask(currentTab, buildPayload());
                 toast.success(res.message);
-                setTaks([res.data]);
+                setTasks([res.data]);
 
                 navigate(`/${tabId}`, {
                     replace: true,

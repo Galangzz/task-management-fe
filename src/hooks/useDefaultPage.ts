@@ -13,7 +13,7 @@ function useDefaultPage(id: string | undefined) {
     const { tasks } = useTaskStore();
     const { tabs, tab, setTabs, currentTabId } = useTabsStore();
 
-    const { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList } =
+    const { isLoadedPage, isLoadedTaskList } =
         usePageLoadingState(tasks, tabs, id, currentTabId);
 
     const titleModal = useTaskTitleModal();
@@ -30,7 +30,7 @@ function useDefaultPage(id: string | undefined) {
         };
     }, []);
 
-    useTabNavigation(setIsLoadedTaskList, id);
+    useTabNavigation(id);
 
     return {
         tabs,

@@ -11,7 +11,7 @@ export function useInitialTask(taskId: string | undefined) {
     // const [task, setTask] = useState<ITasks | null>(null);
 
     const { tabs, tab, setTabs, setTab } = useTabsStore();
-    const {  task, setTask, setTasks, loadTask } = useTaskStore();
+    const { task, setTask, setTasks, loadTask } = useTaskStore();
 
     const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ export function useInitialTask(taskId: string | undefined) {
                     await setTabs();
                 }
                 if (!task) {
-                    const resTask = await getTaskById(taskId as string);
+                    const resTask = await getTaskById(taskId as string, signal);
                     if (!resTask) return;
                     setTab(resTask.taskTabId);
 

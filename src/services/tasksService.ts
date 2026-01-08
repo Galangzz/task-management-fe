@@ -71,10 +71,13 @@ export async function updateTask(
     });
 }
 
-export async function getTaskById(id: string): Promise<ITasks | null> {
+export async function getTaskById(
+    id: string,
+    signal?: AbortSignal
+): Promise<ITasks | null> {
     ensureBase();
     const url = `/tasks/${id}`;
-    const res = await api.get(url);
+    const res = await api.get(url, { signal: signal as AbortSignal });
     const resData = res?.data;
     return resData &&
         typeof resData === 'object' &&
@@ -124,4 +127,10 @@ export async function getTasksByTabId(id: string, signal?: AbortSignal) {
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
         : resData;
+}
+
+export async function deleteTaskById(id: string) {
+    ensureBase();
+    const url = `/tasks/${id}`;
+    await api.delete(url);
 }

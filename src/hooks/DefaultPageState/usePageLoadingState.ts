@@ -13,7 +13,7 @@ function usePageLoadingState(
     const [isLoadedTaskList, setIsLoadedTaskList] = useState(false);
     const location = useLocation();
 
-    console.log({currentTabId})
+    console.log({ currentTabId });
     useEffect(() => {
         setIsLoadedPage(true);
         setIsLoadedTaskList(true);
@@ -21,13 +21,13 @@ function usePageLoadingState(
             setIsLoadedPage(false);
         }
         if (task) {
-            if (tabId === currentTabId) {
+            if (tabId === currentTabId || tabId === 'starred-task') {
                 setIsLoadedTaskList(false);
             }
         }
     }, [task, tabs, location.pathname, currentTabId]);
 
-    return { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList };
+    return { isLoadedPage, isLoadedTaskList };
 }
 
 export default usePageLoadingState;
