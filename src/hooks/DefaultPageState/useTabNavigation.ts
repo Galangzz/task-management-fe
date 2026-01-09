@@ -42,13 +42,10 @@ function useTabNavigation(id: string | undefined) {
         const run = async () => {
             try {
                 console.log({ currentTabId });
-                if (!tabs) {
-                    await setTabs();
-                }
                 console.log({ tasks });
 
                 if (
-                    (!tasks && currentTabId !== id) ||
+                    !tasks ||
                     (tasks && tasks?.length === 0) ||
                     (tasks &&
                         tasks?.length > 0 &&

@@ -130,29 +130,4 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         });
     },
 
-    // // Reset state when changing tabs with active toasts
-    // resetOnTabChange: async (newTabId) => {
-    //     try {
-    //         const { stackedToast, currentTabId, resetToast, clearAllPending } =
-    //             get();
-
-    //         // Skip jika tab tidak berubah
-    //         if (currentTabId === newTabId) {
-    //             console.log('Same tab, skipping reset');
-    //             return;
-    //         }
-
-    //         if (stackedToast > 0) {
-    //             console.log('Tab changed with active toasts, resetting...');
-    //             resetToast();
-    //             clearAllPending();
-    //         }
-
-    //         // Load fresh data for new tab
-    //         const data = await getTaskTabWithTasks(newTabId);
-    //         set({ tasks: data, currentTabId: newTabId, error: null });
-    //     } catch (err) {
-    //         get().setError(err);
-    //     }
-    // },
 }));

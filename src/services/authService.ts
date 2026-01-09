@@ -1,3 +1,4 @@
+import type { IUser } from '../types/userTypes.js';
 import { api, ensureBase, publicApi } from './api.js';
 
 export async function putAccessToken(token: string) {
@@ -13,11 +14,7 @@ export async function loginUser({
 }) {
     ensureBase();
     const url = '/auth/login';
-    const res = await api.post(
-        url,
-        { email, password }
-        // { withCredentials: false }
-    );
+    const res = await publicApi.post(url, { email, password });
 
     const resData = res?.data;
 
@@ -40,12 +37,13 @@ export async function logoutUser() {
     const url = '/auth/logout';
     const res = await api.delete(url);
     if (res?.status === 204) {
+        localStorage.removeItem('accessToken');
         return true;
     }
     return false;
 }
 
-export async function getLoggedUser() {
+export async function getLoggedUser(): Promise<IUser | null> {
     const url = '/auth/me';
     const res = await api.get(url);
 

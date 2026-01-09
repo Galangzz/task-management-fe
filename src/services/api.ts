@@ -1,7 +1,10 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import ApiError from '../errors/ApiError.js';
+import { useUserStore } from '../stores/useUserStore.js';
 
 const API_BASE: string = import.meta.env.VITE_API_URL;
+
+const setUser = useUserStore.getState().setUser;
 
 export const api = axios.create({
     baseURL: API_BASE,
@@ -53,7 +56,7 @@ api.interceptors.response.use(
                 return api(originalRequest);
             } catch (refreshError) {
                 localStorage.removeItem('accessToken');
-                cookieStore.delete('jwt');
+                setUser(null);
                 // window.location.href = '/';
                 return Promise.reject(refreshError);
             }
@@ -81,19 +84,39 @@ export const publicApi = axios.create({
         Accept: 'application/json',
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 });
 
 publicApi.interceptors.response.use(
     (res) => res,
     (error) => {
         console.error({ publicApi: error });
-        const data = error.response?.data;
-        const errorDetail = Array.isArray(data?.errors)
-            ? data.errors[0]?.message
-            : data?.errors || null;
+
+        let errorDetail;
+        let message;
+
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status;
+            if (status === 429) {
+                const retryAfter = error.response?.headers['retry-after'];
+
+                message =
+                    error.response?.data ||
+                    `Terlalu banyak request. Coba lagi${
+                        retryAfter ? ` dalam ${retryAfter} detik` : ''
+                    }`;
+            } else {
+                const data = error.response?.data;
+                message = data?.message || 'Terjadi kesalahan';
+                errorDetail = Array.isArray(data?.errors)
+                    ? data.errors[0]?.message
+                    : data?.errors || null;
+            }
+        }
+
         return Promise.reject(
             new ApiError(
-                error.response?.data?.message || 'Terjadi kesalahan',
+                message || 'Terjadi kesalahan',
                 error.response?.status,
                 errorDetail
             )

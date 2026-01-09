@@ -11,7 +11,7 @@ import useRegister from '../hooks/AuthState/useRegister.js';
 
 type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
-function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
+function AuthPage({ loginSuccess }: { loginSuccess: () => Promise<void> }) {
     const [active, setActive] = useState<active>('NULL');
     const { email, password, handleSubmitLogin, isLoadingLogin } =
         useLogin(loginSuccess);
@@ -29,29 +29,29 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        let isMounted = true;
-        const checkUserLogged = async () => {
-            try {
-                const { id } = await getLoggedUser();
-                if (id && isMounted) {
-                    navigate('/', { replace: true });
-                }
-            } catch {
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        checkUserLogged();
+    // useEffect(() => {
+    //     let isMounted = true;
+    //     const checkUserLogged = async () => {
+    //         try {
+    //             const { id } = await getLoggedUser();
+    //             if (id && isMounted) {
+    //                 navigate('/', { replace: true });
+    //             }
+    //         } catch {
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+    //     checkUserLogged();
 
-        return () => {
-            isMounted = false;
-        };
-    }, []);
+    //     return () => {
+    //         isMounted = false;
+    //     };
+    // }, []);
 
-    if (isLoading) {
-        return <LoadingPage />;
-    }
+    // if (isLoading) {
+    //     return <LoadingPage />;
+    // }
 
     return (
         <div className="flex h-screen w-screen items-center justify-center bg-(--background-color) p-4!">
