@@ -1,11 +1,11 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import type { ITabs, ITasks } from '../../types/index.js';
+import type { ITab, ITask } from '../../types/index.js';
 import { el } from 'date-fns/locale';
 
 function usePageLoadingState(
-    task: ITasks[] | null,
-    tabs: ITabs[] | null,
+    task: ITask[] | null,
+    tabs: ITab[] | null,
     tabId: string | undefined,
     currentTabId: string
 ) {

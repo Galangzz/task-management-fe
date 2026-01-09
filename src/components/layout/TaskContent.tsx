@@ -20,15 +20,15 @@ import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
 const Dropdown = lazy(() => import('../ui/Dropdown.js'));
 import Field from '../ui/Field.js';
 
-import type { ITasks, ITabs } from '../../types/index.js';
+import type { ITask, ITab } from '../../types/index.js';
 
 import { AnimatePresence } from 'framer-motion';
 
-type GroupedTasks = Record<string, ITasks[]>;
+type GroupedTasks = Record<string, ITask[]>;
 
 type TaskContentProps = {
-    tasks?: ITasks[] | null;
-    tab?: ITabs | null;
+    tasks?: ITask[] | null;
+    tab?: ITab | null;
     isLoading?: boolean;
     handleChecked: (id: string, value: boolean) => void;
     handleStarred: (id: string, value: boolean) => void;

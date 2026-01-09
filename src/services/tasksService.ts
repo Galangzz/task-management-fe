@@ -1,4 +1,4 @@
-import type { ITasks } from '../types/index.js';
+import type { ITask } from '../types/index.js';
 import { api, ensureBase } from './api.js';
 
 type addTaskProps = {
@@ -74,7 +74,7 @@ export async function updateTask(
 export async function getTaskById(
     id: string,
     signal?: AbortSignal
-): Promise<ITasks | null> {
+): Promise<ITask | null> {
     ensureBase();
     const url = `/tasks/${id}`;
     const res = await api.get(url, { signal: signal as AbortSignal });

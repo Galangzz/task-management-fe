@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getTaskById } from '../../services/tasksService.js';
 import { getTaskTabs } from '../../services/taskTabsService.js';
-import type { ITabs, ITasks } from '../../types/index.js';
+import type { ITab, ITask } from '../../types/index.js';
 import { useNavigate } from 'react-router-dom';
 import { useTabsStore } from '../../stores/useTabStore.js';
 import { useTaskStore } from '../../stores/useTaskStore.js';
 
 export function useInitialTask(taskId: string | undefined) {
-    // const [tab, setTab] = useState<ITabs[] | null>(null);
-    // const [task, setTask] = useState<ITasks | null>(null);
+    // const [tab, setTab] = useState<ITab[] | null>(null);
+    // const [task, setTask] = useState<ITask | null>(null);
 
     const { tabs, tab, setTabs, setTab } = useTabsStore();
     const { task, setTask, setTasks, loadTask } = useTaskStore();

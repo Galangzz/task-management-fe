@@ -1,13 +1,10 @@
-import React, { lazy, useEffect, useMemo, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import { ThemeProvider } from './context/Theme.js';
-import { ToastProvider } from './context/Toast.js';
 
 import { getLoggedUser } from './services/authService.js';
 
-import { useTaskStore } from './stores/useTaskStore.js';
-import useToast from './hooks/useToast.js';
 import useTheme from './hooks/useTheme.js';
 import { useTabsStore } from './stores/useTabStore.js';
 

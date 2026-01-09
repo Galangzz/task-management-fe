@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { updateDetailTask } from '../../services/tasksService.js';
 import { isTaskDirty } from '../../utils/taskHelper.js';
-import type { ITasks } from '../../types/index.js';
+import type { ITask } from '../../types/index.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
 import { useTaskStore } from '../../stores/useTaskStore.js';
 
@@ -18,9 +18,9 @@ type BuildPayloadProps = {
 
 export function useUpdateTaskSubmit(
     buildPayload: () => BuildPayloadProps,
-    task: ITasks,
-    setTask: (task: ITasks) => void,
-    setTasks: (tasks: ITasks[]) => void,
+    task: ITask,
+    setTask: (task: ITask) => void,
+    setTasks: (tasks: ITask[]) => void,
     id: string,
     initialize: boolean
 ) {
@@ -73,7 +73,6 @@ export function useUpdateTaskSubmit(
         hasTime,
         isCompleted,
         taskTabId,
-
     ]);
 
     useEffect(() => {

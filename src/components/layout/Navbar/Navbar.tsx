@@ -3,12 +3,12 @@ import { FaStar } from 'react-icons/fa';
 import { GoPlus } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import NavbarButton from './NavbarButton.js';
-import type { ITabs } from '../../../types/index.js';
+import type { ITab } from '../../../types/index.js';
 
 import { motion } from 'framer-motion';
 
 type NavbarProps = {
-    tabs: ITabs[] | null;
+    tabs: ITab[] | null;
     addList: () => void;
     tabId: string;
 };
