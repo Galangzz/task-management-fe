@@ -2,12 +2,12 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Field from './Field.js';
 import ListTask from '../specific/ListTask.js';
-import type { ITasks } from '../../types/index.js';
+import type { ITask } from '../../types/index.js';
 
 import { AnimatePresence } from 'framer-motion';
 
 type DropdownProps = {
-    tasks: ITasks[];
+    tasks: ITask[];
     taskId: string;
     handleChecked: (id: string, value: boolean) => void;
 };
@@ -36,7 +36,7 @@ const Dropdown = ({ tasks, taskId, handleChecked }: DropdownProps) => {
                             {tasks.map((t) => (
                                 <li
                                     key={t.id}
-                                    className="listitem "
+                                    className="listitem"
                                     role="listitem"
                                 >
                                     <ListTask

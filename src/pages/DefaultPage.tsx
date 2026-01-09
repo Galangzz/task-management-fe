@@ -37,8 +37,7 @@ function DefaultPage() {
         isOpenModalTask,
         setIsOpenModalTask,
 
-        //loading page and task
-        isLoadedPage,
+        //loading task
         isLoadedTaskList,
 
         //action
@@ -46,9 +45,7 @@ function DefaultPage() {
         handleStarred,
     } = useDefaultPage(id);
 
-    if (isLoadedPage) {
-        return <LoadingPage />;
-    }
+   
 
     return (
         <div className="relative flex h-full w-full flex-col">

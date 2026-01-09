@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 
 import { getTasksByTabId, updateTask } from '../services/tasksService.js';
-import type { ITasks } from '../types/index.js';
+import type { ITask } from '../types/index.js';
 import { handleError } from '../errors/handleError.js';
 
 export interface TaskState {
-    tasks: ITasks[] | null;
-    task: ITasks | null;
+    tasks: ITask[] | null;
+    task: ITask | null;
 
-    getTask: (id: string) => ITasks | null;
-    setTask: (task: ITasks) => void;
-    setTasks: (tasks: ITasks[]) => void;
+    getTask: (id: string) => ITask | null;
+    setTask: (task: ITask) => void;
+    setTasks: (tasks: ITask[]) => void;
 
     // Actions
 
@@ -45,7 +45,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     setTasks: (v) => {
         const { tasks } = get();
-        const map = new Map<string, ITasks>();
+        const map = new Map<string, ITask>();
 
         tasks?.forEach((t) => map.set(t.id, t));
         v.forEach((t) => map.set(t.id, t));
@@ -130,29 +130,4 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         });
     },
 
-    // // Reset state when changing tabs with active toasts
-    // resetOnTabChange: async (newTabId) => {
-    //     try {
-    //         const { stackedToast, currentTabId, resetToast, clearAllPending } =
-    //             get();
-
-    //         // Skip jika tab tidak berubah
-    //         if (currentTabId === newTabId) {
-    //             console.log('Same tab, skipping reset');
-    //             return;
-    //         }
-
-    //         if (stackedToast > 0) {
-    //             console.log('Tab changed with active toasts, resetting...');
-    //             resetToast();
-    //             clearAllPending();
-    //         }
-
-    //         // Load fresh data for new tab
-    //         const data = await getTaskTabWithTasks(newTabId);
-    //         set({ tasks: data, currentTabId: newTabId, error: null });
-    //     } catch (err) {
-    //         get().setError(err);
-    //     }
-    // },
 }));

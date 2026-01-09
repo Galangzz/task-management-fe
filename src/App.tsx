@@ -1,15 +1,13 @@
-import React, { lazy, useEffect, useMemo, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import { ThemeProvider } from './context/Theme.js';
-import { ToastProvider } from './context/Toast.js';
 
 import { getLoggedUser } from './services/authService.js';
 
-import { useTaskStore } from './stores/useTaskStore.js';
-import useToast from './hooks/useToast.js';
 import useTheme from './hooks/useTheme.js';
 import { useTabsStore } from './stores/useTabStore.js';
+import { useUserStore } from './stores/useUserStore.js';
 
 const LoadingPage = lazy(
     () => import('./components/ui/Loading/LoadingPage.js')
@@ -20,30 +18,21 @@ const AppRoutes = lazy(() => import('./routes/AppRoutes.js'));
 function App() {
     const [theme, toggleTheme] = useTheme();
 
-    const [user, setUser] = useState<string | null>(null);
+    // const [user, setUser] = useState<string | null>(null);
+    const { user, checkUserLogged } = useUserStore();
     const [initialize, setInitialize] = useState(true);
-    const [tabId, setTabId] = useState('');
 
-    const { tabs, setTabs } = useTabsStore();
+
+    const { tabs, setTabs, currentTabId, setCurrentTabId } = useTabsStore();
+
 
     useEffect(() => {
         let isMounted = true;
-        const checkUserLogged = async () => {
-            try {
-                const { id } = await getLoggedUser();
-                if (id && isMounted) {
-                    setUser(id as string);
-                } else {
-                    setUser(null);
-                }
-            } catch {
-                setUser(null);
-            } finally {
-                setInitialize(false);
-            }
-        };
+
         if (!isMounted) return;
-        checkUserLogged();
+        checkUserLogged(isMounted).then(() => {
+            setInitialize(false);
+        });
 
         return () => {
             isMounted = false;
@@ -51,36 +40,25 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (user) {
+        if (user && !tabs) {
             setTabs();
         }
-    }, [user]);
+    }, [user, tabs]);
 
     useEffect(() => {
         if (user && tabs && tabs.length > 0) {
-            setTabId(() => {
-                const tab = tabs
-                    .map((tab) => (tab.deletePermission == false ? tab.id : ''))
-                    .filter((id) => id)[0];
-                return tab!;
-            });
+            const tab = tabs
+                .map((tab) => (tab.deletePermission == false ? tab.id : ''))
+                .filter((id) => id)[0] as string;
+            setCurrentTabId(tab);
         }
     }, [tabs]);
 
     async function onLoginSuccess() {
-        const { id } = await getLoggedUser();
-        if (id) {
-            setUser(id as string);
-        }
+        await checkUserLogged(true);
     }
 
-    if (initialize) {
-        //todo
-        // return <InitializeLoading />;
-        return <LoadingPage />;
-    }
-
-    if (user && tabId === '') {
+    if (initialize || (user && !tabs)) {
         return <LoadingPage />;
     }
 
@@ -107,7 +85,7 @@ function App() {
     return (
         <ThemeProvider value={{ theme, toggleTheme }}>
             <div className="App min-h-screen w-screen">
-                <AppRoutes tabId={tabId!} />
+                <AppRoutes tabId={currentTabId} />
                 <ToastContainer
                     autoClose={3000}
                     toastClassName={'bg-(--toast-bg)!'}

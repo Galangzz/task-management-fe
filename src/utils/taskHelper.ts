@@ -1,6 +1,6 @@
-import type { ITasks } from '../types/index.js';
+import type { ITask } from '../types/index.js';
 
-type isTaskDirtyProps = Omit<ITasks, 'id' | 'createdAt'>;
+type isTaskDirtyProps = Omit<ITask, 'id' | 'createdAt'>;
 
 export function isTaskDirty(
     initial: isTaskDirtyProps | null,

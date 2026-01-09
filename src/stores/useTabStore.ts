@@ -1,21 +1,21 @@
 import { create } from 'zustand';
-import type { ITabs, ITasks } from '../types/index.js';
+import type { ITab, ITask } from '../types/index.js';
 import { getTaskTabs } from '../services/taskTabsService.js';
 import { handleError } from '../errors/handleError.js';
 
 interface TabsStoreState {
-    tabs: ITabs[] | null;
-    tab: ITabs | null;
+    tabs: ITab[] | null;
+    tab: ITab | null;
     currentTabId: string;
-    pendingUpdates: Map<string, ITasks[] | null>;
+    pendingUpdates: Map<string, ITask[] | null>;
 
     setTabs: () => Promise<void>;
     setTab: (tabId: string) => void;
     setCurrentTabId: (tabId: string) => void;
 
-    optimisticAddTab: (tab: ITabs) => void;
+    optimisticAddTab: (tab: ITab) => void;
 
-    addPendingUpdates: (tabId: string, tasks: ITasks) => void;
+    addPendingUpdates: (tabId: string, tasks: ITask) => void;
     clearPendingUpdates: (tabId: string, taskId: string) => void;
     clearAllPendingUpdates: () => void;
 }

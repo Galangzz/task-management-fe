@@ -1,3 +1,4 @@
+import axios, { AxiosError } from 'axios';
 import useToast from '../hooks/useToast.js';
 import ApiError from './ApiError.js';
 
@@ -8,6 +9,7 @@ export function handleError(err: unknown) {
         toast.error(err);
         return;
     }
+
 
     if (err instanceof Error) {
         toast.error(err);

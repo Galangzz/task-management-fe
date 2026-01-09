@@ -1,6 +1,6 @@
 import React from 'react';
 import Field from '../Field.js';
-import type { ITabs } from '../../../types/index.js';
+import type { ITab } from '../../../types/index.js';
 import { motion } from 'framer-motion';
 
 export default function ModalTabMove({
@@ -9,7 +9,7 @@ export default function ModalTabMove({
     close,
     handleChange,
 }: {
-    tab: ITabs[] | null;
+    tab: ITab[] | null;
     id: string | null;
     close: () => void;
     handleChange: (id: string) => void;
@@ -37,7 +37,7 @@ export default function ModalTabMove({
                     <h1 className="w-full text-xl font-bold">
                         Pindahkan task ke tab
                     </h1>
-                    <hr className="w-full mb-2!" />
+                    <hr className="mb-2! w-full" />
                     {tab?.map((tab) => (
                         <div
                             key={tab.id}

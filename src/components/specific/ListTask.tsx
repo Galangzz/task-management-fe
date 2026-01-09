@@ -4,7 +4,7 @@ import StarCheck from '../ui/StarCheck.js';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTaskStore } from '../../stores/useTaskStore.js';
-import type { ITasks } from '../../types/index.js';
+import type { ITask } from '../../types/index.js';
 
 type LisTaskProps = {
     children: React.ReactNode;
@@ -45,7 +45,7 @@ function ListTask({
             className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
             onClick={() => {
                 const task = getTask(id);
-                setTask((task as ITasks) || null);
+                setTask((task as ITask) || null);
                 navigate(`/details/${id}`);
             }}
         >

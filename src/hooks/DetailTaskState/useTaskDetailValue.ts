@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ITabs, ITasks } from '../../types/index.js';
+import type { ITab, ITask } from '../../types/index.js';
 
 export function useTaskDetailValue(
-    tab: ITabs[] | null,
-    task: ITasks | null,
+    tab: ITab[] | null,
+    task: ITask | null,
     setInitialize: React.Dispatch<React.SetStateAction<boolean>>
 ) {
     const [title, setTitle] = useState('');
@@ -13,7 +13,7 @@ export function useTaskDetailValue(
     const [taskTabId, setTaskTabId] = useState<string | null>(null);
 
     const detailRef = useRef<HTMLTextAreaElement>(null);
-    console.log({taskdetail: task})
+    console.log({ taskdetail: task });
 
     useEffect(() => {
         if (task && Object.keys(task).length === 10) {

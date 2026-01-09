@@ -4,8 +4,10 @@ import { loginUser } from '../../services/authService.js';
 import useToast from '../useToast.js';
 import { useNavigate } from 'react-router-dom';
 import ApiError from '../../errors/ApiError.js';
+import { AxiosError } from 'axios';
+import { handleError } from '../../errors/handleError.js';
 
-function useLogin(loginSuccess: () => void) {
+function useLogin(loginSuccess: () => Promise<void>) {
     const [email, onChangeEmail, resetEmail] = useInput('');
     const [password, onChangePassword, resetPassword] = useInput('');
     const [isLoadingLogin, setIsLoadingLogin] = useState(false);
@@ -20,13 +22,9 @@ function useLogin(loginSuccess: () => void) {
                 return;
             }
             await loginUser({ email, password });
-            loginSuccess();
+            await loginSuccess();
         } catch (error) {
-            if (error instanceof ApiError || error instanceof Error) {
-                toast?.error(error);
-            } else {
-                toast?.error(new Error('Terjadi kesalahan login'));
-            }
+            handleError(error)
         } finally {
             setIsLoadingLogin(false);
         }
