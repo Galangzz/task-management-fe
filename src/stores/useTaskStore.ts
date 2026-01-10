@@ -28,6 +28,7 @@ export interface TaskState {
     optimisticToggleStarred: (id: string) => void;
     optimisticDeleteTasks: (id: string) => void;
     // resetOnTabChange: (newTabId: string) => Promise<void>;
+    resetTaskStore: () => void;
 }
 
 export const useTaskStore = create<TaskState>((set, get) => ({
@@ -130,4 +131,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         });
     },
 
+    resetTaskStore: () => {
+        console.log('Reset TaskStore')
+        set({
+            tasks: null,
+            task: null,
+        });
+    },
 }));

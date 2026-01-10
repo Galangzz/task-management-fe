@@ -18,6 +18,7 @@ interface TabsStoreState {
     addPendingUpdates: (tabId: string, tasks: ITask) => void;
     clearPendingUpdates: (tabId: string, taskId: string) => void;
     clearAllPendingUpdates: () => void;
+    resetTabStore: () => void;
 }
 
 export const useTabsStore = create<TabsStoreState>((set, get) => ({
@@ -71,4 +72,11 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
     },
 
     clearAllPendingUpdates: () => set({ pendingUpdates: new Map() }),
+
+    resetTabStore: () => {
+        const { clearAllPendingUpdates } = get();
+        clearAllPendingUpdates();
+        console.log('Reset TabStore')
+        set({ tabs: null, tab: null, currentTabId: '' });
+    },
 }));
