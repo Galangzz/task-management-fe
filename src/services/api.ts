@@ -1,10 +1,14 @@
 import axios from 'axios';
 import ApiError from '../errors/ApiError.js';
 import { useUserStore } from '../stores/useUserStore.js';
+import { useTaskStore } from '../stores/useTaskStore.js';
+import { useTabsStore } from '../stores/useTabStore.js';
 
 const API_BASE: string = import.meta.env.VITE_API_URL;
 
 const setUser = useUserStore.getState().setUser;
+const resetTaskStore = useTaskStore.getState().resetTaskStore;
+const resetTabStore = useTabsStore.getState().resetTabStore;
 
 export const api = axios.create({
     baseURL: API_BASE,
@@ -57,7 +61,8 @@ api.interceptors.response.use(
             } catch (refreshError) {
                 localStorage.removeItem('accessToken');
                 setUser(null);
-                // window.location.href = '/';
+                resetTaskStore();
+                resetTabStore();
                 return Promise.reject(refreshError);
             }
         }

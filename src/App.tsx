@@ -18,7 +18,6 @@ const AppRoutes = lazy(() => import('./routes/AppRoutes.js'));
 function App() {
     const [theme, toggleTheme] = useTheme();
 
-    // const [user, setUser] = useState<string | null>(null);
     const { user, checkUserLogged } = useUserStore();
     const [initialize, setInitialize] = useState(true);
 

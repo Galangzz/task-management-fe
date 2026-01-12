@@ -35,21 +35,21 @@ export async function addTaskTabTitle({ title }: { title: string }) {
     return { id, name, createdAt, deletePermission };
 }
 
-export async function getTaskTabWithTasks(id = 'main-task') {
-    ensureBase();
+// export async function getTaskTabWithTasks(id = 'main-task') {
+//     ensureBase();
 
-    const url = `/task-tabs/${id}`;
-    const res = await api.get(url);
-    console.log('FULL RES:', res);
+//     const url = `/task-tabs/${id}`;
+//     const res = await api.get(url);
+//     console.log('FULL RES:', res);
 
-    const resData = res?.data;
-    console.log('DATA:', resData);
-    return resData &&
-        typeof resData === 'object' &&
-        Object.prototype.hasOwnProperty.call(resData, 'data')
-        ? resData.data
-        : resData;
-}
+//     const resData = res?.data;
+//     console.log('DATA:', resData);
+//     return resData &&
+//         typeof resData === 'object' &&
+//         Object.prototype.hasOwnProperty.call(resData, 'data')
+//         ? resData.data
+//         : resData;
+// }
 
 export async function getTaskTabById(id: string) {
     ensureBase();

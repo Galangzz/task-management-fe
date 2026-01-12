@@ -25,34 +25,6 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => Promise<void> }) {
         isLoadingRegister,
     } = useRegister();
 
-    const [isLoading, setIsLoading] = useState(true);
-
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     let isMounted = true;
-    //     const checkUserLogged = async () => {
-    //         try {
-    //             const { id } = await getLoggedUser();
-    //             if (id && isMounted) {
-    //                 navigate('/', { replace: true });
-    //             }
-    //         } catch {
-    //         } finally {
-    //             setIsLoading(false);
-    //         }
-    //     };
-    //     checkUserLogged();
-
-    //     return () => {
-    //         isMounted = false;
-    //     };
-    // }, []);
-
-    // if (isLoading) {
-    //     return <LoadingPage />;
-    // }
-
     return (
         <div className="flex h-screen w-screen items-center justify-center bg-(--background-color) p-4!">
             <div className="max-h relative flex max-h-7/8 min-h-2/3 w-full max-w-2xl overflow-hidden rounded-3xl bg-(--background-header) shadow-2xl max-md:h-7/8! max-md:flex-col">
