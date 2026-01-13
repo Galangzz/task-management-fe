@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import ApiError from '../../errors/ApiError.js';
-import { addTaskTabTitle } from '../../services/taskTabsService.js';
+import { addNewTabTitle } from '../../services/taskTabsService.js';
 import { useNavigate } from 'react-router-dom';
 import useInput from '../useInput.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
@@ -18,7 +18,7 @@ function useTaskTitleModal() {
         setIsLoading(true);
         try {
             const { id, name, createdAt, deletePermission } =
-                await addTaskTabTitle({ title: titleList });
+                await addNewTabTitle({ title: titleList });
             optimisticAddTab({ id, name, createdAt, deletePermission });
             console.log({ NewTab: tabs });
             setTab(id);

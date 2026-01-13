@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getTaskById } from '../../services/tasksService.js';
-import { getTaskTabs } from '../../services/taskTabsService.js';
+import { getTabs } from '../../services/taskTabsService.js';
 import type { ITab, ITask } from '../../types/index.js';
 import { useNavigate } from 'react-router-dom';
 import { useTabsStore } from '../../stores/useTabStore.js';

@@ -38,7 +38,7 @@ export async function addTask(
         starred,
         isCompleted,
     }: addTaskProps
-) {
+): Promise<{ status: string; message: string; data: ITask }> {
     ensureBase();
     const url = '/tasks';
     const resData = await api.post(url, {
@@ -52,11 +52,12 @@ export async function addTask(
         taskTabId,
     });
 
-    return resData &&
+    return (
+        resData &&
         typeof resData === 'object' &&
-        Object.prototype.hasOwnProperty.call(resData, 'data')
-        ? resData.data
-        : null;
+        Object.prototype.hasOwnProperty.call(resData, 'data') &&
+        resData.data
+    );
 }
 
 export async function updateTask(
@@ -112,7 +113,10 @@ export async function updateDetailTask(
     return true;
 }
 
-export async function getTasksByTabId(id: string, signal?: AbortSignal) {
+export async function getTasksByTabId(
+    id: string,
+    signal?: AbortSignal
+): Promise<ITask[]> {
     ensureBase();
     const url = `/tasks`;
     const res = await api.get(url, {
@@ -126,7 +130,7 @@ export async function getTasksByTabId(id: string, signal?: AbortSignal) {
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
-        : resData;
+        : [];
 }
 
 export async function deleteTaskById(id: string) {
