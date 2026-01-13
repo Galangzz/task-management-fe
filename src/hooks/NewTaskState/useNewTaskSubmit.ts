@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getTaskTabById } from '../../services/taskTabsService.js';
+import { getTabById } from '../../services/taskTabsService.js';
 import { addTask } from '../../services/tasksService.js';
 import { useTaskStore } from '../../stores/useTaskStore.js';
 import { handleError } from '../../errors/handleError.js';
@@ -34,7 +34,10 @@ function useNewTaskSubmit(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
             e.preventDefault();
             try {
-                const currentTab = await getTaskTabById(tabId);
+                const currentTab = await getTabById(tabId);
+                if (!currentTab) {
+                    throw new Error('Tab tidak ditemukan');
+                }
 
                 console.log({ useNewTaskSubmit: currentTab });
                 if (!title && !deadline && !detail) return;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTaskStore } from '../../stores/useTaskStore.js';
-import { getTaskTabById } from '../../services/taskTabsService.js';
+import { getTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
 

@@ -76,7 +76,6 @@ export async function signUpUser({
             password,
             repeatPassword,
         }
-        // { withCredentials: false }
     );
 
     const resData = res?.data;

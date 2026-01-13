@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { ITab, ITask } from '../types/index.js';
-import { getTaskTabs } from '../services/taskTabsService.js';
+import { getTabs } from '../services/taskTabsService.js';
 import { handleError } from '../errors/handleError.js';
 
 interface TabsStoreState {
@@ -29,7 +29,7 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
 
     setTabs: async () => {
         try {
-            const tabs = await getTaskTabs();
+            const tabs = await getTabs();
             console.log({ tabs });
             set({ tabs });
         } catch (err) {
@@ -76,7 +76,7 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
     resetTabStore: () => {
         const { clearAllPendingUpdates } = get();
         clearAllPendingUpdates();
-        console.log('Reset TabStore')
+        console.log('Reset TabStore');
         set({ tabs: null, tab: null, currentTabId: '' });
     },
 }));

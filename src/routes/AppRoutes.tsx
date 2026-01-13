@@ -1,8 +1,10 @@
 import { Navigate, Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 import React, { lazy } from 'react';
-const DefaultPage = lazy(() => import('../pages/DefaultPage.js'));
-const DetailTask = lazy(() => import('../pages/DetailTask.js'));
+// const DefaultPage = lazy(() => import('../pages/DefaultPage.js'));
+// const DetailTask = lazy(() => import('../pages/DetailTask.js'));
+import DefaultPage from '../pages/DefaultPage.js';
+import DetailTask from '../pages/DetailTask.js';
 
 function AppRoutes({ tabId }: { tabId: string }) {
     return (
