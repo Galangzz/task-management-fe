@@ -19,7 +19,7 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
     return (
         <div className="NavBar flex w-full items-center justify-center border-b-2">
             <div className="container">
-                <ul className="scrollbar-hide flex h-full w-max snap-x snap-mandatory items-center gap-x-3 overflow-x-auto overflow-y-clip px-2! font-mono text-xl">
+                <ul className="scrollbar-hide flex h-full w-max snap-x snap-mandatory items-center gap-x-3 overflow-x-auto overflow-y-clip px-2! font-mono text-fluid-md">
                     <li className="flex">
                         <NavbarButton
                             onClick={() => navigate('/starred-task')}

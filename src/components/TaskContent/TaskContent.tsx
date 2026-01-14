@@ -159,7 +159,7 @@ function TaskContent({
                                         className="flex w-full flex-col gap-4"
                                     >
                                         <h2
-                                            className={`text-lg font-bold ${colorDate(label)}`}
+                                            className={`text-fluid-sm font-bold ${colorDate(label)}`}
                                         >
                                             {label}
                                         </h2>
@@ -188,7 +188,7 @@ function TaskContent({
                                                                 handleStarred
                                                             }
                                                         >
-                                                            <p className="font-semibold">
+                                                            <p className="font-semibold text-fluid-sm">
                                                                 {t.title}
                                                             </p>
                                                             {t.detail && (
