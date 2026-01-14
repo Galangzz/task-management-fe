@@ -23,6 +23,9 @@ import Field from '../ui/Field.js';
 import type { ITask, ITab } from '../../types/index.js';
 
 import { AnimatePresence } from 'framer-motion';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import TitleTaskContent from './TitleTaskContent.js';
+import MenuTaskContent from './MenuTaskContent.js';
 
 type GroupedTasks = Record<string, ITask[]>;
 
@@ -53,7 +56,7 @@ function TaskContent({
 
     const completeTask = useMemo(
         () => tasks?.filter((t) => t.isCompleted == true) || [],
-        [tasks,tab]
+        [tasks, tab]
     );
 
     useEffect(() => {
@@ -81,9 +84,9 @@ function TaskContent({
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const d = new Date(deadline);
-        if (d < today) return 'TERLEWAT';
-        if (d === today) return 'HARI_INI';
-        if (d === tomorrow) return 'BESOK';
+        if (d.getDate() < today.getDate()) return 'TERLEWAT';
+        if (d.getDate() === today.getDate()) return 'HARI_INI';
+        if (d.getDate() === tomorrow.getDate()) return 'BESOK';
         return d.toLocaleDateString();
     }, []);
 
@@ -137,9 +140,14 @@ function TaskContent({
             <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                 <Field>
                     <div className="flex">
-                        <h1 className="mb-6 text-xl font-bold tracking-wide">
-                            {tab?.name ?? 'Stared Task'}
-                        </h1>
+                        <TitleTaskContent title={tab?.name || 'Starred Task'} />
+                        {/*TODO*/}
+                        {tab?.id !== 'starred-task' && (
+                            <MenuTaskContent
+                                tabId={tabId}
+                                deletePermission={tab?.deletePermission || false}
+                            />
+                        )}
                     </div>
                     <div className="flex flex-col items-center gap-4">
                         {activeTask.length > 0 &&
@@ -151,7 +159,7 @@ function TaskContent({
                                         className="flex w-full flex-col gap-4"
                                     >
                                         <h2
-                                            className={`text-lg font-bold ${colorDate(label)}`}
+                                            className={`text-fluid-sm font-bold ${colorDate(label)}`}
                                         >
                                             {label}
                                         </h2>
@@ -180,17 +188,15 @@ function TaskContent({
                                                                 handleStarred
                                                             }
                                                         >
-                                                            <p className="font-semibold">
+                                                            <p className="font-semibold text-fluid-sm">
                                                                 {t.title}
                                                             </p>
-                                                            {t.detail !==
-                                                                null && (
+                                                            {t.detail && (
                                                                 <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
                                                                     {t.detail}
                                                                 </p>
                                                             )}
-                                                            {t.hasTime ==
-                                                                true && (
+                                                            {t.hasTime && (
                                                                 <div className="ml-2! flex w-fit items-center justify-center opacity-90">
                                                                     {String(
                                                                         dl?.getHours()

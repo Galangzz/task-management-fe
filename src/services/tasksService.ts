@@ -62,14 +62,19 @@ export async function addTask(
 
 export async function updateTask(
     id: string,
-    { starred = null, isCompleted = null }: updateTaskProps
+    { starred = null, isCompleted = null }: updateTaskProps,
+    signal?: AbortSignal
 ) {
     ensureBase();
     const url = `/tasks/${id}`;
-    await api.patch(url, {
-        starred: starred,
-        isCompleted: isCompleted,
-    });
+    await api.patch(
+        url,
+        {
+            starred: starred,
+            isCompleted: isCompleted,
+        },
+        { signal: signal as AbortSignal }
+    );
 }
 
 export async function getTaskById(

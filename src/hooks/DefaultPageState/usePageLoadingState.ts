@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ITab, ITask } from '../../types/index.js';
 
 function usePageLoadingState(
@@ -10,22 +10,24 @@ function usePageLoadingState(
 ) {
     const [isLoadedTaskList, setIsLoadedTaskList] = useState(false);
     const location = useLocation();
+    const timeOutRef = useRef<number | null>(null);
 
-    console.log({ currentTabId });
+    console.log({ currentTabId, tabId });
     useEffect(() => {
-        setIsLoadedTaskList(true);
-        let t: number;
-        if (task) {
-            if (tabId === currentTabId || tabId === 'starred-task') {
-                t = setTimeout(() => {
-                    setIsLoadedTaskList(false);
-                }, 100);
-            }
+        if (!task || (task && task?.length === 0)) {
+            setIsLoadedTaskList(true);
         }
-        return () => {
-            clearTimeout(t);
-        };
-    }, [task, tabs, location.pathname, currentTabId]);
+        if (task && currentTabId === tabId) {
+            
+            if (timeOutRef.current) {
+                clearTimeout(timeOutRef.current);
+            }
+            
+            timeOutRef.current = setTimeout(() => {
+                setIsLoadedTaskList(false);
+            }, 100);
+        }
+    }, [location.pathname, task]);
 
     return { isLoadedTaskList };
 }

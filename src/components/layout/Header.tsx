@@ -20,7 +20,7 @@ function Header() {
 
     return (
         <div className="header realtive flex h-fit w-full items-center justify-center p-2! text-2xl font-extrabold">
-            <h1 className="">Task</h1>
+            <h1 className="text-fluid-xl">Task</h1>
             <div className="absolute right-0 mx-4! flex items-center justify-center gap-2">
                 <div
                     className="relative w-fit"

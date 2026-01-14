@@ -72,3 +72,9 @@ export async function getTabById(id: string): Promise<string | null> {
         ? resData.data?.id
         : null;
 }
+
+export async function deleteTabById(id: string) {
+    ensureBase();
+    const url = `/task-tabs/${id}`;
+    await api.delete(url);
+}

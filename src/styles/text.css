@@ -1,0 +1,18 @@
+@import 'tailwindcss';
+
+@theme{
+    --text-fluid-xs: clamp(0.5rem, calc(0.5rem + 0.5vw), 0.75rem);
+    --text-fluid-sm: clamp(0.8rem, calc(0.8rem + 0.5vw), 1rem);
+    --text-fluid-md: clamp(1rem, calc(1rem + 0.5vw), 1.25rem);
+    --text-fluid-lg: clamp(1.25rem, calc(1.25rem + 0.5vw), 1.5rem);
+    --text-fluid-xl: clamp(1.5rem, calc(1.5rem + 0.5vw), 1.75rem);
+    --text-fluid-2xl: clamp(1.75rem, calc(1.75rem + 0.5vw), 2rem);
+    --text-fluid-3xl: clamp(2rem, calc(2rem + 0.5vw), 2.25rem);
+    --text-fluid-4xl: clamp(2.25rem, calc(2.25rem + 0.5vw), 2.5rem);
+    --text-fluid-5xl: clamp(2.5rem, calc(2.5rem + 0.5vw), 2.75rem);
+    --text-fluid-6xl: clamp(2.75rem, calc(2.75rem + 0.5vw), 3rem);
+    --text-fluid-7xl: clamp(3rem, calc(3rem + 0.5vw), 3.25rem);
+    --text-fluid-8xl: clamp(3.25rem, calc(3.25rem + 0.5vw), 3.5rem);
+    --text-fluid-9xl: clamp(3.5rem, calc(3.5rem + 0.5vw), 3.75rem);
+    --text-fluid-10xl: clamp(3.75rem, calc(3.75rem + 0.5vw), 4rem);
+}
