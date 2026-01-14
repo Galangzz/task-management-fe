@@ -1,6 +1,5 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useRef } from 'react';
 import { useTaskStore } from '../../stores/useTaskStore.js';
-import { ToastContext } from '../../context/Toast.js';
 import { updateTask } from '../../services/tasksService.js';
 import useToast from '../useToast.js';
 import { useTabsStore } from '../../stores/useTabStore.js';
@@ -17,6 +16,8 @@ function useTaskAction() {
 
     const { tabs, currentTabId, addPendingUpdates, clearPendingUpdates } =
         useTabsStore();
+
+    const starAbortRef = useRef<AbortController | null>(null);
 
     const handleChecked = useCallback(
         async (id: string, isCompleted: boolean) => {
@@ -41,7 +42,7 @@ function useTaskAction() {
                     },
                     () => {
                         console.log('Toast closed, committing to DB');
-                        fixChecked(id, currentTabId, isCompleted);
+                        fixChecked(id, isCompleted);
                         clearPendingUpdates(currentTabId, id);
                     },
                     () => {
@@ -56,8 +57,19 @@ function useTaskAction() {
 
     const handleStarred = useCallback(
         async (id: string, starred: boolean) => {
+            if (starAbortRef.current) {
+                starAbortRef.current.abort();
+            }
+
+            const controller = new AbortController();
+            starAbortRef.current = controller;
+
             optimisticToggleStarred(id);
-            await updateTask(id, { starred });
+            try {
+                await updateTask(id, { starred }, controller.signal);
+            } catch {
+                optimisticToggleStarred(id);
+            }
         },
         [tasks, tabs]
     );

@@ -11,71 +11,45 @@ function useTabNavigation(id: string | undefined) {
 
     const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
-    const {
-        tabs,
-        setTab,
-        setTabs,
-        currentTabId,
-        setCurrentTabId,
-        pendingUpdates,
-    } = useTabsStore();
+    const { tabs, setTab, currentTabId, setCurrentTabId, pendingUpdates } =
+        useTabsStore();
 
-    useEffect(() => {
-        if (id === undefined) {
-            const tabId = tabs
-                ?.map((t) => (t.deletePermission == false ? t.id : null))
-                .filter((t) => t !== null)[0];
-            navigate(`/${tabId}`, { replace: true });
-            return;
-        }
-        setTab(id);
-        if (currentTabId !== id) {
-            refreshTasks();
-        }
-        if (id !== 'starred-task') {
-            setCurrentTabId(id);
-        }
-
-        const controller = new AbortController();
-        const signal = controller.signal;
-
-        const run = async () => {
-            try {
-                console.log({ currentTabId });
-                console.log({ tasks });
-
-                if (
-                    !tasks ||
-                    (tasks && tasks?.length === 0) ||
-                    (tasks &&
-                        tasks?.length > 0 &&
-                        tasks?.some((t) => t.taskTabId !== id))
-                ) {
-                    await loadTask(id, signal);
-                }
-
-                console.log({ pendingUpdates });
-                if (pendingUpdates.has(id)) {
-                    console.log({ TabId: id, pendingUpdates });
-                    setTasks(pendingUpdates.get(id)!);
-                }
-
-                console.log({ currentTabId });
-            } catch (error) {
-                if (error instanceof ApiError) {
-                    if (error.status == 404) {
-                        navigate('/', { replace: true });
-                        return;
-                    }
+    const loadTaskList = async (tabId: string, signal?: AbortSignal) => {
+        try {
+            await loadTask(tabId, signal);
+            if (pendingUpdates.has(tabId)) {
+                console.log({ TabId: id, pendingUpdates });
+                setTasks(pendingUpdates.get(tabId)!);
+            }
+        } catch (error) {
+            if (error instanceof ApiError) {
+                if (error.status == 404) {
+                    navigate(`/`, { replace: true });
+                    return;
                 }
             }
-        };
-        run();
+        }
+    };
 
-        return () => {
-            controller.abort();
-        };
-    }, [location.pathname, id]);
+    useEffect(() => {
+        if (id) {
+            setCurrentTabId(id);
+            setTab(id);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        if (!id) return;
+
+        if (!tasks || tasks.length === 0 || !tasks.every((t) => t.taskTabId === id)) {
+            refreshTasks();
+            loadTaskList(id as string, controller.signal);
+        }
+
+        return () => controller.abort();
+    }, [currentTabId, id]);
 
     return null;
 }

@@ -20,7 +20,6 @@ export interface TaskState {
 
     fixChecked: (
         id: string,
-        tabId: string,
         isCompleted: boolean
     ) => Promise<void>;
     undoLocalStatus: (id: string) => void;
@@ -82,7 +81,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     },
 
     // Commit changes to localStorage
-    fixChecked: async (id, tabId, isCompleted) => {
+    fixChecked: async (id, isCompleted) => {
         try {
             await updateTask(id, { isCompleted });
         } catch (err) {

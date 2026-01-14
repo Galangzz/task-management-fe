@@ -4,7 +4,7 @@ import Navbar from '../components/layout/Navbar/Navbar.js';
 const ModalTaskTitle = lazy(
     () => import('../components/ui/Modal/ModalTaskTitle.js')
 );
-import TaskContent from '../components/layout/TaskContent.js';
+import TaskContent from '../components/TaskContent/TaskContent.js';
 import AddButton from '../components/ui/AddButton.js';
 const ModalNewTask = lazy(
     () => import('../components/ui/Modal/ModalNewTask.js')

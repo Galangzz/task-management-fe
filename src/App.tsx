@@ -21,7 +21,6 @@ function App() {
     const { user, checkUserLogged } = useUserStore();
     const [initialize, setInitialize] = useState(true);
 
-
     const { tabs, setTabs, currentTabId, setCurrentTabId } = useTabsStore();
 
 
@@ -57,7 +56,7 @@ function App() {
         await checkUserLogged(true);
     }
 
-    if (initialize || (user && !tabs)) {
+    if (initialize || (user && !tabs && !currentTabId)) {
         return <LoadingPage />;
     }
 

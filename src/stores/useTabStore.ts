@@ -14,6 +14,7 @@ interface TabsStoreState {
     setCurrentTabId: (tabId: string) => void;
 
     optimisticAddTab: (tab: ITab) => void;
+    optimisticDeleteTab: (tabId: string) => void;
 
     addPendingUpdates: (tabId: string, tasks: ITask) => void;
     clearPendingUpdates: (tabId: string, taskId: string) => void;
@@ -51,6 +52,13 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
         console.log({ tab });
         console.log({ Optimistic: tabs });
     },
+
+    optimisticDeleteTab: (tabId) => {
+        const tabs = get().tabs || [];
+        const newTabs = tabs.filter((tab) => tab.id !== tabId);
+        set({ tabs: newTabs });
+    },
+
 
     addPendingUpdates: (tabId, tasks) => {
         const pending = new Map(get().pendingUpdates);
