@@ -1,4 +1,5 @@
-import { api, ensureBase } from './api.js';
+import type { IUser } from '../types/userTypes.js';
+import { api, ensureBase, publicApi } from './api.js';
 
 export async function putAccessToken(token: string) {
     return localStorage.setItem('accessToken', token);
@@ -13,11 +14,7 @@ export async function loginUser({
 }) {
     ensureBase();
     const url = '/auth/login';
-    const res = await api.post(
-        url,
-        { email, password }
-        // { withCredentials: false }
-    );
+    const res = await publicApi.post(url, { email, password });
 
     const resData = res?.data;
 
@@ -40,12 +37,13 @@ export async function logoutUser() {
     const url = '/auth/logout';
     const res = await api.delete(url);
     if (res?.status === 204) {
+        localStorage.removeItem('accessToken');
         return true;
     }
     return false;
 }
 
-export async function getLoggedUser() {
+export async function getLoggedUser(): Promise<IUser | null> {
     const url = '/auth/me';
     const res = await api.get(url);
 
@@ -70,15 +68,14 @@ export async function signUpUser({
     repeatPassword: string;
 }) {
     const url = '/users/signup';
-    const res = await api.post(
+    const res = await publicApi.post(
         url,
         {
             username,
             email,
             password,
             repeatPassword,
-        },
-        // { withCredentials: false }
+        }
     );
 
     const resData = res?.data;
@@ -94,7 +91,16 @@ export async function verifyOTPUser({
     otp: string;
 }) {
     const url = '/users/verify-signup';
-    const res = await api.post(url, { email, otp });
+    const res = await publicApi.post(url, { email, otp });
+
+    const resData = res?.data;
+
+    return resData && resData === 'object' ? resData : null;
+}
+
+export async function resendOTP(email: string) {
+    const url = '/users/resend-otp';
+    const res = await publicApi.post(url, { email });
 
     const resData = res?.data;
 

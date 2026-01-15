@@ -1,65 +1,72 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useTaskStore } from '../useTaskStore.js';
-import { getTaskTabById } from '../../services/taskTabsService.js';
+import { useTaskStore } from '../../stores/useTaskStore.js';
+import { getTabById } from '../../services/taskTabsService.js';
 import ApiError from '../../errors/ApiError.js';
+import { useTabsStore } from '../../stores/useTabStore.js';
 
-function useTabNavigation(setIsLoadedTaskList: (value: React.SetStateAction<boolean>) => void) {
+function useTabNavigation(id: string | undefined) {
     const navigate = useNavigate();
-    const location = useLocation();
-    const previousTabRef = useRef('');
-    const isInitialMount = useRef(true);
 
-    const { setTabs, setCurrentTabId, loadTaskList, resetOnTabChange } =
-        useTaskStore();
+    const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
-    useEffect(() => {
-        let isCancelled = false;
-        const currentTab = location.pathname.split('/')[1] || 'main-task';
+    const {
+        setTab,
+        currentTabId,
+        previousTabId,
+        setCurrentTabId,
+        setPreviousTabId,
+        pendingUpdates,
+    } = useTabsStore();
 
-        if (previousTabRef.current === currentTab && !isInitialMount.current) {
-            return;
-        }
-
-        const isFirstLoad = isInitialMount.current;
-        isInitialMount.current = false;
-
-        console.log(
-            `Tab: ${previousTabRef.current} → ${currentTab} (firstLoad: ${isFirstLoad})`
-        );
-        const run = async () => {
-            if (
-                previousTabRef.current !== '' &&
-                previousTabRef.current !== currentTab
-            ) {
-                setIsLoadedTaskList(true);
-                resetOnTabChange(currentTab);
-            } else {
-                try {
-                    const data = await getTaskTabById(currentTab);
-                    console.log({ data });
-                    if (isCancelled) return;
-
-                    setCurrentTabId(currentTab);
-                    loadTaskList(currentTab);
-                } catch (error) {
-                    if(error instanceof ApiError){
-                        if (error.status == 404) {
-                            navigate('/', { replace: true });
-                            return;
-                        }
-                    }
+    const loadTaskList = async (
+        tabId: string,
+        signal?: AbortSignal,
+        previous?: string
+    ) => {
+        try {
+            await loadTask(tabId, signal);
+            if (pendingUpdates.has(tabId)) {
+                setTasks(pendingUpdates.get(tabId)!);
+            }
+        } catch (error) {
+            if (error instanceof ApiError) {
+                if (error.status == 404) {
+                    navigate(`/${previous}`, { replace: true });
+                    return;
                 }
             }
+        }
+    };
 
-            previousTabRef.current = currentTab;
-        };
-        run();
+    useEffect(() => {
+        if (id) {
+            setCurrentTabId(id);
+            setTab(id);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        let mounted = true;
+
+        if (!id || !mounted) return;
+
+        if (!tasks || tasks?.length === 0 || currentTabId !== previousTabId) {
+            console.log({ currentTabId, id, previousTabId });
+            refreshTasks();
+
+            loadTaskList(id as string, controller.signal, previousTabId).then(
+                () => setPreviousTabId(currentTabId)
+            );
+        }
+
         return () => {
-            isCancelled = true;
+            controller.abort();
+            mounted = false;
         };
-    }, [location.pathname]);
+    }, [id, currentTabId, previousTabId]);
 
-    return null
+    return null;
 }
 export default useTabNavigation;

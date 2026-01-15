@@ -29,12 +29,10 @@ const formatCustomDate = (dateString: string)=> {
         ...(targetYear !== currentYear && { year: 'numeric' }),
     };
 
-    // 4. Formatting Menggunakan Intl.DateTimeFormat
-    // Menghasilkan format: "Sen, 22 Des" atau "Sen, 22 Des 2025"
+
     const formatter = new Intl.DateTimeFormat('id-ID', dateOptions);
     let formattedDate = formatter.format(dateObj);
 
-    // 5. Cleanup (Menghilangkan titik pada singkatan seperti "Des.")
     return formattedDate.replace(/\./g, '');
 };
 

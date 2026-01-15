@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+// const AuthPage = lazy(() => import('../pages/AuthPage.js')); ;
+// const VerifyOTPPage = lazy(() => import('../pages/VerifyOTPPage.js'));
 import AuthPage from '../pages/AuthPage.js';
-import OtpPage from '../pages/OtpPage.js';
+import VerifyOTPPage from '../pages/VerifyOTPPage.js';
 
-function AuthRoutes({ loginSuccess }: { loginSuccess: () => void }) {
+function AuthRoutes({ loginSuccess }: { loginSuccess: () => Promise<void> }) {
     return (
         <Routes>
             <Route
@@ -12,7 +14,7 @@ function AuthRoutes({ loginSuccess }: { loginSuccess: () => void }) {
             />
             <Route
                 path="/otp"
-                element={<OtpPage />}
+                element={<VerifyOTPPage />}
             />
             <Route
                 path="*"

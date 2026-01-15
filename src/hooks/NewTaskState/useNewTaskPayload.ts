@@ -1,24 +1,24 @@
 import { useCallback } from "react";
 
 type FormProps = {
-    title: string;
+    title: string | null;
     detail: string;
     starred: boolean;
 };
 
 type DateTimeProps = {
-    selected: Date | null;
+    deadline: Date | null;
     hasDate: boolean;
     hasTime: boolean;
 };
 function useNewTaskPayload(form: FormProps, dateTime: DateTimeProps) {
     return useCallback(() => {
         return {
-            title: form.title.trim(),
+            title: form.title?.trim() || '',
             detail: form.detail,
             deadline:
-                dateTime.hasDate && dateTime.selected
-                    ? new Date(dateTime.selected)
+                dateTime.hasDate && dateTime.deadline
+                    ? new Date(dateTime.deadline)
                     : null,
             hasDate: dateTime.hasDate,
             hasTime: dateTime.hasTime,
@@ -31,7 +31,7 @@ function useNewTaskPayload(form: FormProps, dateTime: DateTimeProps) {
         form.starred,
         dateTime.hasDate,
         dateTime.hasTime,
-        dateTime.selected,
+        dateTime.deadline,
     ]);
 }
 

@@ -2,12 +2,12 @@ import React from 'react';
 import { styled } from 'styled-components';
 import Field from './Field.js';
 import ListTask from '../specific/ListTask.js';
-import type { Tasks } from '../../types/index.js';
+import type { ITask } from '../../types/index.js';
 
-
+import { AnimatePresence } from 'framer-motion';
 
 type DropdownProps = {
-    tasks: Tasks[];
+    tasks: ITask[];
     taskId: string;
     handleChecked: (id: string, value: boolean) => void;
 };
@@ -32,24 +32,25 @@ const Dropdown = ({ tasks, taskId, handleChecked }: DropdownProps) => {
                         className="list webkit-scrollbar"
                         role="list"
                     >
-                        {tasks.map((t) => (
-                            <li
-                                key={t.id}
-                                className="listitem animate-fade-in"
-                                role="listitem"
-                            >
-                                <ListTask
-                                    checked={t.isCompleted}
-                                    stared={t.starred}
-                                    id={t.id}
-                                    taskId={taskId}
-                                    handleChecked={handleChecked}
-                                    handleStarred={() => {}}
+                        <AnimatePresence>
+                            {tasks.map((t) => (
+                                <li
+                                    key={t.id}
+                                    className="listitem"
+                                    role="listitem"
                                 >
-                                    {t.title}
-                                </ListTask>
-                            </li>
-                        ))}
+                                    <ListTask
+                                        checked={t.isCompleted}
+                                        stared={t.starred}
+                                        id={t.id}
+                                        handleChecked={handleChecked}
+                                        handleStarred={() => {}}
+                                    >
+                                        {t.title}
+                                    </ListTask>
+                                </li>
+                            ))}
+                        </AnimatePresence>
                     </ul>
                 </div>
             </StyledWrapper>

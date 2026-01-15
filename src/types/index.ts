@@ -1,22 +1,3 @@
-export interface ITasks {
-    id: string;
-    title: string;
-    detail: string | null;
-    createdAt: Date;
-    deadline: Date | null;
-    hasDate: boolean;
-    hasTime: boolean;
-    starred: boolean;
-    isCompleted: boolean;
-}
-
-export interface ITabs {
-    id: string;
-    name: string;
-    createdAt: Date;
-    deletePermission: boolean;
-}
-
-export interface ITabWithTasks extends ITabs {
-    tasks: ITasks[];
-}
+export * from './taskTypes.js';
+export * from './tabTypes.js';
+export * from './userTypes.js';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { CgLock, CgMail, CgPassword, CgUser } from 'react-icons/cg';
 import { FaLock, FaUser } from 'react-icons/fa';
+import { ImSpinner9 } from 'react-icons/im';
 
 type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
@@ -23,6 +24,7 @@ type SignUpFormProps = {
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => void;
     submit: () => Promise<void>;
+    isLoadingRegister: boolean;
 };
 
 function SignUpForm({
@@ -36,6 +38,7 @@ function SignUpForm({
     repeatPassword,
     setRepeatPassword,
     submit,
+    isLoadingRegister,
 }: SignUpFormProps) {
     return (
         <div
@@ -69,7 +72,7 @@ function SignUpForm({
                 <div className="flex w-full items-center justify-center gap-2">
                     <CgMail className="pointer-events-none text-2xl opacity-60" />
                     <input
-                        type="text"
+                        type="email"
                         name="email"
                         id="email-register"
                         placeholder="Email"
@@ -111,7 +114,11 @@ function SignUpForm({
                     type="submit"
                     className="m-auto! w-fit rounded-full bg-(--add-button) px-4! py-2! text-xl font-semibold hover:brightness-90"
                 >
-                    SignUp
+                    {isLoadingRegister ? (
+                        <ImSpinner9 className="animate-spin" />
+                    ) : (
+                        'SignUp'
+                    )}
                 </button>
             </form>
         </div>

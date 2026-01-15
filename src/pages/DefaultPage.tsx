@@ -1,25 +1,26 @@
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy } from 'react';
 import Header from '../components/layout/Header.js';
 import Navbar from '../components/layout/Navbar/Navbar.js';
 const ModalTaskTitle = lazy(
     () => import('../components/ui/Modal/ModalTaskTitle.js')
 );
-import TaskContent from '../components/layout/TaskContent.js';
+import TaskContent from '../components/TaskContent/TaskContent.js';
 import AddButton from '../components/ui/AddButton.js';
 const ModalNewTask = lazy(
     () => import('../components/ui/Modal/ModalNewTask.js')
 );
-const LoadingPage = lazy(
-    () => import('../components/ui/Loading/LoadingPage.js')
-);
+
 import useDefaultPage from '../hooks/useDefaultPage.js';
-import { getLoggedUser } from '../services/authService.js';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
+import { AnimatePresence } from 'framer-motion';
 
 function DefaultPage() {
+    const { id } = useParams();
     const {
         tabs,
-        task,
+        tab,
+        tasks,
 
         //newTabModal
         titleList,
@@ -36,18 +37,13 @@ function DefaultPage() {
         isOpenModalTask,
         setIsOpenModalTask,
 
-        //loading page and task
-        isLoadedPage,
+        //loading task
         isLoadedTaskList,
 
         //action
         handleChecked,
         handleStarred,
-    } = useDefaultPage();
-
-    if (isLoadedPage) {
-        return <LoadingPage />;
-    }
+    } = useDefaultPage(id);
 
     return (
         <div className="relative flex h-full w-full flex-col">
@@ -55,43 +51,49 @@ function DefaultPage() {
             <Navbar
                 tabs={tabs}
                 addList={() => setIsOpen(true)}
+                tabId={id!}
             />
-
-            {isOpen && (
-                <ModalTaskTitle
-                    titleList={titleList}
-                    //Check
-                    setTitleList={setTitleList}
-                    setToggleTitle={() => clearTitleModal(false)}
-                    handleSubmitTitleList={submit}
-                    err={error}
-                    setErr={setError}
-                    isLoading={isLoading}
-                    tabs={tabs?.map((t) => t.name) ?? []}
-                />
-            )}
-
-            {isOpenModalTask && (
-                <ModalNewTask setIsOpenModalTask={setIsOpenModalTask} />
-            )}
 
             <TaskContent
-                task={task}
+                tasks={tasks}
+                tab={tab}
                 isLoading={isLoadedTaskList}
-                handleChecked={(id: string, value: boolean) =>
-                    handleChecked(id, value)
-                }
-                handleStarred={(id: string, value: boolean) =>
-                    handleStarred(id, value)
-                }
+                handleChecked={handleChecked}
+                handleStarred={handleStarred}
             />
 
-            <AddButton
-                onClick={(e) => {
-                    e.stopPropagation();
-                    setIsOpenModalTask(true);
-                }}
-            />
+            <AnimatePresence>
+                {isOpen && (
+                    <ModalTaskTitle
+                        titleList={titleList}
+                        setTitleList={setTitleList}
+                        setToggleTitle={() => clearTitleModal(false)}
+                        handleSubmitTitleList={submit}
+                        err={error}
+                        setErr={setError}
+                        isLoading={isLoading}
+                        tabs={tabs?.map((t) => t.name) ?? []}
+                    />
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {isOpenModalTask && (
+                    <ModalNewTask
+                        setIsOpenModalTask={setIsOpenModalTask}
+                        tabId={id!}
+                    />
+                )}
+            </AnimatePresence>
+
+            {id !== 'starred-task' && (
+                <AddButton
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpenModalTask(true);
+                    }}
+                />
+            )}
         </div>
     );
 }

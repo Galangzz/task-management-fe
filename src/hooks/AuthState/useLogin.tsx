@@ -1,31 +1,32 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import useInput from '../useInput.js';
 import { loginUser } from '../../services/authService.js';
 import useToast from '../useToast.js';
 import { useNavigate } from 'react-router-dom';
 import ApiError from '../../errors/ApiError.js';
+import { AxiosError } from 'axios';
+import { handleError } from '../../errors/handleError.js';
 
-function useLogin(loginSuccess: () => void) {
+function useLogin(loginSuccess: () => Promise<void>) {
     const [email, onChangeEmail, resetEmail] = useInput('');
     const [password, onChangePassword, resetPassword] = useInput('');
-    const navigate = useNavigate();
+    const [isLoadingLogin, setIsLoadingLogin] = useState(false);
 
     const toast = useToast();
 
     const handleSubmitLogin = useCallback(async () => {
+        setIsLoadingLogin(true);
         try {
             if (email === '' || password === '') {
                 toast?.error(new Error('Harap lengkapi email atau password'));
                 return;
             }
             await loginUser({ email, password });
-            loginSuccess()
+            await loginSuccess();
         } catch (error) {
-            if (error instanceof ApiError || error instanceof Error) {
-                toast?.error(error);
-            } else {
-                toast?.error(new Error('Terjadi kesalahan login'));
-            }
+            handleError(error)
+        } finally {
+            setIsLoadingLogin(false);
         }
     }, [email, password]);
 
@@ -41,6 +42,7 @@ function useLogin(loginSuccess: () => void) {
             reset: resetPassword,
         },
         handleSubmitLogin,
+        isLoadingLogin,
     };
 }
 

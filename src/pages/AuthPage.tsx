@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import LoginForm from '../components/Login/LoginForm.js';
-import LoginInfo from '../components/Login/LoginInfo.js';
-import SignUpInfo from '../components/SignUp/SignUpInfo.js';
-import SignUpForm from '../components/SignUp/SignUpForm.js';
+import LoginForm from '../components/Auth/Login/LoginForm.js';
+import LoginInfo from '../components/Auth/Login/LoginInfo.js';
+import SignUpInfo from '../components/Auth/SignUp/SignUpInfo.js';
+import SignUpForm from '../components/Auth/SignUp/SignUpForm.js';
 import useLogin from '../hooks/AuthState/useLogin.js';
 import { getLoggedUser } from '../services/authService.js';
 import { useNavigate } from 'react-router-dom';
@@ -11,44 +11,19 @@ import useRegister from '../hooks/AuthState/useRegister.js';
 
 type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
-function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
+function AuthPage({ loginSuccess }: { loginSuccess: () => Promise<void> }) {
     const [active, setActive] = useState<active>('NULL');
-    const { email, password, handleSubmitLogin } = useLogin(loginSuccess);
+    const { email, password, handleSubmitLogin, isLoadingLogin } =
+        useLogin(loginSuccess);
+
     const {
         username,
         email: emailSignUp,
         password: passwordSignUp,
         repeatPassword,
         handleRegeister,
+        isLoadingRegister,
     } = useRegister();
-
-    const [isLoading, setIsLoading] = useState(true);
-
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        let isMounted = true;
-        const checkUserLogged = async () => {
-            try {
-                const { id } = await getLoggedUser();
-                if (id && isMounted) {
-                    navigate('/', { replace: true });
-                }
-            } catch {
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        checkUserLogged();
-
-        return () => {
-            isMounted = false;
-        };
-    }, []);
-
-    if (isLoading) {
-        return <LoadingPage />;
-    }
 
     return (
         <div className="flex h-screen w-screen items-center justify-center bg-(--background-color) p-4!">
@@ -61,10 +36,12 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                     setActive={setActive}
                     resetEmail={email.reset}
                     resetPassword={password.reset}
+                    isLoadingLogin={isLoadingLogin}
                 />
                 <SignUpInfo
                     active={active}
                     setActive={setActive}
+                    isLoadingRegister={isLoadingRegister}
                 />
                 <div
                     className={`form absolute right-0 flex h-full w-1/2 transition-all! delay-600! duration-300! ease-in-out! max-md:bottom-0 max-md:h-3/4 max-md:w-full ${active === 'REGISTER' && 'max-md:-translate-y-1/3! md:-translate-x-full!'} `}
@@ -77,6 +54,7 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                             password={password.value}
                             setPassword={password.setPassword}
                             submit={handleSubmitLogin}
+                            isLoadingLogin={isLoadingLogin}
                         />
                         <SignUpForm
                             active={active}
@@ -89,6 +67,7 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => void }) {
                             repeatPassword={repeatPassword.value}
                             setRepeatPassword={repeatPassword.set}
                             submit={handleRegeister}
+                            isLoadingRegister={isLoadingRegister}
                         />
                     </div>
                 </div>

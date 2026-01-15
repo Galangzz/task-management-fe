@@ -1,5 +1,6 @@
 import React from 'react';
 import { CgLock, CgMail } from 'react-icons/cg';
+import { ImSpinner9 } from 'react-icons/im';
 
 type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
@@ -14,6 +15,7 @@ type LoginFormProps = {
         event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => void;
     submit: () => Promise<void>;
+    isLoadingLogin: boolean;
 };
 
 function LoginForm({
@@ -23,6 +25,7 @@ function LoginForm({
     password,
     setPassword,
     submit,
+    isLoadingLogin,
 }: LoginFormProps) {
     return (
         <div
@@ -43,7 +46,7 @@ function LoginForm({
                 <div className="relative w-full">
                     <CgMail className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl opacity-60" />
                     <input
-                        type="text"
+                        type="email"
                         name="email"
                         id="email-login"
                         placeholder="Email"
@@ -71,7 +74,11 @@ function LoginForm({
                     type="submit"
                     className="m-auto! w-fit rounded-full bg-(--add-button) px-4! py-2! text-xl font-semibold hover:brightness-90"
                 >
-                    Login
+                    {isLoadingLogin ? (
+                        <ImSpinner9 className="animate-spin" />
+                    ) : (
+                        'Login'
+                    )}
                 </button>
             </form>
         </div>
