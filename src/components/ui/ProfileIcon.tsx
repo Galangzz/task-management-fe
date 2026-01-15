@@ -10,7 +10,7 @@ function ProfileIcon({
     const avatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${user?.username || 'user'}`;
     return (
         <div
-            className="h-10 w-10 cursor-pointer overflow-hidden rounded-full hover:brightness-90"
+            className="h-9 w-9 cursor-pointer overflow-hidden rounded-full hover:brightness-90"
             onClick={onClick}
         >
             <img

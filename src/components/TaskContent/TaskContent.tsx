@@ -236,10 +236,10 @@ function TaskContent({
                                 }
                                 alt="Task Notification Image"
                                 aria-label="Task Notification Image"
-                                className="aspect-3/4 h-full max-h-80 w-auto object-contain"
+                                className="aspect-3/4 min-h-36 max-h-80 w-auto object-contain p-2!"
                                 fetchPriority="high"
                             />
-                            <p className="w-full text-center text-3xl font-semibold tracking-widest">
+                            <p className="w-full text-center text-fluid-lg  md:text-fluid-xl font-semibold tracking-widest">
                                 {showCompleted ? (
                                     <>
                                         Task Telah Selesai

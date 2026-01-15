@@ -5,6 +5,7 @@
     --animate-fade-out: fade-out 0.3s ease-in forwards;
     --animate-register: register 1s ease-in-out forwards;
     --animate-login: login 1s ease-in-out forwards;
+    --animate-float: float 3s ease-in-out infinite;
 
     @keyframes fade-in {
         from {
@@ -39,6 +40,17 @@
 
         to {
             transform: translateX(0);
+        }
+    }
+    @keyframes float {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-12px);
+        }
+        100% {
+            transform: translateY(0);
         }
     }
 }
