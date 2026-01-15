@@ -13,10 +13,9 @@ type ModalDayPickerProps = {
     selectedTime: Date | null;
     setSelectedTime: React.Dispatch<React.SetStateAction<Date | null>>;
     isOpenTime: boolean;
-    openTime: () => void;
-    closeTime: () => void;
+    setIsOpenTime: (p: boolean) => void;
     isSubmitTime: boolean;
-    unSubmitTime: () => void;
+    setIsSubmitTime: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
     onHandleSubmitTime: () => void;
 };
 
@@ -28,10 +27,9 @@ function ModalDayPicker({
     selectedTime,
     setSelectedTime,
     isOpenTime,
-    openTime,
-    closeTime,
+    setIsOpenTime,
     isSubmitTime,
-    unSubmitTime,
+    setIsSubmitTime,
     onHandleSubmitTime,
 }: ModalDayPickerProps) {
     const [hours, setHours] = useState<Number>();
@@ -44,14 +42,6 @@ function ModalDayPicker({
             setMinutes(new Date(selected).getMinutes());
         }
     }, [isSubmitTime, selected]);
-
-    useEffect(() => {
-        if (!selected) {
-            const date = new Date();
-            date.setHours(0, 0, 0, 0);
-            setSelected(date);
-        }
-    }, [selected]);
 
     return (
         <>
@@ -68,7 +58,7 @@ function ModalDayPicker({
                     </div>
                     <div
                         className="flex w-full cursor-pointer items-center gap-4 border-y px-10! py-4! hover:backdrop-brightness-125"
-                        onClick={openTime}
+                        onClick={() => setIsOpenTime(true)}
                     >
                         <IoMdTime className="text-2xl" />
                         {isSubmitTime ? (
@@ -81,10 +71,7 @@ function ModalDayPicker({
                                 ).padStart(2, '0')}`}</p>
                                 <div
                                     className="flex h-full cursor-pointer items-center justify-center text-[22px] transition! duration-300 ease-in-out hover:scale-125"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        unSubmitTime();
-                                    }}
+                                    onClick={setIsSubmitTime}
                                 >
                                     <RxCross2 />
                                 </div>
@@ -113,7 +100,7 @@ function ModalDayPicker({
             </Modal>
             {isOpenTime && (
                 <ModalTimePicker
-                    toggleTime={closeTime}
+                    toggleTime={() => setIsOpenTime(false)}
                     selectedTime={selectedTime}
                     setSelectedTime={setSelectedTime}
                     onSubmitTime={onHandleSubmitTime}

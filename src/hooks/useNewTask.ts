@@ -1,18 +1,14 @@
 import useCloseConfirmation from './NewTaskState/useCloseConfirmation.js';
 import useNewTaskPayload from './NewTaskState/useNewTaskPayload.js';
 import useNewTaskSubmit from './NewTaskState/useNewTaskSubmit.js';
-import useTaskDateTime from './useTaskDateTime.js';
+import useTaskDateTime from './NewTaskState/useTaskDateTime.js';
 import useTaskForm from './NewTaskState/useTaskForm.js';
 
-function useNewTask(tabId: string) {
+function useNewTask() {
     const form = useTaskForm();
-    const dateTime = useTaskDateTime(null);
-    const buildPayload = useNewTaskPayload(form, {
-        deadline: dateTime.deadline.value,
-        hasDate: dateTime.hasDate,
-        hasTime: dateTime.hasTime,
-    });
-    const submit = useNewTaskSubmit(buildPayload, form.resetForm, tabId);
+    const dateTime = useTaskDateTime();
+    const buildPayload = useNewTaskPayload(form, dateTime);
+    const submit = useNewTaskSubmit(buildPayload, form.resetForm);
     const confirm = useCloseConfirmation(form.title, dateTime.hasDate);
 
     return {

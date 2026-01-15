@@ -1,29 +1,30 @@
 import { useEffect, useState } from 'react';
-import { useTaskStore } from '../stores/useTaskStore.js';
+import { useTaskStore } from './useTaskStore.js';
 import usePageLoadingState from './DefaultPageState/usePageLoadingState.js';
 import useTabNavigation from './DefaultPageState/useTabNavigation.js';
 import useTaskAction from './DefaultPageState/useTaskAction.js';
 import useTaskTitleModal from './DefaultPageState/useTaskTitleModal.js';
-import { useTabsStore } from '../stores/useTabStore.js';
 
-function useDefaultPage(id: string | undefined) {
-    console.log({ id });
-
+function useDefaultPage() {
     const [isOpenModalTask, setIsOpenModalTask] = useState(false);
-    const { tasks } = useTaskStore();
-    const { tabs, tab } = useTabsStore();
+    const { task, tabs, setTabs } = useTaskStore();
 
-    useTabNavigation(id);
+    const { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList } =
+        usePageLoadingState(task, tabs);
 
-    const { isLoadedTaskList } = usePageLoadingState(tasks);
+    useTabNavigation(setIsLoadedTaskList);
 
     const titleModal = useTaskTitleModal();
     const action = useTaskAction();
 
+    useEffect(() => {
+        setTabs();
+    }, [titleModal.submit]);
+
     return {
         tabs,
-        tab,
-        tasks,
+        task,
+        isLoadedPage,
         isLoadedTaskList,
         isOpenModalTask,
         setIsOpenModalTask,

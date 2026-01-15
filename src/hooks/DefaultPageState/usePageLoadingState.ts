@@ -1,32 +1,31 @@
-import { useLocation } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-import type { ITab, ITask } from '../../types/index.js';
+import { useEffect, useState } from 'react';
+import type { ITabs, ITabWithTasks } from '../../types/index.js';
 
-function usePageLoadingState(
-    task: ITask[] | null,
-) {
-    const [isLoadedTaskList, setIsLoadedTaskList] = useState(false);
-    const location = useLocation();
+function usePageLoadingState(task: ITabWithTasks | null, tabs: ITabs[] | null) {
+    const [isLoadedPage, setIsLoadedPage] = useState(true);
+    const [isLoadedTaskList, setIsLoadedTaskList] = useState(true);
 
     useEffect(() => {
-        if (!task || (task && task?.length === 0)) {
-            setIsLoadedTaskList(true);
+        let timer: number;
+        if (task) {
+            timer = setTimeout(() => {
+                setIsLoadedPage(false);
+            }, 500);
         }
-    }, [location.pathname, task]);
+        return () => clearTimeout(timer);
+    }, [task, tabs]);
 
     useEffect(() => {
-        if (!task) return;
+        let timer: number;
+        if (task) {
+            timer = setTimeout(() => {
+                setIsLoadedTaskList(false);
+            }, 500);
+        }
+        return () => clearTimeout(timer);
+    }, [task]);
 
-        const t = setTimeout(() => {
-            setIsLoadedTaskList(false);
-        }, 100);
-
-        return () => {
-            clearTimeout(t);
-        };
-    }, [location.pathname, task]);
-
-    return { isLoadedTaskList };
+    return { isLoadedPage, isLoadedTaskList, setIsLoadedTaskList };
 }
 
 export default usePageLoadingState;

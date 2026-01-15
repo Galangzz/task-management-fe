@@ -1,15 +1,21 @@
-import axios, { AxiosError } from 'axios';
-import useToast from '../hooks/useToast.js';
 import ApiError from './ApiError.js';
 
-const toast = useToast();
+interface ToastProps {
+    undo: (
+        message: string,
+        onUndo: () => void,
+        onClose: () => void,
+        setStacked: () => void
+    ) => void;
+    success: (message: string) => void;
+    error: (message: Error | ApiError) => void;
+}
 
-export function handleError(err: unknown) {
+export function handleError(err: unknown, toast: ToastProps) {
     if (err instanceof ApiError) {
         toast.error(err);
         return;
     }
-
 
     if (err instanceof Error) {
         toast.error(err);

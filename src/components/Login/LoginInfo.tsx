@@ -7,7 +7,6 @@ type LoginInfoProps = {
     setActive: React.Dispatch<React.SetStateAction<active>>;
     resetEmail: () => void;
     resetPassword: () => void;
-    isLoadingLogin: boolean;
 };
 
 function LoginInfo({
@@ -15,7 +14,6 @@ function LoginInfo({
     setActive,
     resetEmail,
     resetPassword,
-    isLoadingLogin,
 }: LoginInfoProps) {
     return (
         <div
@@ -36,7 +34,6 @@ function LoginInfo({
                         resetPassword();
                         setActive('REGISTER');
                     }}
-                    disabled={isLoadingLogin}
                 >
                     SignUp
                 </button>
