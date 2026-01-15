@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import Checkbox from '../ui/Checkboxes.js';
 import StarCheck from '../ui/StarCheck.js';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useTaskStore } from '../../stores/useTaskStore.js';
-import type { ITask } from '../../types/index.js';
+// import { updateTask } from '../../services/tasksService';
 
 type LisTaskProps = {
     children: React.ReactNode;
     checked: boolean;
     stared: boolean;
     id: string;
+    taskId: string;
     handleChecked: (id: string, checked: boolean) => void;
     handleStarred: (id: string, checked: boolean) => void;
 };
@@ -20,38 +19,38 @@ function ListTask({
     checked,
     stared,
     id,
+    taskId,
     handleChecked,
     handleStarred,
 }: LisTaskProps) {
     const navigate = useNavigate();
 
     const [localChecked, setLocalChecked] = useState(checked);
-    const { setTask, getTask } = useTaskStore();
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
     const handleChange = (value: boolean) => {
-        setLocalChecked(() => value);
-        handleChecked(id, value);
+        setIsTransitioning(true);
+        setLocalChecked(value);
+    };
+
+    const handleTransitionEnd = () => {
+        if (isTransitioning) {
+            handleChecked(id, localChecked);
+            setIsTransitioning(false);
+        }
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, x: 30, y: 0 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, x: 0, y: -30 }}
-            transition={{
-                ease: 'easeInOut',
-                duration: 0.3,
-            }}
-            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
+        <div
+            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! transition-all! duration-300! ease-in-out! hover:bg-(--background-color)/40 ${localChecked != checked ? '-translate-y-full opacity-0 delay-300' : 'opacity-100'}`}
             onClick={() => {
-                const task = getTask(id);
-                setTask((task as ITask) || null);
-                navigate(`/details/${id}`);
+                navigate(`/details/${taskId}/${id}`);
             }}
+            onTransitionEnd={handleTransitionEnd}
         >
             <Checkbox
                 id={id}
-                checked={localChecked}
+                checked={localChecked == true}
                 onChange={handleChange}
             />
             <div
@@ -66,7 +65,7 @@ function ListTask({
                     onChange={(value: boolean) => handleStarred(id, value)}
                 />
             )}
-        </motion.div>
+        </div>
     );
 }
 

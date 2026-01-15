@@ -7,7 +7,6 @@ import './styles/index.css';
 import './styles/theme/light.css';
 import './styles/theme/dark.css';
 import './styles/animation.css'
-import './styles/text.css'
 
 createRoot(document.getElementById('root')!).render(
     <BrowserRouter>

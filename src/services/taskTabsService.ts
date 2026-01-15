@@ -1,7 +1,6 @@
-import type { ITab } from '../types/tabTypes.js';
 import { api, ensureBase } from './api.js';
 
-export async function getTabs(): Promise<ITab[] | null> {
+export async function getTaskTabs() {
     ensureBase();
     const url = '/task-tabs';
     const res = await api.get(url);
@@ -10,57 +9,50 @@ export async function getTabs(): Promise<ITab[] | null> {
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data
-        : null;
+        : resData;
 }
 
-export async function addNewTabTitle({
-    title,
-}: {
-    title: string;
-}): Promise<ITab> {
+export async function addTaskTabTitle({ title }: { title: string }) {
     ensureBase();
 
-    //TODO: Validation shouldn't be here
     if (!title || title.trim() === '') {
         throw new Error('Judul tidak boleh kosong');
     }
     const url = '/task-tabs';
-    const res = await api.post(url, {
-        name: title,
-    });
+    const res = await api.post(
+        url,
+        {
+            name: title,
+        },
+    );
 
     const resData = res?.data;
-    const data =
+    const id =
         resData &&
         typeof resData === 'object' &&
         Object.prototype.hasOwnProperty.call(resData, 'data')
-            ? (resData.data as ITab)
+            ? resData.data?.id
             : null;
-    if (!data) {
-        throw new Error('Gagal menambahkan tab');
-    }
-    const { id, name, createdAt, deletePermission } = data;
-
-    return { id, name, createdAt, deletePermission };
+    return { id: id };
 }
 
-// export async function getTaskTabWithTasks(id = 'main-task') {
-//     ensureBase();
+export async function getTaskTabWithTasks(id = 'main-task') {
+    ensureBase();
 
-//     const url = `/task-tabs/${id}`;
-//     const res = await api.get(url);
-//     console.log('FULL RES:', res);
+    const url = `/task-tabs/${id}`;
+    const res = await api.get(url);
+    console.log('FULL RES:', res);
 
-//     const resData = res?.data;
-//     console.log('DATA:', resData);
-//     return resData &&
-//         typeof resData === 'object' &&
-//         Object.prototype.hasOwnProperty.call(resData, 'data')
-//         ? resData.data
-//         : resData;
-// }
+    const resData = res?.data;
+    console.log('DATA:', resData);
+    return resData &&
+        typeof resData === 'object' &&
+        Object.prototype.hasOwnProperty.call(resData, 'data')
+        ? resData.data
+        : resData;
+}
 
-export async function getTabById(id: string): Promise<string | null> {
+export async function getTaskTabById(id: string) {
     ensureBase();
     const url = `/task-tabs/tab/${id}`;
     const res = await api.get(url);
@@ -71,10 +63,4 @@ export async function getTabById(id: string): Promise<string | null> {
         Object.prototype.hasOwnProperty.call(resData, 'data')
         ? resData.data?.id
         : null;
-}
-
-export async function deleteTabById(id: string) {
-    ensureBase();
-    const url = `/task-tabs/${id}`;
-    await api.delete(url);
 }

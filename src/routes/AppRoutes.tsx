@@ -1,29 +1,22 @@
-import { Navigate, Routes } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 import { Route } from 'react-router-dom';
-import React, { lazy } from 'react';
-// const DefaultPage = lazy(() => import('../pages/DefaultPage.js'));
-// const DetailTask = lazy(() => import('../pages/DetailTask.js'));
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import DefaultPage from '../pages/DefaultPage.js';
 import DetailTask from '../pages/DetailTask.js';
+import AuthPage from '../pages/AuthPage.js';
+import OtpPage from '../pages/OtpPage.js';
 
-function AppRoutes({ tabId }: { tabId: string }) {
+function AppRoutes() {
     return (
         <Routes>
             <Route
-                path="/"
-                element={<Navigate to={`/${tabId}`} />}
-            />
-            <Route
-                path="/details/:taskId"
+                path="/details/:id/:taskId"
                 element={<DetailTask />}
             />
             <Route
-                path="/:id"
+                path="/*"
                 element={<DefaultPage />}
-            />
-            <Route
-                path="*"
-                element={<Navigate to={`/${tabId}`} />}
             />
         </Routes>
     );

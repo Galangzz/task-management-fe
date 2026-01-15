@@ -6,6 +6,8 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import Field from '../ui/Field.js';
+import ListTask from '../specific/ListTask.js';
 import { formatCustomDate } from '../../utils/index.js';
 
 import emptyNoteLight from '../../assets/empty-note-light.svg';
@@ -13,33 +15,24 @@ import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import completedTaskDark from '../../assets/completed-task-dark.svg';
 import completedTaskLight from '../../assets/completed-task-light.svg';
 
-import { ThemeContext } from '../../context/Theme.js';
-
-import ListTask from '../specific/ListTask.js';
-import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
 const Dropdown = lazy(() => import('../ui/Dropdown.js'));
-import Field from '../ui/Field.js';
+import { ThemeContext } from '../../context/Theme.js';
+import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
+import type { ITasks, ITabWithTasks, } from '../../types/index.js';
 
-import type { ITask, ITab } from '../../types/index.js';
 
-import { AnimatePresence } from 'framer-motion';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import TitleTaskContent from './TitleTaskContent.js';
-import MenuTaskContent from './MenuTaskContent.js';
 
-type GroupedTasks = Record<string, ITask[]>;
+type GroupedTasks = Record<string, ITasks[]>;
 
 type TaskContentProps = {
-    tasks?: ITask[] | null;
-    tab?: ITab | null;
+    task?: ITabWithTasks | null;
     isLoading?: boolean;
     handleChecked: (id: string, value: boolean) => void;
     handleStarred: (id: string, value: boolean) => void;
 };
 
 function TaskContent({
-    tasks,
-    tab,
+    task,
     isLoading = true,
     handleChecked,
     handleStarred,
@@ -50,13 +43,13 @@ function TaskContent({
     const [showEmpty, setShowEmpty] = useState(false);
 
     const activeTask = useMemo(
-        () => tasks?.filter((t) => t.isCompleted == false) || [],
-        [tasks, tab]
+        () => task?.tasks?.filter((t) => t.isCompleted === false) || [],
+        [task]
     );
 
     const completeTask = useMemo(
-        () => tasks?.filter((t) => t.isCompleted == true) || [],
-        [tasks, tab]
+        () => task?.tasks?.filter((t) => t.isCompleted === true) || [],
+        [task]
     );
 
     useEffect(() => {
@@ -73,7 +66,7 @@ function TaskContent({
         }
     }, [activeTask.length, completeTask.length]);
 
-    const tabId = tab?.id || '';
+    const taskId = task?.id || '';
 
     const getGroupKey = useCallback((deadline: Date | null) => {
         if (!deadline) return 'TANPA_TANGGAL';
@@ -83,11 +76,12 @@ function TaskContent({
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        const d = new Date(deadline);
-        if (d.getDate() < today.getDate()) return 'TERLEWAT';
-        if (d.getDate() === today.getDate()) return 'HARI_INI';
-        if (d.getDate() === tomorrow.getDate()) return 'BESOK';
-        return d.toLocaleDateString();
+        const d = new Date(deadline).toLocaleDateString();
+
+        if (d < today.toLocaleDateString()) return 'TERLEWAT';
+        if (d === today.toLocaleDateString()) return 'HARI_INI';
+        if (d === tomorrow.toLocaleDateString()) return 'BESOK';
+        return d;
     }, []);
 
     const groupedData = useMemo(
@@ -140,14 +134,9 @@ function TaskContent({
             <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                 <Field>
                     <div className="flex">
-                        <TitleTaskContent title={tab?.name || 'Starred Task'} />
-                        {/*TODO*/}
-                        {tab?.id !== 'starred-task' && (
-                            <MenuTaskContent
-                                tabId={tabId}
-                                deletePermission={tab?.deletePermission || false}
-                            />
-                        )}
+                        <h1 className="mb-6 text-xl font-bold tracking-wide">
+                            {task?.name ?? 'Stared Task'}
+                        </h1>
                     </div>
                     <div className="flex flex-col items-center gap-4">
                         {activeTask.length > 0 &&
@@ -159,65 +148,63 @@ function TaskContent({
                                         className="flex w-full flex-col gap-4"
                                     >
                                         <h2
-                                            className={`text-fluid-sm font-bold ${colorDate(label)}`}
+                                            className={`text-lg font-bold ${colorDate(label)}`}
                                         >
                                             {label}
                                         </h2>
-                                        <AnimatePresence>
-                                            {groupedData[date]?.map((t) => {
-                                                const dl =
-                                                    t?.deadline &&
-                                                    new Date(t?.deadline);
-                                                return (
-                                                    <div
+
+                                        {groupedData[date]?.map((t) => {
+                                            const dl = t?.deadline && new Date(t?.deadline);
+                                            return (
+                                                <div
+                                                    key={t.id}
+                                                    className="animate-fade-in overflow-hidden"
+                                                >
+                                                    <ListTask
                                                         key={t.id}
-                                                        className="overflow-hidden"
+                                                        checked={
+                                                            t?.isCompleted ==
+                                                            true
+                                                        }
+                                                        stared={t?.starred}
+                                                        id={t?.id}
+                                                        taskId={taskId}
+                                                        handleChecked={
+                                                            handleChecked
+                                                        }
+                                                        handleStarred={
+                                                            handleStarred
+                                                        }
                                                     >
-                                                        <ListTask
-                                                            key={t.id}
-                                                            checked={
-                                                                t?.isCompleted ==
-                                                                true
-                                                            }
-                                                            stared={t?.starred}
-                                                            id={t?.id}
-                                                            handleChecked={
-                                                                handleChecked
-                                                            }
-                                                            handleStarred={
-                                                                handleStarred
-                                                            }
-                                                        >
-                                                            <p className="font-semibold text-fluid-sm">
-                                                                {t.title}
+                                                        <p className="font-semibold">
+                                                            {t.title}
+                                                        </p>
+                                                        {t.detail !== null && (
+                                                            <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
+                                                                {t.detail}
                                                             </p>
-                                                            {t.detail && (
-                                                                <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
-                                                                    {t.detail}
-                                                                </p>
-                                                            )}
-                                                            {t.hasTime && (
-                                                                <div className="ml-2! flex w-fit items-center justify-center opacity-90">
-                                                                    {String(
-                                                                        dl?.getHours()
-                                                                    ).padStart(
-                                                                        2,
-                                                                        '0'
-                                                                    )}
-                                                                    :
-                                                                    {String(
-                                                                        dl?.getMinutes()
-                                                                    ).padStart(
-                                                                        2,
-                                                                        '0'
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                        </ListTask>
-                                                    </div>
-                                                );
-                                            })}
-                                        </AnimatePresence>
+                                                        )}
+                                                        {t.hasTime == true && (
+                                                            <div className="ml-2! flex w-fit items-center justify-center opacity-90">
+                                                                {String(
+                                                                    dl?.getHours()
+                                                                ).padStart(
+                                                                    2,
+                                                                    '0'
+                                                                )}
+                                                                :
+                                                                {String(
+                                                                    dl?.getMinutes()
+                                                                ).padStart(
+                                                                    2,
+                                                                    '0'
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                    </ListTask>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 );
                             })}
@@ -236,10 +223,10 @@ function TaskContent({
                                 }
                                 alt="Task Notification Image"
                                 aria-label="Task Notification Image"
-                                className="aspect-3/4 min-h-36 max-h-80 w-auto object-contain p-2!"
+                                className="aspect-3/4 h-full max-h-80 w-auto object-contain"
                                 fetchPriority="high"
                             />
-                            <p className="w-full text-center text-fluid-lg  md:text-fluid-xl font-semibold tracking-widest">
+                            <p className="w-full text-center text-3xl font-semibold tracking-widest">
                                 {showCompleted ? (
                                     <>
                                         Task Telah Selesai
@@ -258,8 +245,10 @@ function TaskContent({
                 <div className="animate-fade-in flex h-auto w-full items-center justify-center">
                     <Dropdown
                         tasks={completeTask}
-                        taskId={tabId}
-                        handleChecked={handleChecked}
+                        taskId={taskId}
+                        handleChecked={(id: string, value: boolean) =>
+                            handleChecked(id, value)
+                        }
                     />
                 </div>
             )}

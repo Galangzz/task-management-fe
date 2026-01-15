@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import useInput from '../useInput.js';
 import useToast from '../useToast.js';
 import { passwordChecker, emailChecker } from '../../utils/authHelper.js';
@@ -12,8 +12,6 @@ function useRegister() {
     const [password, setPassword, resetPassword] = useInput('');
     const [repeatPassword, setRepeatPassword, resetRepeatPassword] =
         useInput('');
-
-    const [isLoadingRegister, setIsLoadingRegister] = useState(false);
 
     const navigate = useNavigate();
 
@@ -48,7 +46,6 @@ function useRegister() {
         }
 
         try {
-            setIsLoadingRegister(true);
             const result = await signUpUser({
                 username,
                 email,
@@ -69,8 +66,6 @@ function useRegister() {
                 return;
             }
             toast.error(new Error('Terjadi kesalahan, harap cobalagi nanti'));
-        } finally {
-            setIsLoadingRegister(false);
         }
     }, [username, email, password, repeatPassword]);
 
@@ -96,7 +91,6 @@ function useRegister() {
             reset: resetRepeatPassword,
         },
         handleRegeister,
-        isLoadingRegister,
     };
 }
 

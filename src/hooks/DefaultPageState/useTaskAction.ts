@@ -1,33 +1,31 @@
-import { useCallback, useRef } from 'react';
-import { useTaskStore } from '../../stores/useTaskStore.js';
+import { useCallback, useContext } from 'react';
+import { useTaskStore } from '../useTaskStore.js';
+import { ToastContext } from '../../context/Toast.js';
 import { updateTask } from '../../services/tasksService.js';
-import useToast from '../useToast.js';
-import { useTabsStore } from '../../stores/useTabStore.js';
 
 function useTaskAction() {
-    const toast = useToast();
+    const { toast } = useContext(ToastContext);
     const {
-        tasks,
+        tabs,
+        task,
+        increaseToast,
+        currentTabId,
         optimisticToggleChecked,
         optimisticToggleStarred,
         undoLocalStatus,
         fixChecked,
+        decreaseToast,
     } = useTaskStore();
-
-    const { tabs, currentTabId, addPendingUpdates, clearPendingUpdates } =
-        useTabsStore();
-
-    const starAbortRef = useRef<AbortController | null>(null);
 
     const handleChecked = useCallback(
         async (id: string, isCompleted: boolean) => {
             console.log({ handleCheckId: id, currentTabId });
 
-            optimisticToggleChecked(id);
-            const task = tasks?.find((task) => task.id === id)!;
-            addPendingUpdates(task?.taskTabId, { ...task, isCompleted });
+            increaseToast();
 
             setTimeout(async () => {
+                optimisticToggleChecked(id);
+
                 const message =
                     isCompleted === true
                         ? 'Tugas Selesai'
@@ -38,40 +36,27 @@ function useTaskAction() {
                     () => {
                         console.log('Undo clicked');
                         undoLocalStatus(id);
-                        clearPendingUpdates(currentTabId, id);
                     },
                     () => {
                         console.log('Toast closed, committing to DB');
-                        fixChecked(id, isCompleted);
-                        clearPendingUpdates(currentTabId, id);
+                        fixChecked(id, currentTabId, isCompleted);
                     },
                     () => {
                         console.log('Toast animation complete');
-                        clearPendingUpdates(currentTabId, id);
+                        decreaseToast();
                     }
                 );
             }, 300);
         },
-        [tabs, tasks]
+        [tabs, task]
     );
 
     const handleStarred = useCallback(
         async (id: string, starred: boolean) => {
-            if (starAbortRef.current) {
-                starAbortRef.current.abort();
-            }
-
-            const controller = new AbortController();
-            starAbortRef.current = controller;
-
-            optimisticToggleStarred(id);
-            try {
-                await updateTask(id, { starred }, controller.signal);
-            } catch {
-                optimisticToggleStarred(id);
-            }
+            optimisticToggleStarred;
+            await updateTask(id, { starred });
         },
-        [tasks, tabs]
+        [task, tabs]
     );
 
     return {

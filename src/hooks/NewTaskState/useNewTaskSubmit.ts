@@ -1,13 +1,13 @@
 import { useCallback, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getTabById } from '../../services/taskTabsService.js';
+import { ToastContext } from '../../context/Toast.js';
+import { getTaskTabById } from '../../services/taskTabsService.js';
 import { addTask } from '../../services/tasksService.js';
-import { useTaskStore } from '../../stores/useTaskStore.js';
+import { useTaskStore } from '../useTaskStore.js';
 import { handleError } from '../../errors/handleError.js';
-import useToast from '../useToast.js';
 
 type BuildPayloadProps = {
-    title: string | null;
+    title: string;
     detail: string;
     starred: boolean;
     deadline: Date | null;
@@ -18,46 +18,37 @@ type BuildPayloadProps = {
 
 function useNewTaskSubmit(
     buildPayload: () => BuildPayloadProps,
-    resetForm: () => void,
-    tabId: string
+    resetForm: () => void
 ) {
     const navigate = useNavigate();
     const location = useLocation();
-    const toast = useToast();
-
-    const { title, detail, starred, deadline, hasDate, hasTime, isCompleted } =
-        buildPayload();
-
-    const { setTasks } = useTaskStore();
+    const { toast } = useContext(ToastContext);
 
     const submit = useCallback(
         async (e: React.FormEvent, closeModal: (open: boolean) => void) => {
             e.preventDefault();
             try {
-                const currentTab = await getTabById(tabId);
-                if (!currentTab) {
-                    throw new Error('Tab tidak ditemukan');
-                }
+                const currentTab =
+                    (await getTaskTabById(
+                        location.pathname.split('/')[1] || 'main-task'
+                    )) ?? 'main-task';
 
-                console.log({ useNewTaskSubmit: currentTab });
-                if (!title && !deadline && !detail) return;
-
-                if (title?.length && title.length >= 50) {
+                if (buildPayload().title.length >= 50) {
                     throw new Error('Judul terlalu panjang, max = 50');
                 }
 
-                const res = await addTask(currentTab, buildPayload());
-                toast.success(res.message);
-                setTasks([res.data]);
+                const msg = await addTask(currentTab, buildPayload());
+                toast.success(msg);
 
-                navigate(`/${tabId}`, {
+                navigate(currentTab === 'main-task' ? '/' : `/${currentTab}`, {
                     replace: true,
                 });
 
+                useTaskStore.getState().refreshCurrentTask();
                 resetForm();
                 closeModal(false);
             } catch (error) {
-                handleError(error);
+                handleError(error, toast);
             }
         },
         [buildPayload, location.pathname, navigate, toast, resetForm]
