@@ -13,20 +13,15 @@ export interface TaskState {
     setTasks: (tasks: ITask[]) => void;
 
     // Actions
-
     loadTask: (tabId: string, signal?: AbortSignal) => Promise<void>;
     refreshCurrentTask: (tabId: string) => Promise<void>;
     refreshTasks: () => void;
 
-    fixChecked: (
-        id: string,
-        isCompleted: boolean
-    ) => Promise<void>;
+    fixChecked: (id: string, isCompleted: boolean) => Promise<void>;
     undoLocalStatus: (id: string) => void;
     optimisticToggleChecked: (id: string) => void;
     optimisticToggleStarred: (id: string) => void;
     optimisticDeleteTasks: (id: string) => void;
-    // resetOnTabChange: (newTabId: string) => Promise<void>;
     resetTaskStore: () => void;
 }
 
@@ -55,21 +50,18 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     // Load task list for specific tab
     loadTask: async (tabId, signal) => {
-        // try {
-        // const currentState = get();
-
-        const data = await getTasksByTabId(tabId, signal);
-        console.log({ Tasks: data });
-        set({ tasks: data });
-        // } catch (err) {
-        //     handleError(err);
-        // }
+        try {
+            const data = await getTasksByTabId(tabId, signal);
+            console.log({ Tasks: data });
+            set({ tasks: data });
+        } catch (err) {
+            throw err;
+        }
     },
 
     refreshCurrentTask: async (tabId) => {
         try {
             const data = await getTasksByTabId(tabId);
-            // console.log('Force refreshing task:', currentTabId);
             set({ tasks: data });
         } catch (err) {
             handleError(err);
@@ -80,7 +72,6 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         set({ tasks: null });
     },
 
-    // Commit changes to localStorage
     fixChecked: async (id, isCompleted) => {
         try {
             await updateTask(id, { isCompleted });
@@ -90,7 +81,6 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         }
     },
 
-    // Undo local UI changes
     undoLocalStatus: (id) => {
         const { tasks } = get();
         set({
@@ -101,7 +91,6 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         });
     },
 
-    // Optimistic UI update
     optimisticToggleChecked: (id) => {
         const { tasks } = get();
         set({
@@ -131,7 +120,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     },
 
     resetTaskStore: () => {
-        console.log('Reset TaskStore')
+        console.log('Reset TaskStore');
         set({
             tasks: null,
             task: null,

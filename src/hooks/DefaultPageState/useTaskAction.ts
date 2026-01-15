@@ -25,7 +25,7 @@ function useTaskAction() {
 
             optimisticToggleChecked(id);
             const task = tasks?.find((task) => task.id === id)!;
-            addPendingUpdates(currentTabId, { ...task, isCompleted });
+            addPendingUpdates(task?.taskTabId, { ...task, isCompleted });
 
             setTimeout(async () => {
                 const message =

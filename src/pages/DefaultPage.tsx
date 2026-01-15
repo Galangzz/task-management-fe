@@ -9,11 +9,11 @@ import AddButton from '../components/ui/AddButton.js';
 const ModalNewTask = lazy(
     () => import('../components/ui/Modal/ModalNewTask.js')
 );
-const LoadingPage = lazy(
-    () => import('../components/ui/Loading/LoadingPage.js')
-);
+
 import useDefaultPage from '../hooks/useDefaultPage.js';
 import { useParams } from 'react-router-dom';
+
+import { AnimatePresence } from 'framer-motion';
 
 function DefaultPage() {
     const { id } = useParams();
@@ -45,8 +45,6 @@ function DefaultPage() {
         handleStarred,
     } = useDefaultPage(id);
 
-   
-
     return (
         <div className="relative flex h-full w-full flex-col">
             <Header />
@@ -56,27 +54,6 @@ function DefaultPage() {
                 tabId={id!}
             />
 
-            {isOpen && (
-                <ModalTaskTitle
-                    titleList={titleList}
-                    //Check
-                    setTitleList={setTitleList}
-                    setToggleTitle={() => clearTitleModal(false)}
-                    handleSubmitTitleList={submit}
-                    err={error}
-                    setErr={setError}
-                    isLoading={isLoading}
-                    tabs={tabs?.map((t) => t.name) ?? []}
-                />
-            )}
-
-            {isOpenModalTask && (
-                <ModalNewTask
-                    setIsOpenModalTask={setIsOpenModalTask}
-                    tabId={id!}
-                />
-            )}
-
             <TaskContent
                 tasks={tasks}
                 tab={tab}
@@ -84,6 +61,30 @@ function DefaultPage() {
                 handleChecked={handleChecked}
                 handleStarred={handleStarred}
             />
+
+            <AnimatePresence>
+                {isOpen && (
+                    <ModalTaskTitle
+                        titleList={titleList}
+                        setTitleList={setTitleList}
+                        setToggleTitle={() => clearTitleModal(false)}
+                        handleSubmitTitleList={submit}
+                        err={error}
+                        setErr={setError}
+                        isLoading={isLoading}
+                        tabs={tabs?.map((t) => t.name) ?? []}
+                    />
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {isOpenModalTask && (
+                    <ModalNewTask
+                        setIsOpenModalTask={setIsOpenModalTask}
+                        tabId={id!}
+                    />
+                )}
+            </AnimatePresence>
 
             {id !== 'starred-task' && (
                 <AddButton

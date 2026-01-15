@@ -10,9 +10,8 @@ function useTaskTitleModal() {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<Error | ApiError | null>(null);
-    const timeOutRef = useRef<number | null>(null);
     const navigate = useNavigate();
-    const { tabs, setTab, optimisticAddTab } = useTabsStore();
+    const {  setTab, optimisticAddTab } = useTabsStore();
 
     const submit = useCallback(async () => {
         setIsLoading(true);
@@ -20,14 +19,12 @@ function useTaskTitleModal() {
             const { id, name, createdAt, deletePermission } =
                 await addNewTabTitle({ title: titleList });
             optimisticAddTab({ id, name, createdAt, deletePermission });
-            console.log({ NewTab: tabs });
             setTab(id);
 
             setError(null);
             onResetTitle();
             setIsLoading(false);
             setIsOpen(false);
-            console.log({ NewTab: tabs });
             navigate(`/${id}`);
         } catch (err) {
             if (err instanceof ApiError) {
