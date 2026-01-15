@@ -17,10 +17,10 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
     const navigate = useNavigate();
     const currentTab = tabId;
     return (
-        <div className="NavBar flex w-full items-center justify-center border-b-2">
+        <div className="= flex w-full items-center justify-center border-b-2">
             <div className="container">
-                <ul className="scrollbar-hide flex h-full w-max snap-x snap-mandatory items-center gap-x-3 overflow-x-auto overflow-y-clip px-2! font-mono text-fluid-md">
-                    <li className="flex">
+                <ul className="text-fluid-md relative flex w-full items-center">
+                    <li className="scrollbar-hide flex w-full overflow-x-scroll scroll-smooth whitespace-nowrap">
                         <NavbarButton
                             onClick={() => navigate('/starred-task')}
                             aria-label={'Starred Button'}
@@ -36,7 +36,7 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
                                     }}
                                 />
                             )}
-                            <FaStar className="flex h-full w-full" />
+                            <FaStar className="text-fluid-xl!" />
                         </NavbarButton>
 
                         {tabs?.map((tab) => (

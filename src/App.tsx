@@ -64,6 +64,15 @@ function App() {
         return (
             <ThemeProvider value={{ theme, toggleTheme }}>
                 <div className="App min-h-screen w-screen">
+                    <div className="fixed gap-18 bottom-10 flex justify-center whitespace-nowrap">
+                        {Array.from({ length: 10 }).map((_, index) => (
+                            <div
+                                key={index}
+                                className="animate-float -z-10 h-40 w-40 rotate-45  bg-(--button-text) opacity-20 blur-md"
+                                style={{ animationDelay: `${index * 300}ms` }}
+                            ></div>
+                        ))}
+                    </div>
                     <AuthRoutes loginSuccess={onLoginSuccess} />
                     <ToastContainer
                         autoClose={3000}
@@ -83,6 +92,10 @@ function App() {
     return (
         <ThemeProvider value={{ theme, toggleTheme }}>
             <div className="App min-h-screen w-screen">
+                <div className="animate-float fixed top-30 left-10 -z-10 h-60 w-60 rounded-full bg-(--button-text) opacity-20 blur-2xl"></div>
+                <div className="animate-float fixed right-50 bottom-30 -z-10 h-60 w-60 rounded-full bg-linear-to-r from-(--button-text)/50 to-(--button-text) opacity-20 blur-2xl delay-500"></div>
+                <div className="animate-float fixed right-10 bottom-30 -z-10 h-60 w-60 rounded-full bg-linear-to-r from-(--button-text)/50 to-(--button-text) opacity-20 blur-2xl delay-300"></div>
+
                 <AppRoutes tabId={currentTabId} />
                 <ToastContainer
                     autoClose={3000}

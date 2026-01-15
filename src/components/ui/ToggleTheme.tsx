@@ -15,9 +15,8 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
             enterDelay={1000}
             arrow
         >
-            <button
-                type="button"
-                className={`${className}  rounded-full transition-all duration-300 ease-in-out hover:backdrop-brightness-125`}
+            <div
+                className={`${className} rounded-full transition-all duration-300 ease-in-out hover:backdrop-brightness-125`}
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="relative flex items-center justify-center">
@@ -31,7 +30,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                     />
                     <label
                         htmlFor="toggle-theme"
-                        className="relative flex h-10 w-10 items-center justify-center rounded-full border text-2xl transition-all duration-300 ease-in-out hover:backdrop-brightness-75 cursor-pointer"
+                        className="relative flex h-9 w-9 items-center justify-center rounded-full border text-2xl transition-all duration-300 ease-in-out hover:backdrop-brightness-75 cursor-pointer"
                     >
                         {/* Light */}
                         <MdLightMode
@@ -52,7 +51,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                         />
                     </label>
                 </div>
-            </button>
+            </div>
         </Tooltip>
     );
 }

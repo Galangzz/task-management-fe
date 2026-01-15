@@ -7,11 +7,13 @@ interface TabsStoreState {
     tabs: ITab[] | null;
     tab: ITab | null;
     currentTabId: string;
+    previousTabId: string;
     pendingUpdates: Map<string, ITask[] | null>;
 
     setTabs: () => Promise<void>;
     setTab: (tabId: string) => void;
     setCurrentTabId: (tabId: string) => void;
+    setPreviousTabId: (tabId: string) => void;
 
     optimisticAddTab: (tab: ITab) => void;
     optimisticDeleteTab: (tabId: string) => void;
@@ -26,6 +28,7 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
     tabs: null,
     tab: null,
     currentTabId: '',
+    previousTabId: '',
     pendingUpdates: new Map(),
 
     setTabs: async () => {
@@ -39,10 +42,23 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
     },
 
     setTab: (tabId) => {
+        if (tabId === 'starred-task') {
+            set({
+                tab: {
+                    id: 'starred-task',
+                    name: 'Starred Task',
+                    createdAt: new Date(),
+                    deletePermission: false,
+                },
+            });
+            return;
+        }
         set({ tab: get().tabs?.find((tab) => tab.id === tabId) || null });
     },
 
     setCurrentTabId: (tabId) => set({ currentTabId: tabId }),
+
+    setPreviousTabId: (tabId) => set({ previousTabId: tabId }),
 
     optimisticAddTab: (tab) => {
         const tabs = get().tabs || [];
@@ -58,7 +74,6 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
         const newTabs = tabs.filter((tab) => tab.id !== tabId);
         set({ tabs: newTabs });
     },
-
 
     addPendingUpdates: (tabId, tasks) => {
         const pending = new Map(get().pendingUpdates);

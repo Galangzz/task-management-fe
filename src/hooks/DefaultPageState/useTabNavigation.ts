@@ -7,24 +7,32 @@ import { useTabsStore } from '../../stores/useTabStore.js';
 
 function useTabNavigation(id: string | undefined) {
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
-    const { tabs, setTab, currentTabId, setCurrentTabId, pendingUpdates } =
-        useTabsStore();
+    const {
+        setTab,
+        currentTabId,
+        previousTabId,
+        setCurrentTabId,
+        setPreviousTabId,
+        pendingUpdates,
+    } = useTabsStore();
 
-    const loadTaskList = async (tabId: string, signal?: AbortSignal) => {
+    const loadTaskList = async (
+        tabId: string,
+        signal?: AbortSignal,
+        previous?: string
+    ) => {
         try {
             await loadTask(tabId, signal);
             if (pendingUpdates.has(tabId)) {
-                console.log({ TabId: id, pendingUpdates });
                 setTasks(pendingUpdates.get(tabId)!);
             }
         } catch (error) {
             if (error instanceof ApiError) {
                 if (error.status == 404) {
-                    navigate(`/`, { replace: true });
+                    navigate(`/${previous}`, { replace: true });
                     return;
                 }
             }
@@ -40,16 +48,24 @@ function useTabNavigation(id: string | undefined) {
 
     useEffect(() => {
         const controller = new AbortController();
+        let mounted = true;
 
-        if (!id) return;
+        if (!id || !mounted) return;
 
-        if (!tasks || tasks.length === 0 || !tasks.every((t) => t.taskTabId === id)) {
+        if (!tasks || tasks?.length === 0 || currentTabId !== previousTabId) {
+            console.log({ currentTabId, id, previousTabId });
             refreshTasks();
-            loadTaskList(id as string, controller.signal);
+
+            loadTaskList(id as string, controller.signal, previousTabId).then(
+                () => setPreviousTabId(currentTabId)
+            );
         }
 
-        return () => controller.abort();
-    }, [currentTabId, id]);
+        return () => {
+            controller.abort();
+            mounted = false;
+        };
+    }, [id, currentTabId, previousTabId]);
 
     return null;
 }
