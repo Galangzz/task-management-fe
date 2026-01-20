@@ -8,7 +8,6 @@ const API_BASE: string = import.meta.env.VITE_API_URL;
 
 const setUser = useUserStore.getState().setUser;
 const resetTaskStore = useTaskStore.getState().resetTaskStore;
-const resetTabStore = useTabsStore.getState().resetTabStore;
 
 export const api = axios.create({
     baseURL: API_BASE,
@@ -62,7 +61,8 @@ api.interceptors.response.use(
                 localStorage.removeItem('accessToken');
                 setUser(null);
                 resetTaskStore();
-                resetTabStore();
+                useTabsStore.getState().resetTabStore;
+
                 return Promise.reject(refreshError);
             }
         }
