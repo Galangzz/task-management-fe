@@ -19,6 +19,7 @@ import { useTaskStore } from '../stores/useTaskStore.js';
 import { deleteTaskById } from '../services/tasksService.js';
 import useToast from '../hooks/useToast.js';
 import useTaskAction from '../hooks/DefaultPageState/useTaskAction.js';
+import ForbiddenPage from './ForbiddenPage.js';
 
 function DetailTask() {
     const { taskId } = useParams();
@@ -27,6 +28,7 @@ function DetailTask() {
         tabs,
         tab,
         task,
+        detailTaskError,
         title,
         detail,
         starred,
@@ -57,6 +59,10 @@ function DetailTask() {
 
     const { optimisticDeleteTasks, loadTask } = useTaskStore();
 
+    if (detailTaskError === 403) {
+        return <ForbiddenPage />;
+    }
+    
     if (!task) {
         return <LoadingPage />;
     }
@@ -137,7 +143,7 @@ function DetailTask() {
                             tab.id === taskTabId.value && (
                                 <p
                                     key={tab.id}
-                                    className="text-blue-400! text-fluid-lg"
+                                    className="text-fluid-lg text-blue-400!"
                                 >
                                     {tab.name}
                                 </p>
@@ -152,11 +158,11 @@ function DetailTask() {
                     id="title-task-detail"
                     value={title.value}
                     onChange={title.set}
-                    className="px-4! py-6! text-fluid-xl focus:underline focus:outline-none"
+                    className="text-fluid-xl px-4! py-6! focus:underline focus:outline-none"
                     maxLength={50}
                 />
 
-                <div className="flex w-full gap-4 px-4! py-2! hover:backdrop-brightness-90 text-fluid-sm">
+                <div className="text-fluid-sm flex w-full gap-4 px-4! py-2! hover:backdrop-brightness-90">
                     <CgDetailsMore size={20} />
                     <textarea
                         ref={detail.ref}
@@ -170,13 +176,13 @@ function DetailTask() {
                     ></textarea>
                 </div>
                 <div
-                    className="flex w-full items-center gap-4 px-4! text-fluid-sm py-2! hover:backdrop-brightness-90"
+                    className="text-fluid-sm flex w-full items-center gap-4 px-4! py-2! hover:backdrop-brightness-90"
                     onClick={toggleCalendar.open}
                 >
                     <IoMdTime size={20} />
                     {hasDate ? (
                         <motion.div
-                            className="flex w-fit items-center gap-2 border-2 p-2!  font-bold"
+                            className="flex w-fit items-center gap-2 border-2 p-2! font-bold"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
@@ -212,7 +218,7 @@ function DetailTask() {
             <Field className="container m-4! flex items-end bg-transparent">
                 <button
                     type="button"
-                    className="cursor-pointer rounded-full p-2! tracking-wider text-blue-400! text-shadow-2xs hover:backdrop-invert-10 text-fluid-sm"
+                    className="text-fluid-sm cursor-pointer rounded-full p-2! tracking-wider text-blue-400! text-shadow-2xs hover:backdrop-invert-10"
                     onClick={() => {
                         handleChecked(task.id, !isCompleted.value).then(() => {
                             navigate(`/${taskTabId.value}`);

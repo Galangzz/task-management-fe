@@ -5,6 +5,7 @@ import React, { lazy } from 'react';
 // const DetailTask = lazy(() => import('../pages/DetailTask.js'));
 import DefaultPage from '../pages/DefaultPage.js';
 import DetailTask from '../pages/DetailTask.js';
+import ForbiddenPage from '../pages/ForbiddenPage.js';
 
 function AppRoutes({ tabId }: { tabId: string }) {
     return (
@@ -20,6 +21,10 @@ function AppRoutes({ tabId }: { tabId: string }) {
             <Route
                 path="/:id"
                 element={<DefaultPage />}
+            />
+            <Route
+                path="/forbidden"
+                element={<ForbiddenPage />}
             />
             <Route
                 path="*"

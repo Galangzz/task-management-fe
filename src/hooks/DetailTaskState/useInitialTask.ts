@@ -5,13 +5,12 @@ import type { ITab, ITask } from '../../types/index.js';
 import { useNavigate } from 'react-router-dom';
 import { useTabsStore } from '../../stores/useTabStore.js';
 import { useTaskStore } from '../../stores/useTaskStore.js';
+import ApiError from '../../errors/ApiError.js';
 
 export function useInitialTask(taskId: string | undefined) {
-    // const [tab, setTab] = useState<ITab[] | null>(null);
-    // const [task, setTask] = useState<ITask | null>(null);
-
     const { tabs, tab, setTabs, setTab } = useTabsStore();
     const { task, setTask, setTasks, loadTask } = useTaskStore();
+    const [err, setErr] = useState<number>(0);
 
     const navigate = useNavigate();
 
@@ -36,8 +35,18 @@ export function useInitialTask(taskId: string | undefined) {
                     await loadTask(resTask.taskTabId);
                     setTask(resTask);
                 }
-            } catch {
-                navigate('/', { replace: true });
+            } catch (error){
+                // navigate('/', { replace: true });
+                if (error instanceof ApiError) {
+                    if (error.status == 404) {
+                        navigate('/', { replace: true });
+                        return;
+                    }
+                    if (error.status == 403) {
+                        setErr(error.status);
+                        return;
+                    }
+                }
                 return;
             }
         };
@@ -53,5 +62,6 @@ export function useInitialTask(taskId: string | undefined) {
         task,
         setTask,
         setTasks,
+        detailTaskError: err,
     };
 }

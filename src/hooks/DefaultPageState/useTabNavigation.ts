@@ -8,6 +8,7 @@ import { useTabsStore } from '../../stores/useTabStore.js';
 function useTabNavigation(id: string | undefined) {
     const navigate = useNavigate();
 
+    const [err, setErr] = useState<number>(0);
     const { tasks, loadTask, setTasks, refreshTasks } = useTaskStore();
 
     const {
@@ -34,6 +35,10 @@ function useTabNavigation(id: string | undefined) {
                 if (error.status == 404) {
                     navigate(`/${previous}`, { replace: true });
                     return;
+                } else if (error.status == 403) {
+                    // navigate('/forbidden', { replace: true });
+                    setErr(error.status);
+                    return;
                 }
             }
         }
@@ -51,22 +56,21 @@ function useTabNavigation(id: string | undefined) {
         let mounted = true;
 
         if (!id || !mounted) return;
+        if (id === previousTabId) return;
 
-        if (!tasks || tasks?.length === 0 || currentTabId !== previousTabId) {
-            console.log({ currentTabId, id, previousTabId });
-            refreshTasks();
+        console.log({ currentTabId, id, previousTabId });
+        refreshTasks();
 
-            loadTaskList(id as string, controller.signal, previousTabId).then(
-                () => setPreviousTabId(currentTabId)
-            );
-        }
+        loadTaskList(id as string, controller.signal, previousTabId).then(() =>
+            setPreviousTabId(id)
+        );
 
         return () => {
             controller.abort();
             mounted = false;
         };
-    }, [id, currentTabId, previousTabId]);
+    }, [id, currentTabId]);
 
-    return null;
+    return { errNav: err };
 }
 export default useTabNavigation;
