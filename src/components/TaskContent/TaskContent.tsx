@@ -22,10 +22,10 @@ import Field from '../ui/Field.js';
 
 import type { ITask, ITab } from '../../types/index.js';
 
-import { AnimatePresence } from 'framer-motion';
-import { BsThreeDotsVertical } from 'react-icons/bs';
+import { AnimatePresence, motion } from 'framer-motion';
 import TitleTaskContent from './TitleTaskContent.js';
 import MenuTaskContent from './MenuTaskContent.js';
+import ImageIndication from './ImageIndication.js';
 
 type GroupedTasks = Record<string, ITask[]>;
 
@@ -145,11 +145,13 @@ function TaskContent({
                         {tab?.id !== 'starred-task' && (
                             <MenuTaskContent
                                 tabId={tabId}
-                                deletePermission={tab?.deletePermission || false}
+                                deletePermission={
+                                    tab?.deletePermission || false
+                                }
                             />
                         )}
                     </div>
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="relative flex flex-col items-center gap-4">
                         {activeTask.length > 0 &&
                             sortedKeys.map((date) => {
                                 const label = formatCustomDate(date);
@@ -188,7 +190,7 @@ function TaskContent({
                                                                 handleStarred
                                                             }
                                                         >
-                                                            <p className="font-semibold text-fluid-sm">
+                                                            <p className="text-fluid-sm font-semibold">
                                                                 {t.title}
                                                             </p>
                                                             {t.detail && (
@@ -221,36 +223,10 @@ function TaskContent({
                                     </div>
                                 );
                             })}
-                        <div
-                            className={`flex h-fit flex-col items-center justify-center gap-8 transition-opacity! duration-500! ease-in-out! ${showCompleted || showEmpty ? 'animate-fade-in' : 'pointer-events-none absolute inset-0 translate-y-4 opacity-0'} mx-auto aspect-3/4 h-full w-full max-w-sm`}
-                        >
-                            <img
-                                src={
-                                    theme === 'dark'
-                                        ? showCompleted
-                                            ? completedTaskDark
-                                            : emptyNoteDark
-                                        : showCompleted
-                                          ? completedTaskLight
-                                          : emptyNoteLight
-                                }
-                                alt="Task Notification Image"
-                                aria-label="Task Notification Image"
-                                className="aspect-3/4 min-h-36 max-h-80 w-auto object-contain p-2!"
-                                fetchPriority="high"
-                            />
-                            <p className="w-full text-center text-fluid-lg  md:text-fluid-xl font-semibold tracking-widest">
-                                {showCompleted ? (
-                                    <>
-                                        Task Telah Selesai
-                                        <br />
-                                        Kerja Bagus
-                                    </>
-                                ) : (
-                                    'Task Kosong'
-                                )}
-                            </p>
-                        </div>
+
+                        {(showCompleted || showEmpty) && (
+                            <ImageIndication showCompleted={showCompleted} />
+                        )}
                     </div>
                 </Field>
             </div>

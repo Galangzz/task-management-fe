@@ -44,7 +44,7 @@ export function useUpdateTaskSubmit(
         return isTaskDirty(
             {
                 title: task.title,
-                detail: task.detail,
+                detail: task.detail ?? '',
                 starred: task.starred,
                 deadline: task.deadline,
                 hasDate: task.hasDate,
@@ -76,13 +76,8 @@ export function useUpdateTaskSubmit(
     ]);
 
     useEffect(() => {
-        if (initialize) return;
+        if (initialize || !task) return;
         if (!isDirty()) return;
-
-        // if (!title && !detail && !deadline) {
-        //     //TODO Delete task
-        //     alert('Delete task');
-        // }
 
         const t = setTimeout(() => {
             abortRef.current?.abort();

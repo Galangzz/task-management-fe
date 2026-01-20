@@ -4,14 +4,12 @@ import { useTaskDetailValue } from './DetailTaskState/useTaskDetailValue.js';
 import { useUpdateTaskPayload } from './DetailTaskState/useUpdateTaskPayload.js';
 import { useUpdateTaskSubmit } from './DetailTaskState/useUpdateTaskSubmit.js';
 import useTaskDateTime from './useTaskDateTime.js';
-import { useTaskStore } from '../stores/useTaskStore.js';
 import { useHandleBackDetail } from './DetailTaskState/useHandleBackDetail.js';
 
 export function useDetailTask(taskId: string | undefined) {
     const [isOpenModalTab, setIsOpenModalTab] = useState(false);
     const { tabs, tab, task, setTask, setTasks } = useInitialTask(taskId);
     const [initialize, setInitialize] = useState(true);
-    const { optimisticDeleteTasks } = useTaskStore();
 
     const { title, detail, starred, isCompleted, taskTabId } =
         useTaskDetailValue(tabs, task, setInitialize);

@@ -26,9 +26,9 @@ function useRegister() {
         }
 
         // username check
-        if (username.trim().length > 30) {
+        if (username.trim().length > 30 || username.trim().length < 3) {
             toast.error(
-                new Error('Username karakter tidak boleh lebih dari 30')
+                new Error('Username karakter min 3 dan max 30 karakter')
             );
             return;
         }

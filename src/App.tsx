@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 
 import { ThemeProvider } from './context/Theme.js';
 
-import { getLoggedUser } from './services/authService.js';
+import { socket } from './services/socket/socket.js';
 
 import useTheme from './hooks/useTheme.js';
 import { useTabsStore } from './stores/useTabStore.js';
@@ -22,7 +22,6 @@ function App() {
     const [initialize, setInitialize] = useState(true);
 
     const { tabs, setTabs, currentTabId, setCurrentTabId } = useTabsStore();
-
 
     useEffect(() => {
         let isMounted = true;
@@ -52,6 +51,39 @@ function App() {
         }
     }, [tabs]);
 
+    //socket
+
+    useEffect(() => {
+        if (!user) return;
+
+        if (socket.connected) {
+            socket.emit('join-user', user.id);
+        }
+
+        const handleReconnect = () => {
+            socket.emit('join-user', user.id);
+        };
+
+        socket.on('connect', handleReconnect);
+
+        return () => {
+            socket.off('connect', handleReconnect);
+        };
+    }, [user]);
+
+    useEffect(() => {
+        socket.on('deadline-reminder', (data) => {
+            alert(
+                `⏰ ${data.title} Now ${new Date(data.deadline).toLocaleString()}`
+            );
+        });
+
+        return () => {
+            socket.off('deadline-reminder');
+        };
+    }, []);
+
+
     async function onLoginSuccess() {
         await checkUserLogged(true);
     }
@@ -64,11 +96,11 @@ function App() {
         return (
             <ThemeProvider value={{ theme, toggleTheme }}>
                 <div className="App min-h-screen w-screen">
-                    <div className="fixed gap-18 bottom-10 flex justify-center whitespace-nowrap">
+                    <div className="fixed bottom-10 flex justify-center gap-18 whitespace-nowrap">
                         {Array.from({ length: 10 }).map((_, index) => (
                             <div
                                 key={index}
-                                className="animate-float -z-10 h-40 w-40 rotate-45  bg-(--button-text) opacity-20 blur-md"
+                                className="animate-float -z-10 h-40 w-40 rotate-45 bg-(--button-text) opacity-20 blur-md"
                                 style={{ animationDelay: `${index * 300}ms` }}
                             ></div>
                         ))}

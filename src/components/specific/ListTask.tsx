@@ -30,7 +30,11 @@ function ListTask({
 
     const handleChange = (value: boolean) => {
         setLocalChecked(() => value);
-        handleChecked(id, value);
+        const t = setTimeout(() => {
+            handleChecked(id, value);
+        }, 300);
+        
+        return () => clearTimeout(t);
     };
 
     return (
