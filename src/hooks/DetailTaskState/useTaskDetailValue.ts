@@ -7,13 +7,12 @@ export function useTaskDetailValue(
     setInitialize: React.Dispatch<React.SetStateAction<boolean>>
 ) {
     const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState<string | null>('');
+    const [detail, setDetail] = useState<string | null>(null);
     const [starred, setStarred] = useState(false);
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
     const [taskTabId, setTaskTabId] = useState<string | null>(null);
 
     const detailRef = useRef<HTMLTextAreaElement>(null);
-    console.log({ taskdetail: task });
 
     useEffect(() => {
         if (task && Object.keys(task).length === 10) {

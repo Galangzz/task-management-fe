@@ -26,7 +26,7 @@ export default function ModalTabMove({
                 initial={{ y: 200 }}
                 animate={{ y: 0 }}
                 exit={{ y: 200 }}
-                className="flex w-full items-center justify-center bg-(--background-header)"
+                className="flex w-full items-center justify-center bg-(--background-header)/50 backdrop-blur-3xl"
                 transition={{
                     duration: 0.3,
                     ease: 'easeInOut',
@@ -41,7 +41,7 @@ export default function ModalTabMove({
                     {tab?.map((tab) => (
                         <div
                             key={tab.id}
-                            className={`flex items-center gap-2! px-2! hover:backdrop-invert-10 ${
+                            className={`group/tab-move flex items-center gap-2! px-2! hover:backdrop-invert-10 ${
                                 tab.id === id ? 'border backdrop-invert-10' : ''
                             } text-lg tracking-wider`}
                         >
@@ -58,7 +58,7 @@ export default function ModalTabMove({
                             />
                             <label
                                 htmlFor={tab.id}
-                                className="flex-1"
+                                className="flex-1 group-hover/tab-move:cursor-pointer"
                             >
                                 {tab.name}
                             </label>
