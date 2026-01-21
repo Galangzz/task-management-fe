@@ -64,5 +64,6 @@ export function useDetailTask(taskId: string | undefined) {
             close: () => setIsOpenModalTab(false),
         },
         handleBackDetail,
+        isDirty,
     };
 }

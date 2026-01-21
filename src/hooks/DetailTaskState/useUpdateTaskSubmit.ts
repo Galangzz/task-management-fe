@@ -112,7 +112,7 @@ export function useUpdateTaskSubmit(
                             isCompleted,
                             taskTabId,
                         });
-                        if (currentTabId === taskTabId) {
+                        if (currentTabId === taskTabId || currentTabId === 'starred-task') {
                             setTasks([
                                 {
                                     ...task,

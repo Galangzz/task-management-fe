@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Field from '../components/ui/Field.js';
 import { CgDetailsMore } from 'react-icons/cg';
@@ -19,8 +19,7 @@ import { useTaskStore } from '../stores/useTaskStore.js';
 import { deleteTaskById } from '../services/tasksService.js';
 import useToast from '../hooks/useToast.js';
 import useTaskAction from '../hooks/DefaultPageState/useTaskAction.js';
-import ForbiddenPage from './ForbiddenPage.js';
-
+const ForbiddenPage = lazy(() => import('./ForbiddenPage.js'));
 function DetailTask() {
     const { taskId } = useParams();
 
@@ -37,6 +36,7 @@ function DetailTask() {
         taskTabId,
         modalTab,
         handleBackDetail,
+        isDirty,
     } = useDetailTask(taskId);
 
     const { handleChecked } = useTaskAction();
@@ -62,7 +62,7 @@ function DetailTask() {
     if (detailTaskError === 403) {
         return <ForbiddenPage />;
     }
-    
+
     if (!task) {
         return <LoadingPage />;
     }
@@ -220,7 +220,15 @@ function DetailTask() {
                     type="button"
                     className="text-fluid-sm cursor-pointer rounded-full p-2! tracking-wider text-blue-400! text-shadow-2xs hover:backdrop-invert-10"
                     onClick={() => {
-                        handleChecked(task.id, !isCompleted.value).then(() => {
+                        if (isDirty()) {
+                            toast.info('Harap tunggu sebentar');
+                            return;
+                        }
+                        handleChecked(
+                            task.id,
+                            !isCompleted.value,
+                            task.taskTabId
+                        ).then(() => {
                             navigate(`/${taskTabId.value}`);
                         });
                     }}

@@ -8,6 +8,7 @@ function useTaskAction() {
     const toast = useToast();
     const {
         tasks,
+        task,
         optimisticToggleChecked,
         optimisticToggleStarred,
         undoLocalStatus,
@@ -20,12 +21,16 @@ function useTaskAction() {
     const starAbortRef = useRef<AbortController | null>(null);
 
     const handleChecked = useCallback(
-        async (id: string, isCompleted: boolean) => {
+        async (id: string, isCompleted: boolean, tabId?: string) => {
             console.log({ handleCheckId: id, currentTabId });
 
             optimisticToggleChecked(id);
-            const task = tasks?.find((task) => task.id === id)!;
-            addPendingUpdates(task?.taskTabId, { ...task, isCompleted });
+            const foundTask = tasks?.find((task) => task.id === id) || task!;
+            console.log({ task, tasks });
+            addPendingUpdates(tabId || foundTask?.taskTabId, {
+                ...foundTask,
+                isCompleted: isCompleted,
+            });
 
             setTimeout(async () => {
                 const message =
@@ -52,7 +57,7 @@ function useTaskAction() {
                 );
             }, 300);
         },
-        [tabs, tasks]
+        [tabs, tasks, task]
     );
 
     const handleStarred = useCallback(

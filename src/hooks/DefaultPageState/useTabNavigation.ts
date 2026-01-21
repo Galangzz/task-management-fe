@@ -36,7 +36,6 @@ function useTabNavigation(id: string | undefined) {
                     navigate(`/${previous}`, { replace: true });
                     return;
                 } else if (error.status == 403) {
-                    // navigate('/forbidden', { replace: true });
                     setErr(error.status);
                     return;
                 }

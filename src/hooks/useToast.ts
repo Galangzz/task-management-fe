@@ -4,10 +4,16 @@ import UndoNotification from '../components/ui/Notification/UndoNotification.js'
 import ErrorNotification from '../components/ui/Notification/ErrorNotification.js';
 import SuccessNotification from '../components/ui/Notification/SuccesNotification.js';
 import type ApiError from '../errors/ApiError.js';
+import InfoNotification from '../components/ui/Notification/InfoNotification.js';
 
 function useToast() {
     const notify = {
-        undo: (message: string, onUndo: () => void, onClose: () => void, setStacked: () => void) =>
+        undo: (
+            message: string,
+            onUndo: () => void,
+            onClose: () => void,
+            setStacked: () => void
+        ) =>
             toast.info(UndoNotification, {
                 onClose: (undo) => {
                     if (!undo) onClose();
@@ -23,7 +29,7 @@ function useToast() {
         success: (msg: string) =>
             toast.success(SuccessNotification, {
                 data: {
-                    message: msg
+                    message: msg,
                 },
                 autoClose: 3000,
             }),
@@ -32,6 +38,11 @@ function useToast() {
                 data: {
                     error: error,
                 },
+                autoClose: 3000,
+            }),
+        info: (msg: string) =>
+            toast.info(InfoNotification, {
+                data: { message: msg },
                 autoClose: 3000,
             }),
     };

@@ -14,7 +14,7 @@ import useDefaultPage from '../hooks/useDefaultPage.js';
 import { useParams } from 'react-router-dom';
 
 import { AnimatePresence } from 'framer-motion';
-import ForbiddenPage from './ForbiddenPage.js';
+const  ForbiddenPage = lazy(() => import('./ForbiddenPage.js'))
 
 function DefaultPage() {
     const { id } = useParams();
