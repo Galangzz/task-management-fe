@@ -8,7 +8,8 @@ import { useHandleBackDetail } from './DetailTaskState/useHandleBackDetail.js';
 
 export function useDetailTask(taskId: string | undefined) {
     const [isOpenModalTab, setIsOpenModalTab] = useState(false);
-    const { tabs, tab, task, setTask, setTasks } = useInitialTask(taskId);
+    const { tabs, tab, task, setTask, setTasks, detailTaskError } =
+        useInitialTask(taskId);
     const [initialize, setInitialize] = useState(true);
 
     const { title, detail, starred, isCompleted, taskTabId } =
@@ -50,6 +51,7 @@ export function useDetailTask(taskId: string | undefined) {
         tabs,
         tab,
         task,
+        detailTaskError,
         title,
         detail,
         starred,
@@ -62,5 +64,6 @@ export function useDetailTask(taskId: string | undefined) {
             close: () => setIsOpenModalTab(false),
         },
         handleBackDetail,
+        isDirty,
     };
 }

@@ -50,7 +50,7 @@ function MenuTaskContent({
                 <BsThreeDotsVertical size={20} />
             </div>
             <div
-                className={`absolute bottom-0 left-0 w-24 -translate-x-21 translate-y-14 flex-col rounded-xl border bg-(--background-header) py-2! shadow-xs ${
+                className={`absolute bottom-0 left-0 z-10 w-24 -translate-x-21 translate-y-14 flex-col rounded-xl border bg-(--background-header) py-2! shadow-xs ${
                     showMenu ? 'flex' : 'hidden'
                 }`}
             >

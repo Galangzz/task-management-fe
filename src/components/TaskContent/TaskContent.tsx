@@ -1,19 +1,11 @@
 import React, {
     lazy,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useState,
 } from 'react';
 import { formatCustomDate } from '../../utils/index.js';
-
-import emptyNoteLight from '../../assets/empty-note-light.svg';
-import emptyNoteDark from '../../assets/empty-note-dark.svg';
-import completedTaskDark from '../../assets/completed-task-dark.svg';
-import completedTaskLight from '../../assets/completed-task-light.svg';
-
-import { ThemeContext } from '../../context/Theme.js';
 
 import ListTask from '../specific/ListTask.js';
 import LoadingTaskList from '../ui/Loading/LoadingTaskList.js';
@@ -22,10 +14,11 @@ import Field from '../ui/Field.js';
 
 import type { ITask, ITab } from '../../types/index.js';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import TitleTaskContent from './TitleTaskContent.js';
 import MenuTaskContent from './MenuTaskContent.js';
 import ImageIndication from './ImageIndication.js';
+import TaskContentValue from './TaskContentValue.js';
 
 type GroupedTasks = Record<string, ITask[]>;
 
@@ -44,8 +37,6 @@ function TaskContent({
     handleChecked,
     handleStarred,
 }: TaskContentProps) {
-    const { theme } = useContext(ThemeContext);
-
     const [showCompleted, setShowCompleted] = useState(false);
     const [showEmpty, setShowEmpty] = useState(false);
 
@@ -84,9 +75,26 @@ function TaskContent({
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const d = new Date(deadline);
-        if (d.getDate() < today.getDate()) return 'TERLEWAT';
-        if (d.getDate() === today.getDate()) return 'HARI_INI';
-        if (d.getDate() === tomorrow.getDate()) return 'BESOK';
+
+        if (
+            d.getFullYear() < today.getFullYear() ||
+            (d.getFullYear() === today.getFullYear() &&
+                d.getMonth() <= today.getMonth() &&
+                d.getDate() < today.getDate())
+        )
+            return 'TERLEWAT';
+        if (
+            d.getDate() === today.getDate() &&
+            d.getMonth() === today.getMonth() &&
+            d.getFullYear() === today.getFullYear()
+        )
+            return 'HARI_INI';
+        if (
+            d.getDate() === tomorrow.getDate() &&
+            d.getMonth() === tomorrow.getMonth() &&
+            d.getFullYear() === tomorrow.getFullYear()
+        )
+            return 'BESOK';
         return d.toLocaleDateString();
     }, []);
 
@@ -120,6 +128,7 @@ function TaskContent({
             }),
         [groupedData]
     );
+    console.log({ groupedData });
 
     const colorDate = useCallback((d: string) => {
         const color =
@@ -190,31 +199,16 @@ function TaskContent({
                                                                 handleStarred
                                                             }
                                                         >
-                                                            <p className="text-fluid-sm font-semibold">
-                                                                {t.title}
-                                                            </p>
-                                                            {t.detail && (
-                                                                <p className="ml-2! line-clamp-2 w-full max-w-sm break-all">
-                                                                    {t.detail}
-                                                                </p>
-                                                            )}
-                                                            {t.hasTime && (
-                                                                <div className="ml-2! flex w-fit items-center justify-center opacity-90">
-                                                                    {String(
-                                                                        dl?.getHours()
-                                                                    ).padStart(
-                                                                        2,
-                                                                        '0'
-                                                                    )}
-                                                                    :
-                                                                    {String(
-                                                                        dl?.getMinutes()
-                                                                    ).padStart(
-                                                                        2,
-                                                                        '0'
-                                                                    )}
-                                                                </div>
-                                                            )}
+                                                            <TaskContentValue
+                                                                title={t.title}
+                                                                detail={
+                                                                    t.detail
+                                                                }
+                                                                hasTime={
+                                                                    t.hasTime
+                                                                }
+                                                                deadline={dl}
+                                                            />
                                                         </ListTask>
                                                     </div>
                                                 );
@@ -225,7 +219,10 @@ function TaskContent({
                             })}
 
                         {(showCompleted || showEmpty) && (
-                            <ImageIndication showCompleted={showCompleted} />
+                            <ImageIndication
+                                showCompleted={showCompleted}
+                                tabId={tab?.id || ''}
+                            />
                         )}
                     </div>
                 </Field>

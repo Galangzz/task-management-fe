@@ -6,12 +6,18 @@ import completedTaskLight from '../../assets/completed-task-light.svg';
 import emptyNoteDark from '../../assets/empty-note-dark.svg';
 import emptyNoteLight from '../../assets/empty-note-light.svg';
 import { ThemeContext } from '../../context/Theme.js';
-function ImageIndication({showCompleted}: {showCompleted: boolean}) {
+function ImageIndication({
+    showCompleted,
+    tabId,
+}: {
+    showCompleted: boolean;
+    tabId: string;
+}) {
     const { theme } = useContext(ThemeContext);
 
     return (
         <motion.div
-            className={`mx-auto flex aspect-3/4 max-h-80 min-h-36 md:max-h-96 lg:max-h-120 w-full max-w-sm flex-col items-center justify-center gap-8 transition-opacity! duration-500! ease-in-out!`}
+            className={`mx-auto flex aspect-3/4 max-h-80 min-h-36 w-full max-w-sm flex-col items-center justify-center gap-8 transition-opacity! duration-500! ease-in-out! md:max-h-96 lg:max-h-120`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
@@ -42,6 +48,8 @@ function ImageIndication({showCompleted}: {showCompleted: boolean}) {
                         <br />
                         Kerja Bagus
                     </>
+                ) : tabId === 'starred-task' ? (
+                    'Tidak ada catatan yang dibintangi'
                 ) : (
                     'Task Kosong'
                 )}

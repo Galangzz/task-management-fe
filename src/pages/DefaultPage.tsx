@@ -14,6 +14,7 @@ import useDefaultPage from '../hooks/useDefaultPage.js';
 import { useParams } from 'react-router-dom';
 
 import { AnimatePresence } from 'framer-motion';
+const  ForbiddenPage = lazy(() => import('./ForbiddenPage.js'))
 
 function DefaultPage() {
     const { id } = useParams();
@@ -21,6 +22,7 @@ function DefaultPage() {
         tabs,
         tab,
         tasks,
+        errNav,
 
         //newTabModal
         titleList,
@@ -44,6 +46,10 @@ function DefaultPage() {
         handleChecked,
         handleStarred,
     } = useDefaultPage(id);
+
+    if (errNav === 403) {
+        return <ForbiddenPage />;
+    }
 
     return (
         <div className="relative flex h-full w-full flex-col">
