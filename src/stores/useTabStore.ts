@@ -100,6 +100,6 @@ export const useTabsStore = create<TabsStoreState>((set, get) => ({
         const { clearAllPendingUpdates } = get();
         clearAllPendingUpdates();
         console.log('Reset TabStore');
-        set({ tabs: null, tab: null, currentTabId: '' });
+        set({ tabs: null, tab: null, currentTabId: '', previousTabId: '' });
     },
 }));
