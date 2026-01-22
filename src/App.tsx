@@ -8,6 +8,7 @@ import { socket } from './services/socket/socket.js';
 import useTheme from './hooks/useTheme.js';
 import { useTabsStore } from './stores/useTabStore.js';
 import { useUserStore } from './stores/useUserStore.js';
+import { getTokenNotification } from './services/firebase/firebase.js';
 
 const LoadingPage = lazy(
     () => import('./components/ui/Loading/LoadingPage.js')
@@ -56,6 +57,8 @@ function App() {
     useEffect(() => {
         if (!user) return;
 
+        // requestNotifications();
+
         if (socket.connected) {
             socket.emit('join-user', user.id);
         }
@@ -83,9 +86,17 @@ function App() {
         };
     }, []);
 
+    async function getTokens() {
+        try {
+            await getTokenNotification();
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function onLoginSuccess() {
         await checkUserLogged(true);
+        await getTokens();
     }
 
     if (initialize || (user && !tabs && !currentTabId)) {
