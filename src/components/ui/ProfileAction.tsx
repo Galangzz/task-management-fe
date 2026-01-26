@@ -14,7 +14,7 @@ function ProfileAction({
     const { resetTabStore } = useTabsStore();
     return (
         <div
-            className={`${show ? 'flex flex-col' : 'hidden'} absolute right-0 -bottom-1 w-fit translate-y-full z-20 flex-col gap-2 rounded-sm bg-(--background-header)  py-4! text-sm font-bold text-balance inset-shadow-sm inset-shadow-white/10`}
+            className={`${show ? 'flex flex-col' : 'hidden'} absolute right-0 -bottom-1 w-fit translate-y-full z-20 flex-col gap-2 rounded-sm bg-secondary  py-4! text-sm font-bold text-balance inset-shadow-sm inset-shadow-white/10`}
         >
             {actionList.map((action, index) => (
                 <div

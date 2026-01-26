@@ -56,7 +56,7 @@ function ModalDayPicker({
         <>
             <Modal setToggle={toggleCalendar}>
                 <div
-                    className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4!"
+                    className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-primary-foreground py-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="flex h-92 w-full justify-center">
@@ -66,7 +66,7 @@ function ModalDayPicker({
                         />
                     </div>
                     <div
-                        className="flex w-full cursor-pointer items-center gap-4 border-y px-10! py-4! hover:backdrop-brightness-125"
+                        className="flex w-full cursor-pointer items-center gap-4 border-y border-foreground/30 px-10! py-4! hover:backdrop-brightness-125"
                         onClick={openTime}
                     >
                         <Clock className="text-2xl" />

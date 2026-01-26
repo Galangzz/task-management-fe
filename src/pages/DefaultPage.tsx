@@ -52,7 +52,7 @@ function DefaultPage() {
     }
 
     return (
-        <div className="relative flex h-full w-full flex-col">
+        <div className="relative z-1 flex min-h-screen w-full flex-col">
             <Header />
             <Navbar
                 tabs={tabs}

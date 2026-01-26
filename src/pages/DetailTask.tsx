@@ -65,7 +65,7 @@ function DetailTask() {
 
     return (
         <motion.div
-            className="flex h-screen w-full flex-col items-center justify-between"
+            className="flex min-h-screen z-1 w-full flex-col items-center justify-between"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{

@@ -50,13 +50,13 @@ function MenuTaskContent({
                 <EllipsisVertical size={20} />
             </div>
             <div
-                className={`absolute bottom-0 left-0 z-10 w-24 -translate-x-21 translate-y-14 flex-col rounded-xl border bg-(--background-header) py-2! shadow-xs ${
+                className={`absolute bottom-0 left-0 z-10 w-34 -translate-x-31 translate-y-14 flex-col rounded-lg border border-primary/40 bg-card py-2! shadow-xs ${
                     showMenu ? 'flex' : 'hidden'
                 }`}
             >
                 <button
                     type="button"
-                    className={`w-full p-2! ${!deletePermission ? 'cursor-not-allowed text-gray-500!' : 'cursor-pointer hover:backdrop-invert-25'}`}
+                    className={`w-full p-2! ${!deletePermission ? 'cursor-not-allowed text-primary/40' : 'cursor-pointer hover:backdrop-invert-25'}`}
                     onClick={() => {
                         handleDeleteTab(tabId);
                     }}

@@ -20,7 +20,7 @@ function SignUpInfo({ active, setActive, isLoadingRegister }: SignUpInfoProps) {
                 <h2 className="mt-8! tracking-wider">Sudah memiliki akun?</h2>
                 <button
                     type="button"
-                    className="mx-auto! my-2! w-fit rounded-full bg-(--add-button) px-4! py-2! font-bold hover:brightness-90"
+                    className="cursor-pointer mx-auto! my-2! w-fit rounded-full bg-accent-button px-4! py-2! font-bold hover:brightness-90"
                     onClick={() => setActive('LOGIN')}
                     disabled={isLoadingRegister}
                 >

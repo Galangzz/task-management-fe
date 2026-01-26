@@ -18,9 +18,9 @@ function Calendar({ selected, setSelected }: CalendarProps) {
             onSelect={setSelected}
             required
             classNames={{
-                selected: `border-(--button-text) border-2 font-bold! text-xl`,
-                today: 'text-(--button-text)! underline',
-                chevron: 'fill-(--button-text)'
+                selected: `border-accent-button border-2 font-bold! text-xl`,
+                today: 'text-accent-button underline',
+                chevron: 'fill-accent-button'
             }}
         />
     );

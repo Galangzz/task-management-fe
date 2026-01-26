@@ -1,6 +1,5 @@
+import { LoaderCircle, Lock, Mail } from 'lucide-react';
 import React from 'react';
-import { CgLock, CgMail } from 'react-icons/cg';
-import { ImSpinner9 } from 'react-icons/im';
 
 type active = 'LOGIN' | 'REGISTER' | 'NULL';
 
@@ -44,7 +43,7 @@ function LoginForm({
                 className="flex flex-col gap-6 pt-4! [&_input]:rounded-2xl [&_input]:px-4! [&_input]:py-2! [&_input]:pl-12! [&_input]:text-xl [&_input]:backdrop-brightness-80 [&_input]:focus:outline-0"
             >
                 <div className="relative w-full">
-                    <CgMail className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl opacity-60" />
+                    <Mail className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl opacity-60" />
                     <input
                         type="email"
                         name="email"
@@ -57,7 +56,7 @@ function LoginForm({
                     />
                 </div>
                 <div className="relative w-full">
-                    <CgLock className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl opacity-60" />
+                    <Lock className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-xl opacity-60" />
 
                     <input
                         type="password"
@@ -72,10 +71,10 @@ function LoginForm({
                 </div>
                 <button
                     type="submit"
-                    className="m-auto! w-fit rounded-full bg-(--add-button) px-4! py-2! text-xl font-semibold hover:brightness-90"
+                    className="border-primary/20 hover:border-primary m-auto! w-fit cursor-pointer rounded-full border px-4! py-2! text-xl font-semibold hover:brightness-90"
                 >
                     {isLoadingLogin ? (
-                        <ImSpinner9 className="animate-spin" />
+                        <LoaderCircle className="animate-spin" />
                     ) : (
                         'Login'
                     )}

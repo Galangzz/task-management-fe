@@ -30,7 +30,7 @@ function LoginInfo({
                 </h2>
                 <button
                     type="button"
-                    className="mx-auto! w-fit rounded-full bg-(--add-button) px-4! py-2! font-bold hover:brightness-90 md:my-2!"
+                    className="cursor-pointer mx-auto! w-fit rounded-full bg-accent-button px-4! py-2! font-bold hover:brightness-90 md:my-2!"
                     onClick={() => {
                         resetEmail();
                         resetPassword();

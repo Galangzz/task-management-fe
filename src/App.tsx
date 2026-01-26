@@ -111,7 +111,7 @@ function App() {
                         {Array.from({ length: 10 }).map((_, index) => (
                             <div
                                 key={index}
-                                className="animate-float -z-10 h-40 w-40 rotate-45 bg-(--button-text) opacity-20 blur-md"
+                                className="animate-float z-0 h-40 w-40 rotate-45 bg-accent-button-light opacity-20 blur-md"
                                 style={{ animationDelay: `${index * 300}ms` }}
                             ></div>
                         ))}
@@ -119,7 +119,7 @@ function App() {
                     <AuthRoutes loginSuccess={onLoginSuccess} />
                     <ToastContainer
                         autoClose={3000}
-                        toastClassName={'bg-(--toast-bg)!'}
+                        toastClassName={'bg-secondary!'}
                         position="bottom-left"
                         pauseOnFocusLoss={false}
                         pauseOnHover={false}
@@ -135,14 +135,14 @@ function App() {
     return (
         <ThemeProvider value={{ theme, toggleTheme }}>
             <div className="App min-h-screen w-screen">
-                <div className="animate-float fixed top-30 left-10 -z-10 h-60 w-60 rounded-full bg-(--button-text) opacity-20 blur-2xl"></div>
-                <div className="animate-float fixed right-50 bottom-30 -z-10 h-60 w-60 rounded-full bg-linear-to-r from-(--button-text)/50 to-(--button-text) opacity-20 blur-2xl delay-500"></div>
-                <div className="animate-float fixed right-10 bottom-30 -z-10 h-60 w-60 rounded-full bg-linear-to-r from-(--button-text)/50 to-(--button-text) opacity-20 blur-2xl delay-300"></div>
+                <div className="animate-float fixed top-30 left-10 z-0 aspect-square w-90 rounded-full bg-accent-button-light opacity-20 blur-2xl"></div>
+                <div className="animate-float fixed right-50 bottom-30 z-0 aspect-square w-70 rounded-full bg-linear-to-r from-accent-button-light/50 to-accent-button-light opacity-20 blur-2xl delay-500"></div>
+                <div className="animate-float fixed right-10 bottom-30 z-0 aspect-square w-60 rounded-full bg-linear-to-r from-accent-button-light/50 to-accent-button-light opacity-20 blur-2xl delay-300"></div>
 
                 <AppRoutes tabId={currentTabId} />
                 <ToastContainer
                     autoClose={3000}
-                    toastClassName={'bg-(--toast-bg)!'}
+                    toastClassName={'bg-secondary!'}
                     position="bottom-left"
                     pauseOnFocusLoss={false}
                     pauseOnHover={false}

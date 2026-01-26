@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark';
 
 function useTheme(defaultValue: Theme = 'light'): [Theme, () => void] {
     const [value, setValue] = useState(() => {
-        return localStorage.getItem('theme') as Theme ?? defaultValue;
+        return (localStorage.getItem('theme') as Theme) ?? defaultValue;
     });
     const onValueChangeHandler = () => {
         setValue((prevValue) => {
@@ -19,7 +19,11 @@ function useTheme(defaultValue: Theme = 'light'): [Theme, () => void] {
     }, [defaultValue]);
 
     useLayoutEffect(() => {
-        document.documentElement.setAttribute('data-theme', value);
+        if (value === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
         localStorage.setItem('theme', value);
     }, [value]);
 

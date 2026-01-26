@@ -21,7 +21,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
         <>
             <Modal setToggle={() => confirm.requestClose(setIsOpenModalTask)}>
                 <div
-                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-4!"
+                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-primary-foreground p-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <form
@@ -36,7 +36,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
-                            className="rounded-xl p-2! text-xl backdrop-invert-25 focus:outline-none"
+                            className="rounded-xl p-2! text-xl bg-input focus:outline-none"
                             maxLength={50}
                             required
                         />

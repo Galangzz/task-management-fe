@@ -19,14 +19,14 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
         <div className="= flex w-full items-center justify-center border-b-2">
             <div className="container">
                 <ul className="text-fluid-md relative flex w-full items-center">
-                    <li className="scrollbar-hide flex w-full overflow-x-scroll scroll-smooth whitespace-nowrap">
+                    <li className="navbar flex w-full overflow-x-scroll scroll-smooth whitespace-nowrap">
                         <NavbarButton
                             onClick={() => navigate('/starred-task')}
                             aria-label={'Starred Button'}
                         >
                             {currentTab === 'starred-task' && (
                                 <motion.div
-                                    className="absolute bottom-0 z-10 h-1 w-2/3 rounded-2xl bg-(--underline-navbar)"
+                                    className="absolute bottom-0 z-10 h-1 w-2/3 rounded-2xl bg-secondary-foreground"
                                     layoutId="underline"
                                     transition={{
                                         type: 'spring',
@@ -47,7 +47,7 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
                             >
                                 {currentTab === tab.id.toString() && (
                                     <motion.div
-                                        className="absolute bottom-0 z-10 h-1 w-2/3 rounded-2xl bg-(--underline-navbar)"
+                                        className="absolute bottom-0 z-10 h-1 w-2/3 rounded-2xl bg-secondary-foreground"
                                         layoutId="underline"
                                         transition={{
                                             type: 'spring',

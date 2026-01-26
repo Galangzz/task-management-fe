@@ -31,7 +31,7 @@ function VerifyOTPPage() {
     const formatTime = (s: number) => `0:${s < 10 ? `0${s}` : s}`;
 
     return (
-        <div className="flex h-screen w-screen items-center justify-center bg-(--background-color)">
+        <div className="flex h-screen w-screen items-center justify-center ">
             <OtpCard>
                 <h1>Silahkan Cek Email dan kirim OTP</h1>
                 <OtpForm

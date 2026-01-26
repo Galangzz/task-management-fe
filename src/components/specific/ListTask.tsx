@@ -46,7 +46,7 @@ function ListTask({
                 ease: 'easeInOut',
                 duration: 0.3,
             }}
-            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-(--background-color)/40`}
+            className={`flex cursor-pointer items-center gap-4 rounded-xl p-2! hover:bg-background/50`}
             onClick={() => {
                 const task = getTask(id);
                 setTask((task as ITask) || null);

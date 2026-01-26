@@ -30,7 +30,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                     />
                     <label
                         htmlFor="toggle-theme"
-                        className="relative flex h-9 w-9 items-center justify-center rounded-full border text-2xl transition-all duration-300 ease-in-out hover:backdrop-brightness-75 cursor-pointer"
+                        className="relative flex h-9 w-9 items-center justify-center rounded-full border border-primary/40 text-2xl transition-all duration-300 ease-in-out hover:backdrop-brightness-75 cursor-pointer"
                     >
                         {/* Light */}
                         <Sun
