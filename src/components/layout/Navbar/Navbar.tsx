@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { FaStar } from 'react-icons/fa';
-import { GoPlus } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import NavbarButton from './NavbarButton.js';
 import type { ITab } from '../../../types/index.js';
 
 import { motion } from 'framer-motion';
+import { Plus, Star } from 'lucide-react';
 
 type NavbarProps = {
     tabs: ITab[] | null;
@@ -36,7 +35,7 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
                                     }}
                                 />
                             )}
-                            <FaStar className="text-fluid-xl!" />
+                            <Star className="text-fluid-xl!" />
                         </NavbarButton>
 
                         {tabs?.map((tab) => (
@@ -61,7 +60,7 @@ function Navbar({ tabs, addList, tabId }: NavbarProps) {
                             </NavbarButton>
                         ))}
                         <NavbarButton onClick={addList}>
-                            <GoPlus />
+                            <Plus />
                             New List
                         </NavbarButton>
                     </li>

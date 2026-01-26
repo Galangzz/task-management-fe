@@ -1,9 +1,8 @@
 import React, { lazy, useEffect, useState } from 'react';
 import Calendar from '../DateTime/Calendar.js';
 import Modal from './Modal.js';
-import { IoMdTime } from 'react-icons/io';
+import { Clock, X } from 'lucide-react';
 const ModalTimePicker = lazy(() => import('./ModalTimePicker.js'));
-import { RxCross2 } from 'react-icons/rx';
 
 type ModalDayPickerProps = {
     toggleCalendar: () => void;
@@ -70,7 +69,7 @@ function ModalDayPicker({
                         className="flex w-full cursor-pointer items-center gap-4 border-y px-10! py-4! hover:backdrop-brightness-125"
                         onClick={openTime}
                     >
-                        <IoMdTime className="text-2xl" />
+                        <Clock className="text-2xl" />
                         {isSubmitTime ? (
                             <div
                                 className="flex w-fit items-center gap-2 border p-2! text-xl leading-none"
@@ -86,7 +85,7 @@ function ModalDayPicker({
                                         unSubmitTime();
                                     }}
                                 >
-                                    <RxCross2 />
+                                    <X />
                                 </div>
                             </div>
                         ) : (

@@ -1,6 +1,6 @@
 import Tooltip from '@mui/material/Tooltip';
+import { Moon, Sun } from 'lucide-react';
 import React from 'react';
-import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
 type ToggleThemeProps = {
     checked: boolean;
@@ -33,7 +33,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                         className="relative flex h-9 w-9 items-center justify-center rounded-full border text-2xl transition-all duration-300 ease-in-out hover:backdrop-brightness-75 cursor-pointer"
                     >
                         {/* Light */}
-                        <MdLightMode
+                        <Sun
                             className={`absolute transition-all ${
                                 checked
                                     ? 'animate-fade-out pointer-events-none'
@@ -42,7 +42,7 @@ function ToggleTheme({ checked, onChange, className }: ToggleThemeProps) {
                         />
 
                         {/* Dark */}
-                        <MdDarkMode
+                        <Moon
                             className={`absolute transition-all ${
                                 checked
                                     ? 'animate-fade-in'
