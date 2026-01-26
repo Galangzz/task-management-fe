@@ -437,6 +437,86 @@ npm run preview
 
 The build output will be in the `dist` directory.
 
+## 🔒 Security Best Practices
+
+### Firebase Configuration
+
+The Firebase service worker file (`public/firebase-messaging-sw.js`) contains sensitive configuration and is **gitignored** to prevent accidental commits. This file should NOT be committed to version control.
+
+To set up Firebase push notifications:
+
+1. **Create the file manually** in `public/firebase-messaging-sw.js`:
+
+```javascript
+/* eslint-disable no-undef */
+importScripts(
+    'https://www.gstatic.com/firebasejs/12.8.0/firebase-app-compat.js'
+);
+importScripts(
+    'https://www.gstatic.com/firebasejs/12.8.0/firebase-messaging-compat.js'
+);
+
+const firebaseConfig = {
+    apiKey: 'YOUR_API_KEY',
+    authDomain: 'YOUR_PROJECT.firebaseapp.com',
+    projectId: 'YOUR_PROJECT_ID',
+    storageBucket: 'YOUR_PROJECT.appspot.com',
+    messagingSenderId: 'YOUR_SENDER_ID',
+    appId: 'YOUR_APP_ID',
+};
+
+firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage((payload) => {
+    console.log(
+        '[firebase-messaging-sw.js] Received background message ',
+        payload
+    );
+    const notificationTitle = payload.data.title;
+    const notificationOptions = {
+        body: payload.data.body,
+    };
+    self.registration.showNotification(notificationTitle, notificationOptions);
+});
+```
+
+2. **Add your Firebase credentials** in the configuration
+
+3. **Never commit this file** - it's already in `.gitignore`
+
+### Environment Variables
+
+All sensitive configuration should be managed through environment variables:
+
+- API keys
+- Firebase configuration
+- JWT secrets
+- Database credentials
+
+Never hardcode sensitive data in source files.
+
+### API Security
+
+The application implements:
+
+- JWT token authentication
+- Automatic token refresh on 401 responses
+- Secure HTTP-only cookie recommendations for production
+- CORS configuration for allowed origins
+
+### Git Security
+
+Always review changes before committing:
+
+```bash
+# Check what will be committed
+git diff --staged
+
+# Review all changes including untracked
+git status
+```
+
 ## 🤝 Contributing
 
 1. Fork the repository
