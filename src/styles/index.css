@@ -234,3 +234,23 @@ body {
         display: none;
     }
 }
+
+@utility textarea {
+    scrollbar-width: thin;
+    
+    scrollbar-color: var(--primary) var(--secondary);
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 8px;
+        background-color: #000000;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--border) !important;
+        border-radius: 20px;
+    }
+}

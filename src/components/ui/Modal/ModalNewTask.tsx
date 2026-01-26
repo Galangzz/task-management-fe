@@ -47,7 +47,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                                 onInput={form.handleInputDetail}
                                 id="newTaskDetail"
                                 placeholder="Tambahkan detail"
-                                className="scrollbar-custom-textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
+                                className="textarea animate-fade-in h-auto max-h-52 w-full resize-none overflow-y-auto px-2! focus:outline-none"
                                 rows={1}
                             />
                         )}
