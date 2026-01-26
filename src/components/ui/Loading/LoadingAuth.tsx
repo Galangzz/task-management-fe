@@ -1,5 +1,5 @@
+import { Loader2 } from 'lucide-react';
 import React from 'react';
-import { CgSpinnerTwo } from 'react-icons/cg';
 
 function LoadingAuth() {
     return (
@@ -7,7 +7,7 @@ function LoadingAuth() {
             className="absolute z-2 backdrop-brightness-80 flex h-screen w-screen items-center justify-center text-6xl"
             onClick={(e) => e.stopPropagation()}
         >
-            <CgSpinnerTwo className="animate-spin" />
+            <Loader2 className="animate-spin" size={40}/>
         </div>
     );
 }

@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Modal from './Modal.js';
 import CustomTimeField from '../DateTime/CustomTimeField.js';
 import CustomClockField from '../DateTime/CustomClockField.js';
-import { IoMdTime } from 'react-icons/io';
-import { FaKeyboard } from 'react-icons/fa';
 import type { TimeView } from '@mui/x-date-pickers/models';
+import { Clock, Keyboard } from 'lucide-react';
 
 type ModalTimePickerProps = {
     toggleTime: () => void;
@@ -38,7 +37,7 @@ function ModalTimePicker({
     return (
         <Modal setToggle={toggleTime}>
             <div
-                className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4!"
+                className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-primary-foreground py-4!"
                 onClick={(e) => e.stopPropagation()}
             >
                 <p className="flex w-full px-4!">Pilih Waktu</p>
@@ -88,12 +87,12 @@ function ModalTimePicker({
                 <div className="flex w-full items-center p-2!">
                     <div className="flex-1 pl-6! text-2xl">
                         {inputTimeField ? (
-                            <IoMdTime
+                            <Clock
                                 className="cursor-pointer transition! duration-200 ease-in-out hover:scale-110 hover:rotate-12"
                                 onClick={() => setInputTimeField(false)}
                             />
                         ) : (
-                            <FaKeyboard
+                            <Keyboard
                                 className="cursor-pointer transition! duration-200 ease-in-out hover:scale-110 hover:rotate-12"
                                 onClick={() => setInputTimeField(true)}
                             />
@@ -102,14 +101,14 @@ function ModalTimePicker({
                     <div className="flex gap-6 px-6">
                         <button
                             type="button"
-                            className="cursor-pointer rounded-2xl p-2! text-(--button-text)! hover:backdrop-brightness-125"
+                            className="cursor-pointer rounded-2xl p-2! text-accent-button hover:backdrop-brightness-125"
                             onClick={toggleTime}
                         >
                             Batal
                         </button>
                         <button
                             type="button"
-                            className="cursor-pointer rounded-2xl p-2! text-(--button-text)! hover:backdrop-brightness-125 disabled:cursor-not-allowed disabled:text-gray-600!"
+                            className="cursor-pointer rounded-2xl p-2! text-accent-button! hover:backdrop-brightness-125 disabled:cursor-not-allowed disabled:text-gray-600!"
                             onClick={onSubmitTime}
                             disabled={errTimeField}
                         >

@@ -1,11 +1,9 @@
 import React, { lazy } from 'react';
 import Modal from './Modal.js';
-import { CgDetailsMore } from 'react-icons/cg';
-import { IoMdTime } from 'react-icons/io';
+import { Clock, TextAlignStart, X } from 'lucide-react';
 import StarCheck from '../StarCheck.js';
 const ModalDayPicker = lazy(() => import('./ModalDayPicker.js'));
 import { formatCustomDate } from '../../../utils/index.js';
-import { RxCross2 } from 'react-icons/rx';
 import useNewTask from '../../../hooks/useNewTask.js';
 const ModalConfirmationToClose = lazy(
     () => import('./ModalConfirmationToClose.js')
@@ -23,7 +21,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
         <>
             <Modal setToggle={() => confirm.requestClose(setIsOpenModalTask)}>
                 <div
-                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-4!"
+                    className="ModalTaskTitle animate-fade-in m-2! flex h-auto w-98 flex-col items-center justify-center gap-6 rounded-3xl bg-primary-foreground p-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <form
@@ -38,7 +36,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                             id="newTaskTitle"
                             type="text"
                             placeholder="Tugas Baru"
-                            className="rounded-xl p-2! text-xl backdrop-invert-25 focus:outline-none"
+                            className="rounded-xl p-2! text-xl bg-input focus:outline-none"
                             maxLength={50}
                             required
                         />
@@ -72,7 +70,7 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                                     className="flex cursor-pointer items-center justify-center transition! duration-300 ease-in-out hover:scale-125"
                                     onClick={dateTime.date.unSubmit}
                                 >
-                                    <RxCross2 size={18} />
+                                    <X size={18} />
                                 </div>
                             </div>
                         )}
@@ -82,10 +80,10 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                                     className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110"
                                     onClick={form.openDetail}
                                 >
-                                    <CgDetailsMore />
+                                    <TextAlignStart />
                                 </div>
                                 <div className="w-fit cursor-pointer rounded-4xl p-2! hover:backdrop-brightness-110">
-                                    <IoMdTime
+                                    <Clock
                                         onClick={dateTime.toggleCalendar.open}
                                     />
                                 </div>
@@ -115,12 +113,10 @@ function ModalNewTask({ setIsOpenModalTask, tabId }: ModalNewTaskProps) {
                     setSelected={dateTime.deadline.setValue}
                     selectedTime={dateTime.deadline.value}
                     setSelectedTime={dateTime.deadline.setValue}
-
                     isOpenTime={dateTime.toggleTime.isOpen}
                     isSubmitTime={dateTime.hasTime}
                     openTime={dateTime.toggleTime.open}
                     closeTime={dateTime.toggleTime.close}
-
                     onHandleSubmit={dateTime.date.submit}
                     onHandleSubmitTime={dateTime.time.submit}
                     unSubmitTime={dateTime.time.unSubmit}

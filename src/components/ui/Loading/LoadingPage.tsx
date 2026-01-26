@@ -1,10 +1,10 @@
+import { Loader2 } from 'lucide-react';
 import React from 'react';
-import { CgSpinnerTwo } from 'react-icons/cg';
 
 function LoadingPage() {
     return (
-        <div className="bg(--background-header) flex h-screen w-screen items-center justify-center text-6xl">
-            <CgSpinnerTwo className="animate-spin" />
+        <div className=" flex h-screen w-screen items-center justify-center text-6xl">
+            <Loader2 className="animate-spin" size={40}/>
         </div>
     );
 }

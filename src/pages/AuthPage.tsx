@@ -26,10 +26,10 @@ function AuthPage({ loginSuccess }: { loginSuccess: () => Promise<void> }) {
     } = useRegister();
 
     return (
-        <div className="flex h-screen w-screen items-center justify-center bg-(--background-color) p-4!">
-            <div className="max-h relative flex max-h-7/8 min-h-2/3 w-full max-w-2xl overflow-hidden rounded-3xl bg-(--background-header) shadow-2xl max-md:h-7/8! max-md:flex-col">
+        <div className="flex h-screen w-screen items-center justify-center  p-4!">
+            <div className="max-h relative flex max-h-7/8 min-h-2/3 w-full max-w-2xl overflow-hidden rounded-3xl bg-secondary shadow-2xl max-md:h-7/8! max-md:flex-col">
                 <div
-                    className={`transition-translate! absolute z-1 h-full w-full rounded-4xl bg-(--add-button) brightness-75 delay-300! duration-1000! ease-in-out! md:-translate-x-1/2 ${active === 'REGISTER' && 'max-md:translate-y-3/4 md:translate-x-1/2'} max-md:-translate-y-3/4`}
+                    className={`transition-translate! absolute z-1 h-full w-full rounded-4xl bg-accent-button brightness-75 delay-300! duration-1000! ease-in-out! md:-translate-x-1/2 ${active === 'REGISTER' && 'max-md:translate-y-3/4 md:translate-x-1/2'} max-md:-translate-y-3/4`}
                 ></div>
                 <LoginInfo
                     active={active}

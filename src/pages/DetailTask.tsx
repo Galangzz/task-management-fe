@@ -1,13 +1,8 @@
 import React, { lazy } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Field from '../components/ui/Field.js';
-import { CgDetailsMore } from 'react-icons/cg';
-import { IoMdTime } from 'react-icons/io';
-import { FaArrowLeft } from 'react-icons/fa';
 import StarCheck from '../components/ui/StarCheck.js';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { formatCustomDate } from '../utils/index.js';
-import { RxCross2 } from 'react-icons/rx';
 import LoadingPage from '../components/ui/Loading/LoadingPage.js';
 import { motion } from 'framer-motion';
 import { useDetailTask } from '../hooks/useDetailTask.js';
@@ -19,6 +14,7 @@ import { useTaskStore } from '../stores/useTaskStore.js';
 import { deleteTaskById } from '../services/tasksService.js';
 import useToast from '../hooks/useToast.js';
 import useTaskAction from '../hooks/DefaultPageState/useTaskAction.js';
+import { ArrowLeft, Clock, EllipsisVertical, TextAlignStart, X } from 'lucide-react';
 const ForbiddenPage = lazy(() => import('./ForbiddenPage.js'));
 function DetailTask() {
     const { taskId } = useParams();
@@ -69,7 +65,7 @@ function DetailTask() {
 
     return (
         <motion.div
-            className="flex h-screen w-full flex-col items-center justify-between"
+            className="flex min-h-screen z-1 w-full flex-col items-center justify-between"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
@@ -80,13 +76,13 @@ function DetailTask() {
             <Field className="container m-4! bg-transparent">
                 <div className="mx-2! mt-2! mb-6! flex w-full items-center justify-between">
                     <div
-                        className="flex cursor-pointer items-center justify-center rounded-full p-2! hover:scale-110 hover:backdrop-invert-10"
+                        className="flex cursor-pointer items-center justify-center rounded-full p-2! hover:scale-110 hover:backdrop-invert-10 "
                         onClick={() => {
                             const result = handleBackDetail();
                             if (result) navigate(`/${tab?.id}`);
                         }}
                     >
-                        <FaArrowLeft size={20} />
+                        <ArrowLeft size={20} />
                     </div>
                     <div className="flex items-center justify-center gap-4">
                         <div className="rounded-full p-2! hover:cursor-pointer hover:backdrop-invert-10">
@@ -99,7 +95,7 @@ function DetailTask() {
                             type="button"
                             className="group/button-delete relative rounded-full p-2! hover:cursor-pointer hover:backdrop-invert-10 focus:bg-(--background-header)"
                         >
-                            <BsThreeDotsVertical size={20} />
+                            <EllipsisVertical size={20} />
                             <div className="absolute left-0 hidden w-5/1 -translate-x-42 translate-y-1/6 rounded-xl bg-(--background-header) py-1! text-lg font-semibold shadow-lg shadow-black/50 group-focus/button-delete:flex">
                                 <p
                                     className="my-2! w-full p-2! hover:backdrop-invert-25"
@@ -163,7 +159,7 @@ function DetailTask() {
                 />
 
                 <div className="text-fluid-sm flex w-full gap-4 px-4! py-2! hover:backdrop-brightness-90">
-                    <CgDetailsMore size={20} />
+                    <TextAlignStart size={20} />
                     <textarea
                         ref={detail.ref}
                         name="Task Detail"
@@ -179,7 +175,7 @@ function DetailTask() {
                     className="text-fluid-sm flex w-full items-center gap-4 px-4! py-2! hover:backdrop-brightness-90"
                     onClick={toggleCalendar.open}
                 >
-                    <IoMdTime size={20} />
+                    <Clock size={20} />
                     {hasDate ? (
                         <motion.div
                             className="flex w-fit items-center gap-2 border-2 p-2! font-bold"
@@ -207,7 +203,7 @@ function DetailTask() {
                                     date.unSubmit();
                                 }}
                             >
-                                <RxCross2 size={18} />
+                                <X size={18} />
                             </div>
                         </motion.div>
                     ) : (

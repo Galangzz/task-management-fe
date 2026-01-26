@@ -63,6 +63,7 @@ function CustomTimeField({
                     },
                     '& .MuiPickersInputBase-root': {
                         height: '100%',
+                        color: 'var(--foreground)',
                     },
                     '& .MuiPickersSectionList-root': {
                         display: 'flex',
@@ -85,8 +86,9 @@ function CustomTimeField({
                             borderRadius: 2,
                         },
                     '& .css-vycme6-MuiPickersInputBase-root-MuiPickersOutlinedInput-root.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline': {
-                        borderColor: 'var(--button-text)'
-                    }
+                        borderColor: 'var(--accent-button)',
+                    },
+
                 }}
                 slotProps={{
                     textField: {

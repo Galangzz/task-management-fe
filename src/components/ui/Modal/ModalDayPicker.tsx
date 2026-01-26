@@ -1,9 +1,8 @@
 import React, { lazy, useEffect, useState } from 'react';
 import Calendar from '../DateTime/Calendar.js';
 import Modal from './Modal.js';
-import { IoMdTime } from 'react-icons/io';
+import { Clock, X } from 'lucide-react';
 const ModalTimePicker = lazy(() => import('./ModalTimePicker.js'));
-import { RxCross2 } from 'react-icons/rx';
 
 type ModalDayPickerProps = {
     toggleCalendar: () => void;
@@ -57,7 +56,7 @@ function ModalDayPicker({
         <>
             <Modal setToggle={toggleCalendar}>
                 <div
-                    className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-(--background-header) py-4!"
+                    className="animate-fade-in m-2! flex h-auto w-96 flex-col items-center gap-2 rounded-2xl bg-primary-foreground py-4!"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="flex h-92 w-full justify-center">
@@ -67,10 +66,10 @@ function ModalDayPicker({
                         />
                     </div>
                     <div
-                        className="flex w-full cursor-pointer items-center gap-4 border-y px-10! py-4! hover:backdrop-brightness-125"
+                        className="flex w-full cursor-pointer items-center gap-4 border-y border-foreground/30 px-10! py-4! hover:backdrop-brightness-125"
                         onClick={openTime}
                     >
-                        <IoMdTime className="text-2xl" />
+                        <Clock className="text-2xl" />
                         {isSubmitTime ? (
                             <div
                                 className="flex w-fit items-center gap-2 border p-2! text-xl leading-none"
@@ -86,7 +85,7 @@ function ModalDayPicker({
                                         unSubmitTime();
                                     }}
                                 >
-                                    <RxCross2 />
+                                    <X />
                                 </div>
                             </div>
                         ) : (

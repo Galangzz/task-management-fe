@@ -1,6 +1,6 @@
-import { CgSpinnerTwo } from 'react-icons/cg';
 import Modal from './Modal.js';
 import type ApiError from '../../../errors/ApiError.js';
+import { Loader2 } from 'lucide-react';
 
 type ModalTaskTitleProps = {
     titleList: string;
@@ -45,10 +45,10 @@ function ModalTaskTitle({
     return (
         <Modal setToggle={setToggleTitle}>
             <div
-                className="ModalTaskTitle animate-fade-in mx-2! flex h-auto w-sm flex-col items-center justify-center gap-6 rounded-3xl bg-(--background-header) p-6!"
+                className="ModalTaskTitle animate-fade-in mx-2! flex h-auto w-sm flex-col items-center justify-center gap-6 rounded-3xl bg-secondary p-6!"
                 onClick={(e) => e.stopPropagation()}
             >
-                <h1 className="text-md relative w-full text-center tracking-widest after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-(--background-color) after:content-['']">
+                <h1 className="text-md relative w-full text-center tracking-widest after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-primary after:content-['']">
                     Masukan Nama Daftar Baru
                 </h1>
                 <form
@@ -77,7 +77,7 @@ function ModalTaskTitle({
                         disabled={titleList === '' || err !== null}
                     >
                         {isLoading ? (
-                            <CgSpinnerTwo
+                            <Loader2
                                 className="flex animate-spin"
                                 size={25}
                             />

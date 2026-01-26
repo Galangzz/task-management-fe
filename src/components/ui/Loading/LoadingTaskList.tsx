@@ -3,7 +3,7 @@ import Field from '../Field.js';
 
 function LoadingTaskList() {
     return (
-        <div className="flex h-auto w-full flex-col items-center justify-center gap-8 p-8! [&_.div-load-task-list]:bg-(--background-header) [&_.div-load-task-list]:brightness-150 [&_.field-loading]:animate-pulse [&_.field-loading]:duration-500!">
+        <div className="flex h-auto w-full flex-col items-center justify-center gap-8 p-8! [&_.div-load-task-list]:bg-secondary [&_.div-load-task-list]:brightness-150 [&_.field-loading]:animate-pulse [&_.field-loading]:duration-500!">
             <Field className={'field-loading flex h-14 flex-col gap-4'}>
                 <div className="div-load-task-list h-6 w-full max-w-60 rounded-2xl"></div>
                 <div className="div-load-task-list h-6 w-full max-w-40 rounded-2xl"></div>

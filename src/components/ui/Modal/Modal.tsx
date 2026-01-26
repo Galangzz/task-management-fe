@@ -9,7 +9,7 @@ type ModalProps = {
 function Modal({ children, setToggle }: ModalProps) {
     return (
         <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-brightness-75"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-muted-foreground/30 backdrop-brightness-75"
             onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
